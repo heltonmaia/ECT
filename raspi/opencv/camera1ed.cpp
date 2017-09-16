@@ -5,32 +5,27 @@
 #include <iostream>
 #include <opencv2/features2d/features2d.hpp>
 
- using namespace std;
- using namespace cv;
+using namespace std;
+using namespace cv;
 
- int xpos, ypos, blue, green, red;
- Mat cameraFrame;
- VideoCapture stream1(0);
+int xpos, ypos, blue, green, red;
+Mat cameraFrame;
+VideoCapture stream1(0);
 
-  int frameCounter,tick,timeBegin, fps;
- 
+int frameCounter,tick,timeBegin, fps; 
 
-
- int fps_vid()
- {
-    frameCounter++;
+int fps_vid(){
+	frameCounter++;
     time_t timeNow = time(0) - timeBegin;
-    if (timeNow - tick >= 1) 
-    {
+    if (timeNow - tick >= 1){
         tick++;
         fps = frameCounter;
         frameCounter = 0;
     }
-    return fps;
- }
+return fps;
+}
 
- void frame(Mat frame)
- {
+void frame(Mat frame){
     Mat frame2, mask;
 
     //compara os valores dos pixels no intervalo dado, e joga o resultado na matriz mask
@@ -45,28 +40,26 @@
     imshow("original", frame);
  }
 
- void CallBackFunc(int event, int x, int y, int flags, void* userdata)
- {
+void CallBackFunc(int event, int x, int y, int flags, void* userdata){
     xpos = x; //definem a posiçao para o comando abaixo identificar o valor rgb do pixel
     ypos = y;
 
-    if (event == EVENT_RBUTTONDOWN) 
-    {
-        Scalar intensity = cameraFrame.at<Vec3b>(ypos, xpos);
+    if (event == EVENT_RBUTTONDOWN){
+        Vec3f intensity = cameraFrame.at<Vec3b>(ypos, xpos);
         blue = intensity.val[0];
         green = intensity.val[1];
         red = intensity.val[2];
     }
  }
 
- int main(int argc, char** argv)
-  {
-  frameCounter = 0;
-     tick = 0;
-     timeBegin = time(0);
+int main(int argc, char** argv){
 
-    while (true) 
-      {
+	frameCounter = 0;
+	tick = 0;
+	timeBegin = time(0);
+
+    while (true){
+    
         stream1 >> cameraFrame;
         namedWindow("Identificação", 1);
 
@@ -75,8 +68,8 @@
 
         char c = (char)waitKey(1); //esc clicada fecha o prog.
         if (c == 27) break;
-    
-      }
+	}
 
-    return 0;
-  }
+return 0;
+}
+
