@@ -7,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <opencv2/features2d/features2d.hpp>
-#include "funcoes.h"
+#include "/home/lucas/Rasp-opencv-testes/funcoes.h"
 
 using namespace std;
 using namespace cv;

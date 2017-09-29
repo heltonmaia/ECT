@@ -11,6 +11,7 @@ void principal();
 //função de modificação da imagem
 Mat transform(Mat frame);
 
+Mat contornos (Mat frame);
 //função de transformação, restrição e exibição da imagem capturada
 void frame(Mat frame, double fps);
 
