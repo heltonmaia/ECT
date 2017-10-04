@@ -1,4 +1,4 @@
-School of Science and Technology
+School of Science and Technology - http://www.ect.ufrn.br/
 
 Federal University of Rio Grande do Norte
 
