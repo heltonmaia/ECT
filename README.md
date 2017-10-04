@@ -6,4 +6,6 @@ Federal University of Rio Grande do Norte (UFRN) - http://www.ufrn.br
 
 Professor: Helton Maia - helton.maia@ect.ufrn.br
 
-=== Project codes ===
+------------------------------------------------------
+
+Project codes
