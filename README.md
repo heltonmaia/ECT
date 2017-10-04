@@ -1,5 +1,5 @@
-School of Science and Technology - http://www.ect.ufrn.br/
+School of Science and Technology - http://www.ect.ufrn.br
 
-Federal University of Rio Grande do Norte
+Federal University of Rio Grande do Norte - http://www.ufrn.br
 
 Project codes
