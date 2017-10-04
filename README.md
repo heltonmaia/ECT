@@ -1,5 +1,7 @@
-School of Science and Technology - http://www.ect.ufrn.br
+School of Science and Technology (ECT) - http://www.ect.ufrn.br
 
-Federal University of Rio Grande do Norte - http://www.ufrn.br
+Federal University of Rio Grande do Norte (UFRN) - http://www.ufrn.br
 
-Project codes
+Professor: Helton Maia - helton.maia@ect.ufrn.br
+
+=== Project codes ===
