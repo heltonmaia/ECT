@@ -8,7 +8,7 @@ Professor: Helton Maia - helton.maia@ect.ufrn.br
 
 Students:
 
-Name1
+Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
 
 Name2
 
