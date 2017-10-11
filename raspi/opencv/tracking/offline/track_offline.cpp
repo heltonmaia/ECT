@@ -12,8 +12,12 @@
 using namespace std;
 using namespace cv;
 
-
 int main(int argc, char *argv[]) {
+
+    if (argc < 2){
+    	cout << "Error: Use ./track_offline video.avi" << endl;
+    	return -1;
+    }
 
     principal(argv);
 

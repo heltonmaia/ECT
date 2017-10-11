@@ -12,12 +12,12 @@ int blue=0, green=0, red=0, num_foto=0, Range_rgb=20;
 int posicao[4]= {0}, coord=0;
 int xpos, ypos, frame_width, frame_height;
 
-bool gravar_video=false,gravar_vid_restrito=false,trava=false, foto=false;
+bool gravar_video=false, gravar_vid_restrito=false, trava=false, foto=false;
 
 Mat cameraFrame,frame_restrito, imagem_salva;
 Mat preto = imread("preto.png");
 
-Point centro_massa,centro_orig, Rectp1,Rectp2;
+Point centro_massa,centro_orig, Rectp1, Rectp2;
 VideoCapture cap;
 //ofstream myfile;
 
@@ -226,7 +226,7 @@ void frame(Mat original) {
 //função principal, onde ocorre a captura da imagem
 void principal(char *argv[]) {
 
-    char nome_vid[20];
+    char nome_vid[50];
     cout << argv[1];
     sprintf(nome_vid,"%s",argv[1]);
     cap.open(nome_vid);
@@ -241,6 +241,9 @@ void principal(char *argv[]) {
     //mostra o primeiro frame, para o usuário poder selecionar a área do tracking
     if(!cameraFrame.empty())
         imshow("original",cameraFrame);
+        else {
+            cout <<  "Could not open the video file" << endl ;
+        }
     while (true) {
         if(trava==true) cap >> cameraFrame;
 
