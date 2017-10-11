@@ -12,6 +12,8 @@ Joanderson Lucas
 
 Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
 
+Richardson Santiago - richardsonsantiago@ufrn.edu.br
+
 ...
 
 ------------------------------------------------------
