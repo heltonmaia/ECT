@@ -9,7 +9,8 @@ Professor: Helton Maia - helton.maia@ect.ufrn.br
 Students:
 
 Joanderson Lucas Laurentino Borges 
-Matricula:2014096983 GitHub - JoandersonL
+E-mail: joanderson_lucas@hotmail.com
+GitHub - JoandersonL
 
 Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
 
