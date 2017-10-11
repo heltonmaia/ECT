@@ -14,7 +14,9 @@ Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
 
 Richardson Santiago - richardsonsantiago@ufrn.edu.br
 
-...
+Ítalo Oliveira Fernandes - italo.of@hotmail.com
+
+..
 
 ------------------------------------------------------
 
