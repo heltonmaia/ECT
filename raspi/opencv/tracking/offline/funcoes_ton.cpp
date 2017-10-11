@@ -27,7 +27,6 @@ ofstream myfile;
 int frame_width, frame_height;
 VideoWriter video1,video2;
 
-
 void condicoes_esp_fot(int xt, int yt, Mat mat) {
 
     if(xt>0 && xt<=frame_width && yt<0) {
@@ -115,13 +114,9 @@ void condicoes_esp_fot(int xt, int yt, Mat mat) {
     if(xt>0 && xt<=frame_width && yt>0 && yt<=frame_height) {
         imwrite( nome, mat );
 
-
     } else imwrite( nome, preto );
     num_foto++;
-
-
 }
-
 
 //função relacionada a detecção do mouse
 void CallBackFunc(int event, int x, int y, int flags, void* userdata) {
