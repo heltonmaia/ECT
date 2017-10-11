@@ -28,113 +28,123 @@ int frame_width, frame_height;
 VideoWriter video1,video2;
 
 
-void condicoes_esp_fot(int xt, int yt, Mat mat){
+void condicoes_esp_fot(int xt, int yt, Mat mat)
+{
 
-if(xt>0 && xt<=frame_width && yt<0){
-for(int x = (preto.rows-mat.rows), xi=0; x <=300 ; x++,xi++)
+    if(xt>0 && xt<=frame_width && yt<0)
     {
-        for(int y =0, yi=0; y <=300 ; y++,yi++)
+        for(int x = (preto.rows-mat.rows), xi=0; x <=300 ; x++,xi++)
         {
-preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
- preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
- preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
+            for(int y =0, yi=0; y <=300 ; y++,yi++)
+            {
+                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
+                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
+                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
 
+            }
         }
     }
-}
-if(xt>0 && xt<=frame_width && yt>frame_height){
-for(int x =0, xi=0; x <mat.rows ; x++,xi++)
+    if(xt>0 && xt<=frame_width && yt>frame_height)
     {
-        for(int y =0, yi=0; y < 300 ; y++,yi++)
+        for(int x =0, xi=0; x <mat.rows ; x++,xi++)
         {
-preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
- preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
- preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
+            for(int y =0, yi=0; y < 300 ; y++,yi++)
+            {
+                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
+                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
+                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
 
+            }
         }
     }
-}
-if(yt>0 && yt<=frame_height && xt<0){
-for(int x =0, xi=0; x <300 ; x++,xi++)
+    if(yt>0 && yt<=frame_height && xt<0)
     {
-        for(int y =(preto.cols-mat.cols), yi=0; y < 300 ; y++,yi++)
+        for(int x =0, xi=0; x <300 ; x++,xi++)
         {
-preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
- preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
- preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
+            for(int y =(preto.cols-mat.cols), yi=0; y < 300 ; y++,yi++)
+            {
+                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
+                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
+                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
 
+            }
         }
     }
-}
-if(yt>0 && yt<=frame_height && xt>frame_width){
-for(int x = 0, xi=0; x <300 ; x++,xi++)
+    if(yt>0 && yt<=frame_height && xt>frame_width)
     {
-        for(int y =0, yi=0; y < mat.cols ; y++,yi++)
+        for(int x = 0, xi=0; x <300 ; x++,xi++)
         {
-preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
- preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
- preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
+            for(int y =0, yi=0; y < mat.cols ; y++,yi++)
+            {
+                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
+                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
+                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
 
+            }
         }
     }
-}
-if(xt<0 && yt<0){
-for(int x = (preto.rows-mat.rows), xi=0; x <300 ; x++,xi++)
+    if(xt<0 && yt<0)
     {
-        for(int y =(preto.cols-mat.cols), yi=0; y < 300 ; y++,yi++)
+        for(int x = (preto.rows-mat.rows), xi=0; x <300 ; x++,xi++)
         {
-preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
- preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
- preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
+            for(int y =(preto.cols-mat.cols), yi=0; y < 300 ; y++,yi++)
+            {
+                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
+                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
+                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
 
+            }
         }
     }
-}
-if(xt>frame_width && yt>frame_height){
-for(int x = 0, xi=0; x <mat.rows ; x++,xi++)
+    if(xt>frame_width && yt>frame_height)
     {
-        for(int y =0, yi=0; y < mat.cols ; y++,yi++)
+        for(int x = 0, xi=0; x <mat.rows ; x++,xi++)
         {
-preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
- preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
- preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
+            for(int y =0, yi=0; y < mat.cols ; y++,yi++)
+            {
+                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
+                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
+                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
 
+            }
         }
     }
-}
-if(xt>frame_width && yt<0){
-for(int x = (preto.rows-mat.rows), xi=0; x <300 ; x++,xi++)
+    if(xt>frame_width && yt<0)
     {
-        for(int y =0, yi=0; y < mat.cols ; y++,yi++)
+        for(int x = (preto.rows-mat.rows), xi=0; x <300 ; x++,xi++)
         {
-preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
- preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
- preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
+            for(int y =0, yi=0; y < mat.cols ; y++,yi++)
+            {
+                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
+                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
+                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
 
+            }
         }
     }
-}
-if(xt<0 && yt>frame_height){
-for(int x = 0, xi=0; x <mat.rows ; x++,xi++)
+    if(xt<0 && yt>frame_height)
     {
-        for(int y =(preto.cols-mat.cols), yi=0; y < 300 ; y++,yi++)
+        for(int x = 0, xi=0; x <mat.rows ; x++,xi++)
         {
-preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
- preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
- preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
+            for(int y =(preto.cols-mat.cols), yi=0; y < 300 ; y++,yi++)
+            {
+                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
+                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
+                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
 
+            }
         }
     }
-}
- char nome[30];
-        sprintf(nome,"figures/%d.jpg",num_foto);
-        if(xt>0 && xt<=frame_width && yt>0 && yt<=frame_height){
-imwrite( nome, mat );
+    char nome[30];
+    sprintf(nome,"figures/%d.jpg",num_foto);
+    if(xt>0 && xt<=frame_width && yt>0 && yt<=frame_height)
+    {
+        imwrite( nome, mat );
 
 
-}
-        else imwrite( nome, preto );
-        num_foto++;
+    }
+    else imwrite( nome, preto );
+    num_foto++;
 
 
 }
@@ -216,33 +226,37 @@ Mat transform(Mat entrada)
         int tam_cortey=300, tam_cond_y=100;
 
 //Verifica a posição do corte e se ajusta para nao pegar fora do frame
-        if(ycorte>(frame_height-tam_total)){
-tam_cond_y=ycorte+tam_total;
-tam_cortey=tam_total-(ycorte-(frame_height-tam_total));
+        if(ycorte>(frame_height-tam_total))
+        {
+            tam_cond_y=ycorte+tam_total;
+            tam_cortey=tam_total-(ycorte-(frame_height-tam_total));
 
 
-}
-        if(xcorte>(frame_width-tam_total)){
-tam_cond_x=xcorte+tam_total;
-tam_cortex=tam_total-(xcorte-(frame_width-tam_total));
+        }
+        if(xcorte>(frame_width-tam_total))
+        {
+            tam_cond_x=xcorte+tam_total;
+            tam_cortex=tam_total-(xcorte-(frame_width-tam_total));
 
 
-}
-        if(ycorte<0){
-tam_cond_y=ycorte;
-cout<<endl<<ycorte<<" yseg "<<endl;
-tam_cortey=tam_total+ycorte;
-ycorte=ycorte*(-1)+posicao[1]+centro_massa.y-tam_medio;
-}
-        if(xcorte<0){
-tam_cond_x=xcorte;
-cout<<endl<<xcorte<<" seg "<<endl;
-tam_cortex=tam_total+xcorte;
-xcorte=xcorte*(-1)+posicao[0]+centro_massa.x-tam_medio;
+        }
+        if(ycorte<0)
+        {
+            tam_cond_y=ycorte;
+            cout<<endl<<ycorte<<" yseg "<<endl;
+            tam_cortey=tam_total+ycorte;
+            ycorte=ycorte*(-1)+posicao[1]+centro_massa.y-tam_medio;
+        }
+        if(xcorte<0)
+        {
+            tam_cond_x=xcorte;
+            cout<<endl<<xcorte<<" seg "<<endl;
+            tam_cortex=tam_total+xcorte;
+            xcorte=xcorte*(-1)+posicao[0]+centro_massa.x-tam_medio;
 
- }
+        }
         Mat imagem_Primaria = cameraFrame( Rect(xcorte,ycorte,tam_cortex,tam_cortey));
-cout<<tam_cond_x<<"  "<<tam_cond_y<<endl;
+        cout<<tam_cond_x<<"  "<<tam_cond_y<<endl;
         condicoes_esp_fot(tam_cond_x, tam_cond_y,imagem_Primaria );
 
 
@@ -283,7 +297,7 @@ void frame(Mat original)
     circle(original, centro_orig, 3, Scalar(0, 0, 255), -1);
 
 //salva o video com a marca de centro
-  if (gravar_video==true) video2.write(original);
+    if (gravar_video==true) video2.write(original);
 
 //Retangulo que mostra a área onde acontece o tracking
     rectangle(original, Rectp1, Rectp2,Scalar(0, 0, 255),1, 8, 0);
