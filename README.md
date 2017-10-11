@@ -14,6 +14,7 @@ Matricula:2014096983 GitHub - JoandersonL
 Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
 
 Richardson Santiago - richardsonsantiago@ufrn.edu.br
+Jadson Araújo Bezerra- jadson013@gmail.com 
 
 ...
 
