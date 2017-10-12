@@ -8,7 +8,7 @@ Professor: Helton Maia - helton.maia@ect.ufrn.br
 
 Students:
 
-Joanderson Lucas Laurentino Borges joanderson_lucas@hotmail.com
+Joanderson Lucas Laurentino Borges - joanderson_lucas@hotmail.com
 
 Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
 
@@ -19,7 +19,6 @@ Jadson Araújo Bezerra- jadson013@gmail.com
 Ítalo Oliveira Fernandes - italo.of@hotmail.com
 
 Gabriel Ribeiro de Freitas - gabrielfreitas2601@gmail.com
-..
 
 ------------------------------------------------------
 
