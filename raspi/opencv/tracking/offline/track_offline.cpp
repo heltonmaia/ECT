@@ -7,17 +7,19 @@
 #include <iostream>
 #include <fstream>
 #include <opencv2/features2d/features2d.hpp>
-#include "/home/lucas/Rasp-opencv-testes/funcoes.h"
+#include "funcoes_toff.h"
 
 using namespace std;
 using namespace cv;
 
+int main(int argc, char *argv[]) {
 
-int main(int argc, char** argv)
-{
-  
-    principal();
+    if (argc < 2){
+    	cout << "Error: Use ./track_offline video.avi" << endl;
+    	return -1;
+    }
 
+    principal(argv);
 
     return 0;
 }
