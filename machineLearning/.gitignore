@@ -1,0 +1,2 @@
+#ignora os .yml pois estavam muito grandes
+*.yml
