@@ -136,7 +136,7 @@ int main(int argc, char **argv){
 
     Mat labelsMat(labels.size(), 1, CV_32S, labelsArray);
 
-    // Treina a SVM
+    // Configura a SVM
     // 'Seta' os parametros(optimal(ish)) da SVM's
     Ptr<ml::SVM> svm = ml::SVM::create();
     svm->setType(ml::SVM::C_SVC);
