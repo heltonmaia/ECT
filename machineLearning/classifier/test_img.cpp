@@ -12,30 +12,33 @@
 // POSIX
 #include <unistd.h>
 
+using namespace std;
+using namespace cv;
+
 
 int main(int argc, char **argv){
 
     //Carrega a SVM
-    cv::Ptr<cv::ml::SVM> svm = cv::ml::StatModel::load<cv::ml::SVM>("classifier.yml");
+    Ptr<ml::SVM> svm = ml::StatModel::load<ml::SVM>("rats_everywhere.yml");
 
     // le a imagem (grayscale)
-    cv::Mat imgMat = cv::imread("img.png", 0);
+    Mat imgMat = imread("img.png", 0);
 
     // converte de 2d para 1d
-    cv::Mat testMat = imgMat.clone().reshape(1, 1);
+    Mat testMat = imgMat.clone().reshape(1, 1);
     testMat.convertTo(testMat, CV_32F);
 
     // Tenta prever qual numero foi desenhado 
     try{
         int predicted = svm->predict(testMat);
 
-        std::cout << std::endl
-                  << "Numero reconhecido -> " << predicted << std::endl
-                  << std::endl;
+        cout << endl
+                  << "Classe reconhecida -> " << predicted << endl
+                  << endl;
 
-        std::string notifyCmd = "notify-send -t 1000 Recognized: " + std::to_string(predicted);
+        string notifyCmd = "notify-send -t 1000 Recognized: " + to_string(predicted);
         system(notifyCmd.c_str());
     }
-    catch (cv::Exception ex){
+    catch (Exception ex){
     }
 }

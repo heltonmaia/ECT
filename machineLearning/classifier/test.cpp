@@ -17,10 +17,15 @@
 // Testes do tempo de execucao
 #include <ctime>
 
+using namespace std;
+using namespace cv;
+
+
+
 // Rotulos dos arquivos de treino
-std::vector<int> expectedLabels;
-std::vector<int> predictedLabels;
-std::vector<std::string> testFilenames;
+vector<int> expectedLabels;
+vector<int> predictedLabels;
+vector<string> testFilenames;
 
 //Pega os arquivos e teste e salva os rotulos/arquvios em uma classe vector
 void getsTestFiles()
@@ -41,7 +46,7 @@ void getsTestFiles()
         if (file.is_dir)
         {
 
-            std::string numbersDirName = file.name;
+            string numbersDirName = file.name;
 
             // pula . / .. / .DS_Store (OSX)
             if (numbersDirName != "." && numbersDirName != ".." && numbersDirName != ".DS_Store")
@@ -65,7 +70,7 @@ void getsTestFiles()
                     tinydir_readfile(&test_number_dir, &testJpgFile);
 
                     // pega o nome
-                    std::string testJpgFileName = testJpgFile.name;
+                    string testJpgFileName = testJpgFile.name;
 
                     // pula . / .. / .DS_Store (OSX)
                     if (testJpgFileName != "." && testJpgFileName != ".." && testJpgFileName != ".DS_Store")
@@ -103,29 +108,30 @@ int main(int argc, char **argv)
     getsTestFiles();
 
     //Carrega a SVM
-    cv::Ptr<cv::ml::SVM> svm = cv::ml::StatModel::load<cv::ml::SVM>("classifier2.yml");
+    Ptr<ml::SVM> svm = ml::StatModel::load<ml::SVM>("rats_everywhere.yml");
 
     // Informacoes legais
     int totalClassifications = 0;
     int totalCorrect = 0;
     int totalWrong = 0;
 
+    int i = clock();
     // itera pelos arquivos de teste
     for (int index = 0; index < testFilenames.size(); index++)
     {
 
         // le a imagem (grayscale)
-        cv::Mat imgMat = cv::imread(testFilenames[index], 0);
+        Mat imgMat = imread(testFilenames[index], 0);
 
         // converte de 2d para 1d
-        cv::Mat testMat = imgMat.clone().reshape(1, 1);
+        Mat testMat = imgMat.clone().reshape(1, 1);
         testMat.convertTo(testMat, CV_32F);
 
         // Tenta prever qual numero foi desenhado
         try
         {
             int predicted = svm->predict(testMat);
-            //std::cout<< "expected: " << expectedLabels[index] << " -> predicted: " << predicted << std::endl;
+            //cout<< "expected: " << expectedLabels[index] << " -> predicted: " << predicted << endl;
             predictedLabels.push_back(predicted);
             // Status
             totalClassifications++;
@@ -138,21 +144,23 @@ int main(int argc, char **argv)
                 totalWrong++;
             }
         }
-        catch (cv::Exception ex)
+        catch (Exception ex)
         {
         }
     }
+    int f = clock();
+    cout << "A classificacao levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
     // Calcula as porcentagens
     float percentageCorrect = ((float)totalCorrect / totalClassifications) * 100;
     float percentageIncorrect = 100 - percentageCorrect;
 
     // Mostras as informacoes legais
-    std::cout << std::endl
-              << "Numero de classificacoes: " << totalClassifications << std::endl;
-    std::cout << "Corretas:  " << totalCorrect << " (" << percentageCorrect << "%)" << std::endl;
-    std::cout << "Erradas: " << totalWrong << " (" << percentageIncorrect << "%)" << std::endl;
-    std::cout << std::endl;
+    cout << endl;
+    cout << "Numero de classificacoes: " << totalClassifications << endl;
+    cout << "Corretas:  " << totalCorrect << " (" << percentageCorrect << "%)" << endl;
+    cout << "Erradas: " << totalWrong << " (" << percentageIncorrect << "%)" << endl;
+    cout << endl;
 
     Confusion confusion = Confusion(expectedLabels, predictedLabels);
     confusion.print_noInd();
