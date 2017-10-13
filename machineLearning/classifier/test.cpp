@@ -14,6 +14,9 @@
 
 #include "extra_libs/evaluation.hpp"
 
+// Testes do tempo de execucao
+#include <ctime>
+
 // Rotulos dos arquivos de treino
 std::vector<int> expectedLabels;
 std::vector<int> predictedLabels;
