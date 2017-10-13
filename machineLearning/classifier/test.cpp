@@ -108,6 +108,7 @@ int main(int argc, char **argv)
     getsTestFiles();
 
     //Carrega a SVM
+    cout << endl <<"Carregando a svm..." << endl;
     Ptr<ml::SVM> svm = ml::StatModel::load<ml::SVM>("rats_everywhere.yml");
 
     // Informacoes legais
@@ -115,6 +116,7 @@ int main(int argc, char **argv)
     int totalCorrect = 0;
     int totalWrong = 0;
 
+    cout << "Classificando..." << endl;
     int i = clock();
     // itera pelos arquivos de teste
     for (int index = 0; index < testFilenames.size(); index++)
@@ -155,18 +157,19 @@ int main(int argc, char **argv)
     float percentageCorrect = ((float)totalCorrect / totalClassifications) * 100;
     float percentageIncorrect = 100 - percentageCorrect;
 
-    // Mostras as informacoes legais
+    // Mostras as informacoes 
     cout << endl;
     cout << "Numero de classificacoes: " << totalClassifications << endl;
     cout << "Corretas:  " << totalCorrect << " (" << percentageCorrect << "%)" << endl;
     cout << "Erradas: " << totalWrong << " (" << percentageIncorrect << "%)" << endl;
     cout << endl;
-
+    /*
     Confusion confusion = Confusion(expectedLabels, predictedLabels);
     confusion.print_noInd();
 
     Evaluation evaluation = Evaluation(confusion);
     evaluation.print();
+    */
 
     
 }
