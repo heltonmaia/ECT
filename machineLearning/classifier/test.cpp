@@ -131,7 +131,7 @@ int main(int argc, char **argv)
         try
         {
             int predicted = svm->predict(testMat);
-            //cout<< "expected: " << expectedLabels[index] << " -> predicted: " << predicted << endl;
+            //cout<< "Esperado: " << expectedLabels[index] << " -> Previsto: " << predicted << endl;
             predictedLabels.push_back(predicted);
             // Status
             totalClassifications++;
@@ -162,12 +162,14 @@ int main(int argc, char **argv)
     cout << "Erradas: " << totalWrong << " (" << percentageIncorrect << "%)" << endl;
     cout << endl;
     
+    /*
     Confusion confusion = Confusion(expectedLabels, predictedLabels);
     confusion.print_noInd();
 
     Evaluation evaluation = Evaluation(confusion);
     evaluation.print();
-
-
+    */
     
+    
+    return 0;
 }

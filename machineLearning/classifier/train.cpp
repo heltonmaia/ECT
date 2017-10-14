@@ -91,6 +91,16 @@ void getsTrainingFiles(){
     // fecha o diretorio
     tinydir_close(&training_root_dir);
 }
+
+//Mostra os parametros da SVM
+void SVMParams(ml::SVM *svm){
+    cout << "Kernel type     : " << svm->getKernelType() << endl;
+    cout << "Type            : " << svm->getType() << endl;
+    cout << "C               : " << svm->getC() << endl;
+    cout << "Degree          : " << svm->getDegree() << endl;
+    cout << "Nu              : " << svm->getNu() << endl;
+    cout << "Gamma           : " << svm->getGamma() << endl;
+}
     
 
 
@@ -110,7 +120,7 @@ int main(int argc, char **argv){
     for (int index = 0; index < trainingFilenames.size(); index++){
     
         //Mostra em qual arquivo estamos treinando
-        // cout << "Analizando rotulo -> arquivo: " << labels[index] << "|" << trainingFilenames[index] <<  endl;
+        //cout << "Analizando rotulo -> Classe | Arquivo: " << labels[index] << "|" << trainingFilenames[index] <<  endl;
 
         // le a imagem(grayscale)
         Mat imgMat = imread(trainingFilenames[index], 0);
@@ -138,23 +148,36 @@ int main(int argc, char **argv){
 
     // Configura a SVM
     // 'Seta' os parametros(optimal(ish)) da SVM's
+    Ptr<ml::SVM> svm = cv::ml::SVM::create();
+	svm->setType(cv::ml::SVM::C_SVC);
+	svm->setKernel(cv::ml::SVM::POLY);
+    svm->setTermCriteria(cv::TermCriteria(cv::TermCriteria::MAX_ITER, 100, 1e-6));
+	svm->setGamma(0.50625);
+    svm->setC(12.5);
+	svm->setDegree(3);
+
+    /*
+    //Kernel do tipo RBF (nao apresentou bons resultados)
     Ptr<ml::SVM> svm = ml::SVM::create();
     svm->setType(ml::SVM::C_SVC);
     svm->setKernel(ml::SVM::RBF);
-    svm->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER, 1000, 1e-6));
-    svm->setGamma(10);
-    svm->setC(100); //grau de aceitabilidade de erros de classificacao (maior C -> menos erros)
-    //svm->setDegree(3); //grau do polinomio se kernel == POLY
+    svm->setGamma(0.50625);
+    svm->setC(12.5);
+    */
+
 
     //Treina o classificador 
     i = clock();
     cout << "Treinando o classificador......." <<  endl;
     svm->train(trainingMat, ml::ROW_SAMPLE, labelsMat);
+    //svm->trainAuto(trainingMat, ml::ROW_SAMPLE, labelsMat);
     f = clock();
     cout << "O treinamento levou " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
+
 
     // Salva a SVM
     cout << "Salvando a SVM......." <<  endl;
     svm->save("rats_everywhere.yml");
     cout <<  endl;
+    SVMParams(svm);
 }
