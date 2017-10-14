@@ -154,7 +154,7 @@ int main(int argc, char **argv){
     svm->setTermCriteria(cv::TermCriteria(cv::TermCriteria::MAX_ITER, 100, 1e-6));
 	svm->setGamma(0.50625);
     svm->setC(12.5);
-	svm->setDegree(3);
+	svm->setDegree(12);
 
     /*
     //Kernel do tipo RBF (nao apresentou bons resultados)
