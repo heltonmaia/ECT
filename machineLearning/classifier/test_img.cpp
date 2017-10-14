@@ -19,10 +19,11 @@ using namespace cv;
 int main(int argc, char **argv){
 
     //Carrega a SVM
+    cout << endl <<"Carregando a svm..." << endl;
     Ptr<ml::SVM> svm = ml::StatModel::load<ml::SVM>("rats_everywhere.yml");
 
     // le a imagem (grayscale)
-    Mat imgMat = imread("img.png", 0);
+    Mat imgMat = imread("img.jpg", 0);
 
     // converte de 2d para 1d
     Mat testMat = imgMat.clone().reshape(1, 1);
@@ -36,7 +37,7 @@ int main(int argc, char **argv){
                   << "Classe reconhecida -> " << predicted << endl
                   << endl;
 
-        string notifyCmd = "notify-send -t 1000 Recognized: " + to_string(predicted);
+        string notifyCmd = "notify-send -t 1000 Classe reconhecida: " + to_string(predicted);
         system(notifyCmd.c_str());
     }
     catch (Exception ex){

@@ -20,8 +20,6 @@
 using namespace std;
 using namespace cv;
 
-
-
 // Rotulos dos arquivos de treino
 vector<int> expectedLabels;
 vector<int> predictedLabels;
@@ -163,13 +161,13 @@ int main(int argc, char **argv)
     cout << "Corretas:  " << totalCorrect << " (" << percentageCorrect << "%)" << endl;
     cout << "Erradas: " << totalWrong << " (" << percentageIncorrect << "%)" << endl;
     cout << endl;
-    /*
+    
     Confusion confusion = Confusion(expectedLabels, predictedLabels);
     confusion.print_noInd();
 
     Evaluation evaluation = Evaluation(confusion);
     evaluation.print();
-    */
+
 
     
 }

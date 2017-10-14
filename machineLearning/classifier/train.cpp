@@ -140,10 +140,11 @@ int main(int argc, char **argv){
     // 'Seta' os parametros(optimal(ish)) da SVM's
     Ptr<ml::SVM> svm = ml::SVM::create();
     svm->setType(ml::SVM::C_SVC);
-    svm->setKernel(ml::SVM::POLY);
-    svm->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER, 100, 1e-6));
-    svm->setGamma(3);
-    svm->setDegree(3);
+    svm->setKernel(ml::SVM::RBF);
+    svm->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER, 1000, 1e-6));
+    svm->setGamma(10);
+    svm->setC(100); //grau de aceitabilidade de erros de classificacao (maior C -> menos erros)
+    //svm->setDegree(3); //grau do polinomio se kernel == POLY
 
     //Treina o classificador 
     i = clock();
