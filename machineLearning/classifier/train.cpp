@@ -148,14 +148,14 @@ int main(int argc, char **argv){
 
     // Configura a SVM
     // 'Seta' os parametros(optimal(ish)) da SVM's
+    
+    //Kernel do tipo polinomial de grau 3 (best one so far)
     Ptr<ml::SVM> svm = cv::ml::SVM::create();
 	svm->setType(cv::ml::SVM::C_SVC);
-	svm->setKernel(cv::ml::SVM::POLY);
-    svm->setTermCriteria(cv::TermCriteria(cv::TermCriteria::MAX_ITER, 100, 1e-6));
-	svm->setGamma(0.50625);
-    svm->setC(12.5);
-	svm->setDegree(12);
-
+    svm->setKernel(cv::ml::SVM::POLY);
+    svm->setDegree(3);
+    
+    
     /*
     //Kernel do tipo RBF (nao apresentou bons resultados)
     Ptr<ml::SVM> svm = ml::SVM::create();
@@ -165,12 +165,27 @@ int main(int argc, char **argv){
     svm->setC(12.5);
     */
 
-
+    /*
+    //kernel do tipo CHI2
+    Ptr<ml::SVM> svm = ml::SVM::create();
+    svm->setType(ml::SVM::C_SVC);
+    svm->setKernel(ml::SVM::CHI2);
+    //parametros do auto train
+    svm->setC(2.5);
+    svm->setGamma(1e-5);
+    */
+    /*
+    best:
+    Numero de classificacoes: 57
+    Corretas:  19 (33.3333%)
+    Erradas: 38 (66.6667%)
+    */
+    
     //Treina o classificador 
     i = clock();
     cout << "Treinando o classificador......." <<  endl;
-    svm->train(trainingMat, ml::ROW_SAMPLE, labelsMat);
-    //svm->trainAuto(trainingMat, ml::ROW_SAMPLE, labelsMat);
+    //svm->train(trainingMat, ml::ROW_SAMPLE, labelsMat);
+    svm->trainAuto(trainingMat, ml::ROW_SAMPLE, labelsMat);
     f = clock();
     cout << "O treinamento levou " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
