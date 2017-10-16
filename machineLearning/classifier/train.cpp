@@ -154,7 +154,12 @@ int main(int argc, char **argv){
 	svm->setType(cv::ml::SVM::C_SVC);
     svm->setKernel(cv::ml::SVM::POLY);
     svm->setDegree(3);
-    
+    /*
+    best:
+    Numero de classificacoes: 57
+    Corretas:  34 (59.6491%)
+    Erradas: 23 (40.3509%)
+    */
     
     /*
     //Kernel do tipo RBF (nao apresentou bons resultados)
