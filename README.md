@@ -12,9 +12,11 @@ Joanderson Lucas Laurentino Borges - joanderson_lucas@hotmail.com
 
 Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
 
+Lucas Soares Pereira Barros - lucassoares-sp@hotmail.com
+
 Richardson Santiago - richardsonsantiago@ufrn.edu.br
 
-Jadson Araújo Bezerra- jadson013@gmail.com 
+Jadson Araújo Bezerra- jadson013@gmail.com
 
 Ítalo Oliveira Fernandes - italo.of@hotmail.com
 

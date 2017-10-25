@@ -2,114 +2,138 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
 #include <iostream>
-//#include <fstream>
+
 #define MICRO_PER_SECOND 1000000
 
 using namespace std;
 using namespace cv;
 
 int blue=0, green=0, red=0, num_foto=0, Range_rgb=20;
-int posicao[4]= {0}, coord=0;
+int posicao[4]= {0}, coord=0,tam_total_final=300;
 int xpos, ypos, frame_width, frame_height;
 
 bool gravar_video=false, gravar_vid_restrito=false, trava=false, foto=false;
 
-Mat cameraFrame,frame_restrito, imagem_salva;
-Mat preto = imread("preto.png");
+Mat cameraFrame,frame_restrito, imagem_salva,saida;
 
 Point centro_massa,centro_orig, Rectp1, Rectp2;
-VideoCapture cap;
-//ofstream myfile;
 
+VideoCapture cap;
 VideoWriter video;
 
-void condicoes_esp_fot(int xt, int yt, Mat mat) {
+void condicoes_esp_fot(int xt, int yt, int xcorte, int ycorte, int tam_cortey, Mat D)
+{
+//copia a imagem para outra (mat) para que possa ser retirada as faixas de texto
+//originais do video sem que seja apresentada na imagem original
+    Mat mat;
+    D.copyTo(mat);
 
-    if(xt>0 && xt<=frame_width && yt<0) {
-        for(int x = (preto.rows-mat.rows), xi=0; x <=300 ; x++,xi++) {
-            for(int y =0, yi=0; y <=300 ; y++,yi++) {
-                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
-                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
-                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
-            }
-        }
-    }
-    if(xt>0 && xt<=frame_width && yt>frame_height) {
-        for(int x =0, xi=0; x <mat.rows ; x++,xi++) {
-            for(int y =0, yi=0; y < 300 ; y++,yi++) {
-                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
-                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
-                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
-            }
-        }
-    }
-    if(yt>0 && yt<=frame_height && xt<0) {
-        for(int x =0, xi=0; x <300 ; x++,xi++) {
-            for(int y =(preto.cols-mat.cols), yi=0; y < 300 ; y++,yi++) {
-                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
-                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
-                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
-            }
-        }
-    }
-    if(yt>0 && yt<=frame_height && xt>frame_width) {
-        for(int x = 0, xi=0; x <300 ; x++,xi++) {
-            for(int y =0, yi=0; y < mat.cols ; y++,yi++) {
-                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
-                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
-                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
-            }
-        }
-    }
-    if(xt<0 && yt<0) {
-        for(int x = (preto.rows-mat.rows), xi=0; x <300 ; x++,xi++) {
-            for(int y =(preto.cols-mat.cols), yi=0; y < 300 ; y++,yi++) {
-                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
-                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
-                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
-            }
-        }
-    }
-    if(xt>frame_width && yt>frame_height) {
-        for(int x = 0, xi=0; x <mat.rows ; x++,xi++) {
-            for(int y =0, yi=0; y < mat.cols ; y++,yi++) {
-                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
-                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
-                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
-            }
-        }
-    }
-    if(xt>frame_width && yt<0) {
-        for(int x = (preto.rows-mat.rows), xi=0; x <300 ; x++,xi++) {
-            for(int y =0, yi=0; y < mat.cols ; y++,yi++) {
-                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
-                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
-                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
+//cria uma faixa preta onde aparece alguns digitos no video
 
-            }
-        }
+    if(ycorte<=19)
+    {
+        Point pt1,pt2;
+        pt1.x=0;
+        pt1.y=0;
+        pt2.x=0+340;
+        pt2.y=0+(19-ycorte);
+        cout<<pt1<<" "<<pt2<<endl;
+        rectangle(mat, pt1,  pt2, Scalar(0,0,0), -1);
+
     }
-    if(xt<0 && yt>frame_height) {
-        for(int x = 0, xi=0; x <mat.rows ; x++,xi++) {
-            for(int y =(preto.cols-mat.cols), yi=0; y < 300 ; y++,yi++) {
-                preto.at<Vec3b>(x, y)[0] =mat.at<Vec3b>(xi, yi)[0] ;
-                preto.at<Vec3b>(x, y)[1] =mat.at<Vec3b>(xi, yi)[1] ;
-                preto.at<Vec3b>(x, y)[2] =mat.at<Vec3b>(xi, yi)[2] ;
-            }
+
+    else  if(xcorte>=0 && xcorte<=154 && (ycorte+tam_total_final)>=463)
+    {
+        int apaga, apaga_final;
+        if((ycorte + tam_total_final)>=463)
+        {
+            apaga_final=tam_cortey;
+            if((ycorte+tam_total_final)>480)  apaga=tam_cortey-15;
+            else apaga=tam_cortey-(15-(frame_height-(ycorte+tam_total_final)));
         }
+        Point pt1,pt2;
+        pt1.x=0;
+        pt1.y=apaga;
+        pt2.x=(154-xcorte);
+        pt2.y=( apaga_final);
+        rectangle(mat, pt1,  pt2, Scalar(0,0,0), -1);
     }
+
+
+//conjunto de condiçoes para deixar o camundongo sempre no cento da imagem
+    if(xt>0 && xt<=frame_width && yt<0)
+    {
+        Mat preto2(tam_total_final-mat.rows,tam_total_final, CV_8UC3, Scalar(255,255,255));
+
+        vconcat(preto2,mat, saida);
+
+    }
+    else if(xt>0 && xt<=frame_width && yt>frame_height)
+    {
+        Mat preto2(tam_total_final-mat.rows,tam_total_final, CV_8UC3, Scalar(255,255,255));
+
+        vconcat(mat, preto2, saida);
+    }
+    else if(yt>0 && yt<=frame_height && xt<0)
+    {
+        Mat preto2(tam_total_final,tam_total_final-mat.cols, CV_8UC3, Scalar(255,255,255));
+
+        hconcat(mat, preto2, saida);
+    }
+    else if(yt>0 && yt<=frame_height && xt>frame_width)
+    {
+        Mat preto2(tam_total_final,tam_total_final-mat.cols, CV_8UC3, Scalar(255,255,255));
+
+        hconcat(preto2,mat, saida);
+    }
+    else if(xt<0 && yt<0)
+    {
+        Mat preto1(mat.rows,tam_total_final-mat.cols, CV_8UC3, Scalar(255,255,255));
+        Mat preto2(tam_total_final-mat.rows,tam_total_final, CV_8UC3, Scalar(255,255,255));
+        hconcat(preto1,mat, saida);
+        vconcat(preto2,saida, saida);
+    }
+    else if(xt>frame_width && yt>frame_height)
+    {
+        Mat preto1(mat.rows,tam_total_final-mat.cols, CV_8UC3, Scalar(255,255,255));
+        Mat preto2(tam_total_final-mat.rows,tam_total_final, CV_8UC3, Scalar(255,255,255));
+        hconcat(mat,preto1, saida);
+        vconcat(saida,preto2, saida);
+    }
+    else if(xt>frame_width && yt<0)
+    {
+        Mat preto1(mat.rows,tam_total_final-mat.cols, CV_8UC3, Scalar(255,255,255));
+        Mat preto2(tam_total_final-mat.rows,tam_total_final, CV_8UC3, Scalar(255,255,255));
+        hconcat(mat,preto1, saida);
+        vconcat(preto2,saida, saida);
+    }
+    else if(xt<0 && yt>frame_height)
+    {
+        Mat preto1(mat.rows,tam_total_final-mat.cols, CV_8UC3, Scalar(255,255,255));
+        Mat preto2(tam_total_final-mat.rows,tam_total_final, CV_8UC3, Scalar(255,255,255));
+        hconcat(preto1,mat, saida);
+        vconcat(saida,preto2, saida);
+    }
+
+
+// salva a foto
     char nome[30];
     sprintf(nome,"figures/%d.jpg",num_foto);
-    if(xt>0 && xt<=frame_width && yt>0 && yt<=frame_height) {
+    if(xt>0 && xt<=frame_width && yt>0 && yt<=frame_height)
+    {
         imwrite( nome, mat );
 
-    } else imwrite( nome, preto );
+    }
+    else imwrite( nome, saida );
     num_foto++;
 }
+
 //função relacionada a detecção do mouse
-void CallBackFunc(int event, int x, int y, int flags, void* userdata) {
+void CallBackFunc(int event, int x, int y, int flags, void* userdata)
+{
     //definem a posiçao para o comando abaixo identificar o valor rgb do pixel
-    if (event == EVENT_RBUTTONDOWN) {
+    if (event == EVENT_RBUTTONDOWN)
+    {
         Vec3f intensity = frame_restrito.at<Vec3b>(y, x);
         blue = intensity.val[0];
         green = intensity.val[1];
@@ -117,14 +141,16 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata) {
         gravar_video=true;
     }
     //pega as posicoes de area desejada para rasteamento do rato
-    if (event == EVENT_LBUTTONDOWN) {
+    if (event == EVENT_LBUTTONDOWN)
+    {
 
         posicao[coord]=x;
         coord++;
         posicao[coord]=y;
         coord++;
 
-        if(coord==4) {
+        if(coord==4)
+        {
             gravar_vid_restrito=true;
 
             //Algumas variáveis que definem o tamanho e os limites dos frames utilizados para todo o processo
@@ -134,13 +160,15 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata) {
             Rectp1.y=posicao[1];
             Rectp2.x=posicao[2];
             Rectp2.y=posicao[3];
-            video.open("video_resultado.avi", CV_FOURCC('M', 'J', 'P', 'G'), 10, Size(frame_width, frame_height));
+            video.open("video/video_resultado.avi", CV_FOURCC('M', 'J', 'P', 'G'), 10, Size(frame_width, frame_height));
         }
     }
 }
 
-//função de modificação da imagem
-void transform(Mat frame) {
+//função de modificação da imagem,onde ocorre uma varredura e seleção de pixels em determinado intervalo
+// efeitos de redução de ruido, cálculo de centro de massa, e recorte da magem que será salva
+void transform(Mat frame)
+{
     Mat saida, restrit_cor;
 
     //compara os valores dos pixels no intervalo dado, e joga o resultado na matriz restrit_cor
@@ -159,42 +187,49 @@ void transform(Mat frame) {
     centro_massa.x = mu.m10 / mu.m00;
     centro_massa.y = mu.m01 / mu.m00;
 
-    //captura de imagens 300x300 a partir da imagem original
-    if(foto==true) {
-        int tam_total=300,tam_medio=150 ;
+    //captura de imagens tam_total_finalxtam_total_final a partir da imagem original
+    if(foto==true)
+    {
+        int tam_medio=150 ;
         int xcorte = posicao[0]+centro_massa.x-tam_medio;
         int ycorte = posicao[1]+centro_massa.y-tam_medio;
-        int tam_cortex=300, tam_cond_x=100;
-        int tam_cortey=300, tam_cond_y=100;
+        int tam_cortex=tam_total_final, tam_cond_x=xcorte+tam_cortex;
+        int tam_cortey=tam_total_final, tam_cond_y=ycorte+tam_cortey;
+
         //Verifica a posição do corte e se ajusta para nao pegar fora do frame
-        if(ycorte>(frame_height-tam_total)) {
-            tam_cond_y=ycorte+tam_total;
-            tam_cortey=tam_total-(ycorte-(frame_height-tam_total));
+        if(ycorte>(frame_height-tam_total_final))
+        {
+            tam_cond_y=ycorte+tam_total_final;
+            tam_cortey=tam_total_final-(ycorte-(frame_height-tam_total_final));
         }
-        if(xcorte>(frame_width-tam_total)) {
-            tam_cond_x=xcorte+tam_total;
-            tam_cortex=tam_total-(xcorte-(frame_width-tam_total));
+        if(xcorte>(frame_width-tam_total_final))
+        {
+            tam_cond_x=xcorte+tam_total_final;
+            tam_cortex=tam_total_final-(xcorte-(frame_width-tam_total_final));
         }
-        if(ycorte<0) {
+        if(ycorte<0)
+        {
             tam_cond_y=ycorte;
-            cout<<endl<<ycorte<<" yseg "<<endl;
-            tam_cortey=tam_total+ycorte;
+            tam_cortey=tam_total_final+ycorte;
             ycorte=ycorte*(-1)+posicao[1]+centro_massa.y-tam_medio;
         }
-        if(xcorte<0) {
+        if(xcorte<0)
+        {
             tam_cond_x=xcorte;
-            cout<<endl<<xcorte<<" seg "<<endl;
-            tam_cortex=tam_total+xcorte;
+            tam_cortex=tam_total_final+xcorte;
             xcorte=xcorte*(-1)+posicao[0]+centro_massa.x-tam_medio;
         }
         Mat imagem_Primaria = cameraFrame( Rect(xcorte,ycorte,tam_cortex,tam_cortey));
-        cout<<tam_cond_x<<"  "<<tam_cond_y<<endl;
-        condicoes_esp_fot(tam_cond_x, tam_cond_y,imagem_Primaria );
+
+
+
+        condicoes_esp_fot(tam_cond_x, tam_cond_y, xcorte, ycorte, tam_cortey, imagem_Primaria);
     }
 }
 
 //função de exibição da imagem capturada e ja modificada
-void frame(Mat original) {
+void frame(Mat original)
+{
 
     //seleciona uma parte indicada pelo usuario
     if(gravar_vid_restrito==true)
@@ -211,7 +246,8 @@ void frame(Mat original) {
     circle(original, centro_orig, 3, Scalar(0, 0, 255), -1);
 
     //função responsável de gravar os videos
-    if (gravar_video==true) {
+    if (gravar_video==true)
+    {
         //myfile << centro_massa.x << " " << centro_massa.y << endl;
         video.write(original);
     }
@@ -224,7 +260,8 @@ void frame(Mat original) {
 }
 
 //função principal, onde ocorre a captura da imagem
-void principal(char *argv[]) {
+void principal(char *argv[])
+{
 
     char nome_vid[50];
     cout << argv[1];
@@ -241,10 +278,12 @@ void principal(char *argv[]) {
     //mostra o primeiro frame, para o usuário poder selecionar a área do tracking
     if(!cameraFrame.empty())
         imshow("original",cameraFrame);
-        else {
-            cout <<  "Could not open the video file" << endl ;
-        }
-    while (true) {
+    else
+    {
+        cout <<  "Could not open the video file" << endl ;
+    }
+    while (true)
+    {
         if(trava==true) cap >> cameraFrame;
 
         //funcoes do mouse
@@ -256,8 +295,9 @@ void principal(char *argv[]) {
         if (c == 27)
             break;
 
-        //play no video
-        if (c == 'p' || c=='P') {
+        //play e pause do video
+        if (c == 'p' || c=='P')
+        {
             if(trava==true)trava=false;
             else trava=true;
         }
