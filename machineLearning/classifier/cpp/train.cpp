@@ -120,7 +120,7 @@ int main(int argc, char **argv){
     for (int index = 0; index < trainingFilenames.size(); index++){
     
         //Mostra em qual arquivo estamos treinando
-        //cout << "Analizando rotulo -> Classe | Arquivo: " << labels[index] << "|" << trainingFilenames[index] <<  endl;
+        cout << "Analizando rotulo -> (Classe | Arquivo): " << labels[index] << "|" << trainingFilenames[index] <<  endl;
 
         // le a imagem(grayscale)
         Mat imgMat = imread(trainingFilenames[index], 0);
@@ -189,8 +189,8 @@ int main(int argc, char **argv){
     //Treina o classificador 
     i = clock();
     cout << "Treinando o classificador......." <<  endl;
-    //svm->train(trainingMat, ml::ROW_SAMPLE, labelsMat);
-    svm->trainAuto(trainingMat, ml::ROW_SAMPLE, labelsMat);
+    svm->train(trainingMat, ml::ROW_SAMPLE, labelsMat);
+    //svm->trainAuto(trainingMat, ml::ROW_SAMPLE, labelsMat);
     f = clock();
     cout << "O treinamento levou " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
