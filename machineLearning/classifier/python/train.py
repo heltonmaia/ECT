@@ -61,10 +61,3 @@ print("O treinamento levou: {}s".format(f-i))
 print("Salvando a SVM.......")
 svm.save("rats_and_pitons.yml")
 SVMParams(svm)
-  
-'''
-cv2.imshow('Mice',data[132])
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-'''
-
