@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     //cria o arquivo arquivo Keypoints.yml e lê o coordenadas.yml
     FileStorage fs("results/keypoints_orb.yml", FileStorage::WRITE);
     FileStorage fsd("results/descriptors_orb.yml", FileStorage::WRITE);
-    FileStorage fs2("coordenadas.yml", FileStorage::READ);
+    FileStorage fs2("results/coordenadas.yml", FileStorage::READ);
 
     //lê o local onde se encontra os dados salvos
     FileNode features = fs2["features"];
@@ -74,7 +74,9 @@ int main(int argc, char **argv)
             if((y+tam_cortey-yfim)>=0 || (x+tam_cortex-xfim)>=0 || x<=xini || y<=yini)
             {
 
-                if (kp[i].pt.x<(adicionalx + xini-x) || kp[i].pt.x>(adicionalx + tam_cortex-(x+tam_cortex-xfim)) || kp[i].pt.y<(adicionaly + yini-y) || kp[i].pt.y>(adicionaly + tam_cortey-(y+tam_cortey-yfim)))kp[i].pt=zero;
+                if (kp[i].pt.x<(adicionalx + xini-x) || kp[i].pt.x>(adicionalx + tam_cortex-(x+tam_cortex-xfim)))kp[i].pt=zero; 
+
+ 	        if (kp[i].pt.y<(adicionaly + yini-y+1) || kp[i].pt.y>( tam_cortey-(y+tam_cortey-yfim)-10))kp[i].pt=zero;
 
 
 
@@ -91,7 +93,7 @@ int main(int argc, char **argv)
         
         drawKeypoints(img, kp, out, Scalar::all(255));
         sprintf(nome,"fotorb/%d.jpg",frame);		
-        //imwrite(nome, out); //salva a imagem com os pontos
+        imwrite(nome, out); //salva a imagem com os pontos
 
         if (waitKey(30) >= 0)
             break;
@@ -112,4 +114,3 @@ int main(int argc, char **argv)
     fs.release();
     fs2.release();
 }
-
