@@ -14,7 +14,8 @@ int main(int argc, char **argv)
     int x,y,frame, xini,yini, xfim,yfim, parada, tam_cortex,tam_cortey,frame_inicial,frame_final, porcentagem=0;
     int adicionalx, adicionaly;
     //cria o arquivo arquivo Keypoints.yml e lê o coordenadas.yml
-    FileStorage fs("Keypoints_orb.yml", FileStorage::WRITE);
+    FileStorage fs("results/keypoints_orb.yml", FileStorage::WRITE);
+    FileStorage fsd("results/descriptors_orb.yml", FileStorage::WRITE);
     FileStorage fs2("coordenadas.yml", FileStorage::READ);
 
     //lê o local onde se encontra os dados salvos
@@ -60,8 +61,11 @@ int main(int argc, char **argv)
         threshold(img, thres, 100, 255, CV_THRESH_BINARY | CV_THRESH_TRUNC);
 
         //detecta os keypoints
+        Mat descriptors;
         OrbFeatureDetector detector(700, 1.2f, 8, 31, 0);
+        OrbDescriptorExtractor extractor;
         detector.detect(thres, kp);
+        detector.compute(thres, kp, descriptors);
         Mat out;
    
         //verifica se os keypoints estao fora da arena, se verdadeiro os elimina
@@ -78,14 +82,16 @@ int main(int argc, char **argv)
         }
 
 	//escreve os keypoints na imagem
-        char keys[20];
+        char keys[20], des[20];
         sprintf(keys,"keypoints_%d",frame);
+        sprintf(des,"descriptors_%d",frame);
+        
         write(fs, keys, kp);
+        write(fsd, des, descriptors);
+        
         drawKeypoints(img, kp, out, Scalar::all(255));
-        sprintf(nome,"fotorb/%d.jpg",frame);
- 
-	//salva a imagem com os pontos
-        imwrite(nome, out);
+        sprintf(nome,"fotorb/%d.jpg",frame);		
+        //imwrite(nome, out); //salva a imagem com os pontos
 
         if (waitKey(30) >= 0)
             break;
