@@ -29,7 +29,7 @@ VideoCapture cap;
 VideoWriter video;
 
 //cria o arquivo para salvamento do dados
-FileStorage fs("coordenadas.yml", FileStorage::WRITE);
+FileStorage fs("results/coordenadas.yml", FileStorage::WRITE);
 
 void condicoes_esp_fot(int xt, int yt, int xcorte, int ycorte, int tam_cortey, Mat mat)
 {
@@ -59,7 +59,7 @@ int adicionalx=0, adicionaly=0;
 
         Mat preto2(tam_total_final,adicionalx, CV_8UC3, Scalar(255,255,255));
 
-        hconcat(mat, preto2, saida);
+        hconcat(preto2, mat, saida);
     }
     else if(yt>0 && yt<=frame_height && xt>frame_width)
     {
@@ -67,7 +67,7 @@ int adicionalx=0, adicionaly=0;
 	
         Mat preto2(tam_total_final,adicionalx, CV_8UC3, Scalar(255,255,255));
 
-        hconcat(preto2,mat, saida);
+        hconcat(mat,preto2, saida);
     }
     else if(xt<0 && yt<0)
     {
@@ -120,7 +120,6 @@ fs<<"adicional_x"<<adicionalx<<"adicional_y"<<adicionaly<< "}";
 
     }
     else imwrite( nome, saida );
-    num_foto++;
 }
 
 //função relacionada a detecção do mouse
@@ -325,4 +324,3 @@ void principal(char *argv[])
 
     fs.release();
 }
-
