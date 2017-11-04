@@ -13,6 +13,7 @@ int blue=0, green=0, red=0, num_foto=1, Range_rgb=20;
 int posicao[4]= {0}, coord=0,tam_total_final=300;
 int xpos, ypos, frame_width, frame_height;
 
+
 //variaveis utilizadas para condições especificas
 bool gravar_video=false, gravar_vid_restrito=false, trava=false, foto=false;
 
@@ -114,6 +115,7 @@ fs<<"adicional_x"<<adicionalx<<"adicional_y"<<adicionaly<< "}";
 // salva a foto
     char nome[30];
     sprintf(nome,"figures/%d.jpg",num_foto);
+    cout << num_foto << endl;
     if(xt>0 && xt<=frame_width && yt>0 && yt<=frame_height)
     {
         imwrite( nome, mat );
@@ -311,11 +313,15 @@ void principal(char *argv[])
         {
             if(trava==true)trava=false;
             else trava=true;
+        
         }
         //captura uma foto do camundongo
-        if (c == 'f' || c=='F')foto=true;
+        //if (c == 'f' || c=='F')
+        foto=true;
         if (c == 'r' || c=='R')coord=0;
+        
     }
+    
     cap.release();
     video.release();
     fs << "]";
