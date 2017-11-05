@@ -110,8 +110,6 @@ HOGDescriptor hog(
 void createTrainHOG(vector<vector<float>> &trainHOG, vector<string> trainingFilenames){
 
     for (int index = 0; index < trainingFilenames.size(); index++){
-        //Mostra em qual arquivo esta
-        //cout << "Analizando rotulo -> (Classe | Arquivo): " << labels[index] << "|" << trainingFilenames[index] <<  endl;
         // le a imagem(grayscale)
         Mat imgMat = imread(trainingFilenames[index], 0);
 
@@ -215,7 +213,7 @@ int main(int argc, char **argv){
 
     Mat trainMat(trainHOG.size(),descriptor_size,CV_32FC1);
     convertVectortoMatrix(trainHOG, trainMat, descriptor_size);
-
+    
     //Processa os rotulos 
     int labelsArray[labels.size()];    
     // itera pelos rotulos
