@@ -11,6 +11,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/ml.hpp>
+#include "opencv2/objdetect.hpp"
 
 // TinyDir
 #include "extra_libs/tinydir.h"
@@ -18,11 +19,9 @@
 using namespace std;
 using namespace cv;
 
-
 // Rotulos dos arquivos de treino
-vector<int> labels;
+vector<int> labels; 
 vector<string> trainingFilenames;
-
 
 //Pega os arquivos e teste e salva os rotulos/arquvios em uma classe vector
 void getsTrainingFiles(){
@@ -40,7 +39,7 @@ void getsTrainingFiles(){
             // se for um diretorio 
             if (file.is_dir){
     
-                std::string numbersDirName = file.name;
+                string numbersDirName = file.name;
     
                 // pula . / .. / .DS_Store (OSX)
                 if (numbersDirName != "." && numbersDirName != ".." && numbersDirName != ".DS_Store"){
@@ -62,7 +61,7 @@ void getsTrainingFiles(){
                         tinydir_readfile(&training_number_dir, &trainingJpgFile);
     
                         // pega o nome
-                        std::string trainingJpgFileName = trainingJpgFile.name;
+                        string trainingJpgFileName = trainingJpgFile.name;
     
                         // pula . / .. / .DS_Store (OSX)
                         if (trainingJpgFileName != "." && trainingJpgFileName != ".." && trainingJpgFileName != ".DS_Store"){
@@ -92,6 +91,46 @@ void getsTrainingFiles(){
     tinydir_close(&training_root_dir);
 }
 
+HOGDescriptor hog(
+    Size(300,300), //winSize, tamanho das imagens
+    Size(40,40), //blocksize, lida com variacoes de iluminacao (2 x cellSize - normalmente)
+    Size(20,20), //blockStride, controla o grau de normalização do contraste (0.5 x blockSize)
+    Size(20,20), //cellSize, tamanho da descritor que é escolhido com base na escala dos recursos importantes para fazer a classificação 
+             9, //nbins
+              1, //derivAper
+             -1, //winSigma
+              0, //histogramNormType
+            0.2, //L2HysThresh
+              1,//gammal correction
+              64,//nlevels=64
+              1//Use signed gradients 
+);
+
+//Cria os descritores HOG das imagens
+void createTrainHOG(vector<vector<float>> &trainHOG, vector<string> trainingFilenames){
+
+    for (int index = 0; index < trainingFilenames.size(); index++){
+        //Mostra em qual arquivo esta
+        //cout << "Analizando rotulo -> (Classe | Arquivo): " << labels[index] << "|" << trainingFilenames[index] <<  endl;
+        // le a imagem(grayscale)
+        Mat imgMat = imread(trainingFilenames[index], 0);
+
+        vector<float> descriptors;
+        hog.compute(imgMat, descriptors);
+        trainHOG.push_back(descriptors);
+    }
+    
+}
+
+//converte os descritores em matrizes
+void convertVectortoMatrix(vector<vector<float>> &trainHOG, Mat &trainMat, int descriptor_size){
+    for(int i = 0;i<trainHOG.size();i++){
+        for(int j = 0;j<descriptor_size;j++){
+           trainMat.at<float>(i,j) = trainHOG[i][j]; 
+        }
+    }
+}
+
 //Mostra os parametros da SVM
 void SVMParams(ml::SVM *svm){
     cout << "Kernel type     : " << svm->getKernelType() << endl;
@@ -101,59 +140,17 @@ void SVMParams(ml::SVM *svm){
     cout << "Nu              : " << svm->getNu() << endl;
     cout << "Gamma           : " << svm->getGamma() << endl;
 }
-    
 
-
-int main(int argc, char **argv){
-    // pega os arquivos de treino
-    getsTrainingFiles();
-
-    // dimensao das imagens 
-    int imgArea = 300 * 300;
-
-    //armazena os dados de treinamento
-    Mat trainingMat(trainingFilenames.size(), imgArea, CV_32FC1);
-
-    //itera pelos arquivos de treinamento
-    int i = clock();
-    cout <<  endl << "Analizando rotulos ......." <<  endl;
-    for (int index = 0; index < trainingFilenames.size(); index++){
-    
-        //Mostra em qual arquivo estamos treinando
-        cout << "Analizando rotulo -> (Classe | Arquivo): " << labels[index] << "|" << trainingFilenames[index] <<  endl;
-
-        // le a imagem(grayscale)
-        Mat imgMat = imread(trainingFilenames[index], 0);
-
-        int ii = 0; //coluna atual em training_mat
-
-        //Processa os pixels individualmente para formar o array 1D da imagem
-        for (int i = 0; i < imgMat.rows; i++){
-            for (int j = 0; j < imgMat.cols; j++){
-                trainingMat.at<float>(index, ii++) = imgMat.at<uchar>(i, j);
-            }
-        }
-    }
-    int f = clock();
-    cout << "A analise dos rotulos levou " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
-    //Processa os rotulos 
-    int labelsArray[labels.size()];
-
-    // itera pelos rotulos
-    for (int index = 0; index < labels.size(); index++){
-        labelsArray[index] = labels[index];
-    }
-
-    Mat labelsMat(labels.size(), 1, CV_32S, labelsArray);
-
+//Todas as ações da SVM
+void SVMtrain(Mat &trainMat,Mat &labelsMat){    
     // Configura a SVM
-    // 'Seta' os parametros(optimal(ish)) da SVM's
-    
+    // 'Seta' os parametros(optimal(ish)) da SVM's    
     //Kernel do tipo polinomial de grau 3 (best one so far)
     Ptr<ml::SVM> svm = cv::ml::SVM::create();
-	svm->setType(cv::ml::SVM::C_SVC);
-    svm->setKernel(cv::ml::SVM::POLY);
+	svm->setType(ml::SVM::C_SVC);
+    svm->setKernel(ml::SVM::POLY);
     svm->setDegree(3);
+    svm->setGamma(0.50625);
     /*
     best:
     Numero de classificacoes: 57
@@ -187,17 +184,48 @@ int main(int argc, char **argv){
     */
     
     //Treina o classificador 
-    i = clock();
-    cout << "Treinando o classificador......." <<  endl;
-    svm->train(trainingMat, ml::ROW_SAMPLE, labelsMat);
+    int i = clock();
+    cout << "Treinando o classificador ...\n";
+    svm->train(trainMat, ml::ROW_SAMPLE, labelsMat);
     //svm->trainAuto(trainingMat, ml::ROW_SAMPLE, labelsMat);
-    f = clock();
-    cout << "O treinamento levou " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
-
+    int f = clock();
+    cout << "O treinamento levou " << (f-i)/(float)CLOCKS_PER_SEC << "s\n";
 
     // Salva a SVM
-    cout << "Salvando a SVM......." <<  endl;
-    svm->save("rats_everywhere.yml");
+    cout << "Salvando a SVM ...\n";
+    svm->save("HOG_RATS.yml");
     cout <<  endl;
     SVMParams(svm);
+}
+
+
+int main(int argc, char **argv){
+    cout << "******Classificacao de Imagens******\n";
+
+    cout << "Adquirindo arquivos ...\n";
+    // pega os arquivos de treino
+    getsTrainingFiles();
+
+    cout << "Criando os descritores HOG ...\n";
+    vector<vector<float>> trainHOG;    
+    createTrainHOG(trainHOG, trainingFilenames);
+
+    int descriptor_size = trainHOG[0].size();
+    cout << "Tamanho dos descritores: " << descriptor_size << endl;
+
+    Mat trainMat(trainHOG.size(),descriptor_size,CV_32FC1);
+    convertVectortoMatrix(trainHOG, trainMat, descriptor_size);
+
+    //Processa os rotulos 
+    int labelsArray[labels.size()];    
+    // itera pelos rotulos
+    for (int index = 0; index < labels.size(); index++){
+        labelsArray[index] = labels[index];
+    }
+    
+    Mat labelsMat(labels.size(), 1, CV_32S, labelsArray);
+
+    SVMtrain(trainMat, labelsMat);
+
+    return 0;    
 }
