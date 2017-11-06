@@ -145,10 +145,11 @@ void SVMtrain(Mat &trainMat,Mat &labelsMat){
     // 'Seta' os parametros(optimal(ish)) da SVM's    
     //Kernel do tipo polinomial de grau 3 (best one so far)
     Ptr<ml::SVM> svm = cv::ml::SVM::create();
-	svm->setType(ml::SVM::C_SVC);
     svm->setKernel(ml::SVM::POLY);
+	svm->setType(ml::SVM::C_SVC);
+    svm->setC(12.5);
     svm->setDegree(3);
-    svm->setGamma(0.50625);
+    svm->setGamma(1e-05);
     /*
     best:
     Numero de classificacoes: 57
@@ -213,7 +214,7 @@ int main(int argc, char **argv){
 
     Mat trainMat(trainHOG.size(),descriptor_size,CV_32FC1);
     convertVectortoMatrix(trainHOG, trainMat, descriptor_size);
-    
+
     //Processa os rotulos 
     int labelsArray[labels.size()];    
     // itera pelos rotulos
