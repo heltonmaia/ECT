@@ -11,14 +11,13 @@ using namespace cv;
 //variaveis utilizadas
 int blue=0, green=0, red=0, num_foto=1, Range_rgb=20;
 int posicao[4]= {0}, coord=0,tam_total_final=300;
-int xpos, ypos, frame_width, frame_height;
-
+int xpos, ypos, frame_width, frame_height, regiao=0;
 
 //variaveis utilizadas para condições especificas
-bool gravar_video=false, gravar_vid_restrito=false, trava=false, foto=false;
+bool gravar_video=false, gravar_vid_restrito=false, trava=false, foto=false, adcnlx=false,adcnly=false, direcionalx=true,direcionaly=true, canto=true;
 
 //Matrizes das imagens utilizadas
-Mat cameraFrame,frame_restrito, imagem_salva, saida;
+Mat cameraFrame,frame_restrito, imagem_salva;
 
 
 Point centro_massa,centro_orig, Rectp1, Rectp2;
@@ -30,99 +29,105 @@ VideoCapture cap;
 VideoWriter video;
 
 //cria o arquivo para salvamento do dados
-FileStorage fs("results/coordenadas.yml", FileStorage::WRITE);
+FileStorage fs;
 
-void condicoes_esp_fot(int xt, int yt, int xcorte, int ycorte, int tam_cortey, Mat mat)
+void condicoes_esp_fot( int regiao, Mat mat)
 {
-int adicionalx=0, adicionaly=0;
-
+    Mat saida;
+    int adicionalx=0, adicionaly=0;
+    adicionaly=tam_total_final-mat.rows;
+    adicionalx=tam_total_final-mat.cols;
 //conjunto de condiçoes para deixar o camundongo sempre no cento da imagem
-    if(xt>0 && xt<=frame_width && yt<0)
+    cout<< regiao<<endl;
+    adicionaly=tam_total_final-mat.rows;
+    adicionalx=tam_total_final-mat.cols;
+
+    Mat completxy(mat.rows,adicionalx, CV_8UC3, Scalar(255,255,255));
+    Mat completx(tam_total_final,adicionalx, CV_8UC3, Scalar(255,255,255));
+    Mat complety(adicionaly,tam_total_final, CV_8UC3, Scalar(255,255,255));
+    cout<<adicionalx<<" "<<adicionaly<<endl;
+    switch(regiao)
     {
-	adicionaly=tam_total_final-mat.rows;
-	
-        Mat preto2(adicionaly,tam_total_final, CV_8UC3, Scalar(255,255,255));
+    case 1:
+        hconcat(completxy,mat, saida);
+        vconcat(complety,saida, saida);
+        break;
 
-        vconcat(preto2,mat, saida);
+    case 2:
+        vconcat(complety,mat,saida);
+        break;
 
+    case 3:
+        hconcat(mat,completxy, saida);
+        vconcat(complety,saida, saida);
+        break;
+
+    case 4:
+        hconcat(completx,mat, saida);
+        break;
+
+    case 5:
+        hconcat(mat,completx, saida);
+        break;
+
+    case 6:
+        hconcat(completxy,mat, saida);
+        vconcat(saida,complety, saida);
+        break;
+
+    case 7:
+        vconcat(mat,complety, saida);
+        break;
+
+    case 8:
+        hconcat(mat,completxy, saida);
+        vconcat(saida,complety, saida);
+        break;
+
+    case 9:
+        vconcat(complety,mat, saida);
+        break;
+
+    case 10:
+        vconcat(mat,complety, saida);
+        break;
+
+    case 11:
+        vconcat(complety,mat, saida);
+        break;
+
+    case 12:
+        vconcat(mat,complety, saida);
+        break;
+
+    case 13:
+        hconcat(completx,mat, saida);
+        break;
+
+    case 14:
+        hconcat(mat,completx, saida);
+        break;
+
+    case 15:
+        hconcat(completx,mat, saida);
+        break;
+
+    case 16:
+        hconcat(mat,completx, saida);
+        break;
     }
-    else if(xt>0 && xt<=frame_width && yt>frame_height)
-    {
-	adicionaly=tam_total_final-mat.rows;
-	
-        Mat preto2(adicionaly,tam_total_final, CV_8UC3, Scalar(255,255,255));
-
-        vconcat(mat, preto2, saida);
-    }
-    else if(yt>0 && yt<=frame_height && xt<0)
-    {   
-	adicionalx=tam_total_final-mat.cols;
-
-        Mat preto2(tam_total_final,adicionalx, CV_8UC3, Scalar(255,255,255));
-
-        hconcat(preto2, mat, saida);
-    }
-    else if(yt>0 && yt<=frame_height && xt>frame_width)
-    {
-	adicionalx=tam_total_final-mat.cols;
-	
-        Mat preto2(tam_total_final,adicionalx, CV_8UC3, Scalar(255,255,255));
-
-        hconcat(mat,preto2, saida);
-    }
-    else if(xt<0 && yt<0)
-    {
-	adicionaly=tam_total_final-mat.rows;
-	adicionalx=tam_total_final-mat.cols;
-
-        Mat preto1(mat.rows,adicionalx, CV_8UC3, Scalar(255,255,255));
-        Mat preto2(adicionaly,tam_total_final, CV_8UC3, Scalar(255,255,255));
-        hconcat(preto1,mat, saida);
-        vconcat(preto2,saida, saida);
-    }
-    else if(xt>frame_width && yt>frame_height)
-    {
-	adicionaly=tam_total_final-mat.rows;
-	adicionalx=tam_total_final-mat.cols;
-
-        Mat preto1(mat.rows,adicionalx, CV_8UC3, Scalar(255,255,255));
-        Mat preto2(adicionaly,tam_total_final, CV_8UC3, Scalar(255,255,255));
-        hconcat(mat,preto1, saida);
-        vconcat(saida,preto2, saida);
-    }
-    else if(xt>frame_width && yt<0)
-    {
-	adicionaly=tam_total_final-mat.rows;
-	adicionalx=tam_total_final-mat.cols;
-
-        Mat preto1(mat.rows,adicionalx, CV_8UC3, Scalar(255,255,255));
-        Mat preto2(adicionaly,tam_total_final, CV_8UC3, Scalar(255,255,255));
-        hconcat(mat,preto1, saida);
-        vconcat(preto2,saida, saida);
-    }
-    else if(xt<0 && yt>frame_height)
-    {
-	adicionaly=tam_total_final-mat.rows;
-	adicionalx=tam_total_final-mat.cols;
-
-        Mat preto1(mat.rows,adicionalx, CV_8UC3, Scalar(255,255,255));
-        Mat preto2(adicionaly,tam_total_final, CV_8UC3, Scalar(255,255,255));
-        hconcat(preto1,mat, saida);
-        vconcat(saida,preto2, saida);
-    }
-fs<<"adicional_x"<<adicionalx<<"adicional_y"<<adicionaly<< "}";
 
 // salva a foto
     char nome[30];
     sprintf(nome,"figures/%d.jpg",num_foto);
-    cout << num_foto << endl;
-    if(xt>0 && xt<=frame_width && yt>0 && yt<=frame_height)
+    if(regiao==0)
     {
         imwrite( nome, mat );
 
     }
     else imwrite( nome, saida );
 }
+
 
 //função relacionada a detecção do mouse
 void CallBackFunc(int event, int x, int y, int flags, void* userdata)
@@ -154,19 +159,19 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
             xpos=posicao[2]-posicao[0];
             ypos=posicao[3]-posicao[1];
 
-	    //coordenads iniciais e finais da arena
+            //coordenads iniciais e finais da arena
             Rectp1.x=posicao[0];
             Rectp1.y=posicao[1];
             Rectp2.x=posicao[2];
             Rectp2.y=posicao[3];
-
+            fs.open("results/coordenadas.yml", FileStorage::WRITE);
             //classe onde vai ser salvos os dados
             fs << "features" << "[";
 
             //posiçoes salvas
             fs  << "{:" <<"quadr_x1"<<posicao[0]<< "quadr_y1" << posicao[1] << "quadr_x2" << posicao[2] << "quadr_y2" << posicao[3]<< "}";
 
-            
+
         }
     }
 }
@@ -175,8 +180,9 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 // efeitos de redução de ruido, cálculo de centro de massa, e recorte da magem que será salva
 void transform(Mat frame)
 {
-    Mat saida, restrit_cor;
-
+    Mat saida2, restrit_cor;
+    cvtColor(frame,frame,CV_BGR2GRAY);
+    threshold(frame, frame, 110, 255, CV_THRESH_BINARY | CV_THRESH_TRUNC);
     //compara os valores dos pixels no intervalo dado, e joga o resultado na matriz restrit_cor
     inRange(frame, Scalar(blue - Range_rgb, green - Range_rgb, red - Range_rgb), Scalar(blue + Range_rgb, green + Range_rgb, red + Range_rgb), restrit_cor);
 
@@ -185,7 +191,7 @@ void transform(Mat frame)
     dilate(restrit_cor, restrit_cor, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 
     //retorna aos valores de rgb
-    bitwise_and(frame, frame, saida, restrit_cor = restrit_cor);
+    bitwise_and(frame, frame, saida2, restrit_cor = restrit_cor);
 
     //centro de massa
     Moments mu = moments(restrit_cor, true);
@@ -196,42 +202,111 @@ void transform(Mat frame)
     //captura de imagens tam_total_finalxtam_total_final a partir da imagem original
     if(foto==true)
     {
-        int tam_medio=150 ;
+
+        //Verifica a posição do corte e se ajusta para nao pegar fora do frame
+        int tam_medio=150;
         int xcorte = posicao[0]+centro_massa.x-tam_medio;
         int ycorte = posicao[1]+centro_massa.y-tam_medio;
         int tam_cortex=tam_total_final, tam_cond_x=xcorte+tam_cortex;
         int tam_cortey=tam_total_final, tam_cond_y=ycorte+tam_cortey;
-
+        cout<<" ini "<<ycorte<<" "<<xcorte<<" "<<posicao[0]<<" "<<posicao[1]<<" "<<posicao[2]<<" "<<posicao[3]<<endl;
         //Verifica a posição do corte e se ajusta para nao pegar fora do frame
-        if(ycorte>(frame_height-tam_total_final))
+        cout<< " antes" <<regiao<<endl;
+        if(xcorte<posicao[0] && ycorte<=posicao[1] ) regiao=1;
+
+        else if((xcorte+300)>posicao[2] && ycorte<posicao[1] ) regiao=3;
+
+        else if((xcorte+300)>posicao[2] && (ycorte+300)>posicao[3] ) regiao=8;
+
+        else if(xcorte<posicao[0] && (ycorte+300)>posicao[3] ) regiao=6;
+
+        else if(xcorte<posicao[0] && ycorte>posicao[1] && ycorte<posicao[3] ) regiao=4;
+
+        else if(ycorte<posicao[1] && xcorte>posicao[0] && xcorte<posicao[2] ) regiao=2;
+
+        else if((xcorte+300)>posicao[2] && ycorte>posicao[1] && ycorte<posicao[3] ) regiao=5;
+
+        else if((ycorte+300)>posicao[3] && xcorte>posicao[0] && xcorte<posicao[2] ) regiao=7;
+
+        if(xcorte==posicao[0] && ycorte<posicao[1])regiao=9;
+        else if(xcorte==posicao[0] && (ycorte+300)>posicao[3])regiao=10;
+
+        if((xcorte+300)==posicao[2] && ycorte<posicao[1])regiao=11;
+        else if((xcorte+300)==posicao[2] && (ycorte+300)>posicao[3])regiao=12;
+
+        if(ycorte==posicao[1] && xcorte<posicao[0])regiao=13;
+        else if(ycorte==posicao[1] && (xcorte+300)>posicao[2])regiao=14;
+
+        if((ycorte+300)==posicao[3] && xcorte<posicao[0])regiao=15;
+        else if((ycorte+300)==posicao[3] && (xcorte+300)>posicao[2])regiao=16;
+        cout<< " depois" <<regiao<<endl;
+
+        if(xcorte==posicao[0] || (xcorte+300)==posicao[2] || ycorte==posicao[1] || (ycorte+300)==posicao[3])imwrite("nova.jpg",cameraFrame);
+
+
+        if(ycorte>(frame_height-tam_total_final) || ycorte>(posicao[3]-tam_total_final))
         {
-            tam_cond_y=ycorte+tam_total_final;
-            tam_cortey=tam_total_final-(ycorte-(frame_height-tam_total_final));
+            if(ycorte>(frame_height-tam_total_final))
+            {
+                tam_cortey=tam_total_final-(ycorte-(frame_height-tam_total_final))-(frame_height-posicao[3]);
+            }
+            else
+            {
+                tam_cortey=posicao[3]-ycorte;
+            }
         }
-        if(xcorte>(frame_width-tam_total_final))
+        if(xcorte>(frame_width-tam_total_final) || xcorte>(posicao[2]-tam_total_final) )
         {
-            tam_cond_x=xcorte+tam_total_final;
-            tam_cortex=tam_total_final-(xcorte-(frame_width-tam_total_final));
+            if(xcorte>(frame_width-tam_total_final) )
+            {
+                tam_cortex=tam_total_final-(xcorte-(frame_width-tam_total_final))-(frame_width-posicao[2]);
+            }
+            else
+            {
+                tam_cortex=posicao[2]-xcorte;
+            }
         }
-        if(ycorte<0)
+        if(ycorte<0 || ycorte<=posicao[1])
         {
-            tam_cond_y=ycorte;
-            tam_cortey=tam_total_final+ycorte;
-            ycorte=ycorte*(-1)+posicao[1]+centro_massa.y-tam_medio;
+            if(ycorte<0 )
+            {
+                tam_cortey=tam_total_final+ycorte-posicao[1];
+                ycorte=posicao[1];
+            }
+            else
+            {
+                tam_cortey=tam_total_final-(posicao[1]-ycorte);
+                ycorte=posicao[1];
+            }
+
         }
-        if(xcorte<0)
+        if(xcorte<0 || xcorte<=posicao[0])
         {
-            tam_cond_x=xcorte;
-            tam_cortex=tam_total_final+xcorte;
-            xcorte=xcorte*(-1)+posicao[0]+centro_massa.x-tam_medio;
+            if(xcorte<0 )
+            {
+                tam_cortex=tam_total_final+xcorte-posicao[0];
+                xcorte=posicao[0];
+            }
+            else
+            {
+                tam_cortex=tam_total_final+xcorte-posicao[0];
+                xcorte=posicao[0];
+            }
+
         }
+
+
 
         //recorte limitado ou nao pelas laterais da arena
         Mat imagem_Primaria = cameraFrame( Rect(xcorte,ycorte,tam_cortex,tam_cortey));
 
         //fs <<numero do frame<<" "<< x do corte << " " << y do corte <<tamanho do corte em x<< tamanho do corte em y<< endl;
-        fs << "{:" <<"frame"<<num_foto<< "x" << xcorte << "y" << ycorte << "tam_cortex" << tam_cortex<< "tam_cortey" << tam_cortey;
-        condicoes_esp_fot(tam_cond_x, tam_cond_y, xcorte, ycorte, tam_cortey, imagem_Primaria);
+        fs << "{:" <<"frame"<<num_foto<< "x" << xcorte << "y" << ycorte <<"largura"<<tam_cortex<<"altura"<<tam_cortey<< "regiao"<<regiao<<"}";
+        condicoes_esp_fot( regiao, imagem_Primaria);
+        regiao=0;
+
+
+
     }
 }
 
@@ -292,10 +367,10 @@ void principal(char *argv[])
     while (true)
     {
 
-	//contagem dos frames
+        //contagem dos frames
         if(trava==true)num_foto++;
 
-	//captura do frame
+        //captura do frame
         if(trava==true) cap >> cameraFrame;
 
         //funcoes do mouse
@@ -313,15 +388,11 @@ void principal(char *argv[])
         {
             if(trava==true)trava=false;
             else trava=true;
-        
         }
         //captura uma foto do camundongo
-        //if (c == 'f' || c=='F')
-        foto=true;
+        if (c == 'f' || c=='F')foto=true;
         if (c == 'r' || c=='R')coord=0;
-        
     }
-    
     cap.release();
     video.release();
     fs << "]";
