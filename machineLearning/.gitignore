@@ -1,2 +1,7 @@
 #ignora os .yml pois estavam muito grandes
 *.yml
+#ignora os executaveis
+hog
+train
+test
+test_img
