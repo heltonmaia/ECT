@@ -51,6 +51,12 @@ void SVMtrain(Mat &trainMat,Mat &labelsMat){
     svm->setC(1);
     svm->setGamma(1e-5);
     */
+    /*
+    //kernel do tipo SIGMOID
+    Ptr<ml::SVM> svm = ml::SVM::create();
+    svm->setType(ml::SVM::C_SVC);
+    svm->setKernel(ml::SVM::SIGMOID);
+    */
     //Treina o classificador 
     int i = clock();
     cout << "Treinando o classificador ...\n";
