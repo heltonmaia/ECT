@@ -48,7 +48,7 @@ void SVMtrain(Mat &trainMat,Mat &labelsMat){
     svm->setType(ml::SVM::C_SVC);
     svm->setKernel(ml::SVM::CHI2);
     //parametros do auto train
-    svm->setC(2.5);
+    svm->setC(1);
     svm->setGamma(1e-5);
     */
     //Treina o classificador 
