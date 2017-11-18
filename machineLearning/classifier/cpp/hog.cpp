@@ -27,13 +27,13 @@ void load_images( String dirname, vector<Mat> &img_lst, int classe, vector<int> 
 }
 
 void getsTrainingFiles(vector<Mat> &traningImages){
-    for(int i=1;i<13;i++){
+    for(int i=1;i<9;i++){
         load_images("training_files/"+to_string(i), traningImages, i, trainLabels);
     }
 }
 
 void getTestFiles(vector<Mat> &testImages){
-    for(int i=1;i<13;i++){
+    for(int i=1;i<9;i++){
         load_images("test_files/"+to_string(i), testImages, i, testLabels);
     }
 }
