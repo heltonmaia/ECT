@@ -31,7 +31,7 @@ void SVMtrain(Mat &trainMat,Mat &labelsMat){
     svm->setKernel(ml::SVM::POLY);
 	svm->setType(ml::SVM::C_SVC);
     svm->setC(1);
-    svm->setDegree(3);
+    svm->setDegree(1);
     svm->setGamma(0.50625);
     
     /*
