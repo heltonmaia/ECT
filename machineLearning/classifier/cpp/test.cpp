@@ -1,13 +1,10 @@
 // Bibliotecas Padrao
-#include <iostream>
-#include <iomanip>  
+#include <iostream> 
 #include <vector>
 
 // OpenCV
 #include <opencv2/core.hpp>
 #include <opencv2/ml.hpp>
-
-#include "extra_libs/evaluation.hpp"
 
 // Testes do tempo de execucao
 #include <ctime>
@@ -19,12 +16,12 @@ void SVMpredict(Mat &testMat, Mat &testResponse){
 
     //Carrega a SVM
     cout << "Carregando a svm ...\n";
-    Ptr<ml::SVM> svm = ml::StatModel::load<ml::SVM>("ymls/HOG_RATS_POLY.yml");
+    Ptr<ml::SVM> svm = ml::StatModel::load<ml::SVM>("ymls/hog/RATS_POLY.yml");
 
     cout << "Classificando ...\n";
     svm->predict(testMat, testResponse); 
     cout << "Salvando as classificacoes ...\n";
-    FileStorage fs("ymls/testResponse.yml", FileStorage::WRITE);
+    FileStorage fs("ymls/hog/testResponse.yml", FileStorage::WRITE);
     fs << "testResponse" << testResponse;
     fs.release(); 
 }
@@ -56,37 +53,11 @@ void SVMevaluate(Mat &testResponse, vector<int> testLabels){
     
 }
 
-void in_n_out(vector<int> &in, vector<int> &out){
- 
-    cout << "[ ";
-    for(int i=0; i<in.size(); i++){
-        cout << in[i] << ", ";
-    }
-    cout << "]" <<endl;
-    cout << "[ ";
-    for(int i=0; i<in.size(); i++){
-        cout << out[i] << ", ";
-    }
-    cout<< "]" <<endl;
-    
-}
-
-void conf_mat(){
-    vector<int> targets = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8};
-    vector<int> outputs = { 1, 1, 1, 1, 1, 6, 2, 2, 2, 2, 3, 3, 4, 3, 3, 4, 4, 8, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 8, 8, 8, 8, 4};
-
-    Confusion confusion = Confusion(targets, outputs);
-    confusion.print();
-
-    Evaluation evaluation = Evaluation(confusion);
-    evaluation.print();
-}
-
 int main(int argc, char **argv){
     cout << "******Testando o classificador******\n";
 
     cout << "Lendo os dados ...\n";
-    FileStorage fs("ymls/testMat.yml", FileStorage::READ);
+    FileStorage fs("ymls/hog/testMat.yml", FileStorage::READ);
 
     vector<int> testLabels;
     fs["testLabels"] >> testLabels;
@@ -96,18 +67,13 @@ int main(int argc, char **argv){
     fs.release(); 
     
     //classifica as imagens de teste
+    int i = clock();
     SVMpredict(testMat, testResponse);
+    int f = clock();
+    cout << "A classficacao levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s\n";
    
     //avalia as classificações feitas
     SVMevaluate(testResponse, testLabels);
-
-    //Métricas 
-    vector<int> outputs;
-    for(int i=0;i<testResponse.rows;i++){
-        outputs.push_back(testResponse.at<float>(i,0) );
-    }
-
-    conf_mat();
 
     return 0;
 }
