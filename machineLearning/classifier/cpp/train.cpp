@@ -63,11 +63,11 @@ void SVMtrain(Mat &trainMat,Mat &labelsMat){
     svm->train(trainMat, ml::ROW_SAMPLE, labelsMat);
     //svm->trainAuto(trainingMat, ml::ROW_SAMPLE, labelsMat);
     int f = clock();
-    cout << "O treinamento levou " << (f-i)/(float)CLOCKS_PER_SEC << "s\n";
+    cout << "O treinamento levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s\n";
 
     // Salva a SVM
     cout << "Salvando a SVM ...\n";
-    svm->save("ymls/HOG_RATS_POLY.yml");
+    svm->save("ymls/hog/RATS_POLY.yml");
     cout <<  endl;
     SVMParams(svm);
 }
@@ -77,7 +77,7 @@ int main(int argc, char **argv){
     cout << "******Classificacao de Imagens******\n";
 
     cout << "Lendo os dados ...\n";
-    FileStorage fs("ymls/trainMat.yml", FileStorage::READ);
+    FileStorage fs("ymls/hog/trainMat.yml", FileStorage::READ);
     Mat trainMat, labelsMat;
     fs["labelsMat"] >> labelsMat;
     fs["trainMat"] >> trainMat;
