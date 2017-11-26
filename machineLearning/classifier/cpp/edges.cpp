@@ -3,6 +3,9 @@
 #include <vector>
 #include <string>
 
+// Testes do tempo de execucao
+ #include <ctime>
+
 // OpenCV
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
@@ -20,7 +23,7 @@ void load_images( String dirname, vector<Mat> &img_lst, int classe, vector<int> 
     glob( dirname, files );
     for ( size_t i = 0; i < files.size(); ++i ){
         //cout << files[i] << endl;
-        Mat img = imread( files[i] ); // load the image
+        Mat img = imread(files[i]); // load the image
         img_lst.push_back( img );
         labels.push_back(classe);
     }    
@@ -39,71 +42,75 @@ void getTestFiles(vector<Mat> &testImages){
 }
 
 //Cria os descritores de contorno das imagens
-void createEdges(vector<Mat> &trainEdge, vector<Mat> &images){
-    Mat image, gray, blurImage, edge, cedge;
-    for(int i=0; i<images.size(); i++){
-        cedge.create(images[i].size(), image.type());
-        cvtColor(image, gray, COLOR_BGR2GRAY);
+void createEdges(Mat &edges, vector<Mat> &images){
+        
+    for(int index=0; index < images.size(); index++){
+        //trandforma a imagem para grayscale
+        cvtColor(images[index], images[index], CV_BGR2GRAY);
 
-        blur(gray, blurImage, Size(3,3));
-        // Run the edge detector on grayscale
-        Canny(cedge, edge, 100, 300, 3);
-        cedge = Scalar::all(0);
-        images[i].copyTo(cedge, edge);
-        trainEdge.push_back(cedge);        
+        //elimina ruidos pelo metodo gaussiano 
+        GaussianBlur(images[index], images[index], Size(3,3), 0, 0, BORDER_DEFAULT );
+    
+        Canny(images[index], images[index], 100, 300, 3);
+
+        //usando o operador lapaciano com o fato de que a segunda derivada nas extremidades do objeto sera zero
+        //Laplacian(images[i], edge, CV_16S, 3, 1, 0 , BORDER_DEFAULT);
+
+        int ii = 0; //coluna atual
+        
+        for (int i = 0; i < images[index].rows; i++){
+            for (int j = 0; j < images[index].cols; j++){
+                edges.at<float>(index, ii++) = images[index].at<uchar>(i, j);
+            }
+        } 
+          
     }
 
 }
-/*
-//converte os descritores em matrizes
-void convertVectortoMatrix(vector<Mat> &Edges, Mat &Mat, int descriptor_size){
-    for(int i = 0;i<Edges.size();i++){
-        for(int j = 0;j<descriptor_size;j++){
-           Mat.at<float>(i,j) = Edges[i][j]; 
-        }
-    }
-}
-*/
 
 int main(){
     cout << "******Descritores de Contorno******\n";
-    FileStorage fs("ymls/trainMatEdges.yml", FileStorage::WRITE);
-    FileStorage fs2("ymls/testMatEdges.yml", FileStorage::WRITE);
+    FileStorage fs("ymls/edges/trainMat.yml", FileStorage::WRITE);
+    FileStorage fs2("ymls/edges/testMat.yml", FileStorage::WRITE);
 
     cout << "Adquirindo arquivos ...\n";
     // pega os arquivos de treino e teste
     vector<Mat> traningImages, testImages;
     getsTrainingFiles(traningImages);
     getTestFiles(testImages);
+    int imgArea = 300 * 300;
    
-    cout << "Criando os descritores de contorno...\n";
+    cout << "Criando os descritores de contorno:\n";
 
     //treinamento
-    vector<Mat> trainEdge;    
+    Mat trainEdge(traningImages.size(), imgArea, CV_32FC1); 
+    int i = clock();
     createEdges(trainEdge, traningImages);
-
-    int descriptor_size = trainEdge[0].rows;
-    cout << "Tamanho dos descritores: " << descriptor_size << endl;
-
-    //Mat trainMatEdges(trainEdge.size(), descriptor_size, CV_32FC1);
-    //convertVectortoMatrix(trainEdge, trainMatEdges, descriptor_size);
+    int f = clock();
+    cout << "\tA analise das imagens de treino levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
     fs << "labelsMat" << Mat(trainLabels);
     fs << "trainMat" << trainEdge;    
     fs.release(); 
 
     //teste
-    vector<Mat> testEdge;
+    Mat testEdge(testImages.size(), imgArea, CV_32FC1);
+    i = clock();
     createEdges(testEdge, testImages);
-
-    //Mat testMatEdges(testEdge.size(),descriptor_size,CV_32FC1);
-    //convertVectortoMatrix(testEdge, testMatEdges, descriptor_size);
+    f = clock();
+    cout << "\tA analise das imagens de teste levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
     fs2 << "testLabels" << testLabels;
     fs2 << "testMat" << testEdge;
     fs2.release();
 
+    cout << "Descitores de contorno salvos com sucesso!\n";
+    
+    //Mostra o resultado de uma imagem
+    /*
+    imshow("Contorno",testImages[10]);
+    waitKey(0);
+    */
 
-    cout << "Descitores HOG salvos com sucesso\n";
     return 0;
 }
