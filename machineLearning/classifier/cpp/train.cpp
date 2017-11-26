@@ -23,7 +23,7 @@ void SVMParams(ml::SVM *svm){
 }
 
 //Todas as ações da SVM
-void SVMtrain(Mat &trainMat,Mat &labelsMat){    
+void SVMtrain(Mat &trainMat, Mat &labelsMat, string &metodo){    
     // Configura a SVM
     //Kernel do tipo polinomial de grau 3 (best one so far)
     
@@ -67,7 +67,7 @@ void SVMtrain(Mat &trainMat,Mat &labelsMat){
 
     // Salva a SVM
     cout << "Salvando a SVM ...\n";
-    svm->save("ymls/hog/RATS_POLY.yml");
+    svm->save("ymls/"+ metodo +"/RATS_POLY.yml");
     cout <<  endl;
     SVMParams(svm);
 }
@@ -76,14 +76,16 @@ void SVMtrain(Mat &trainMat,Mat &labelsMat){
 int main(int argc, char **argv){
     cout << "******Classificacao de Imagens******\n";
 
+    string metodo = argv[1];
+    
     cout << "Lendo os dados ...\n";
-    FileStorage fs("ymls/hog/trainMat.yml", FileStorage::READ);
+    FileStorage fs("ymls/"+ metodo +"/trainMat.yml", FileStorage::READ);
     Mat trainMat, labelsMat;
     fs["labelsMat"] >> labelsMat;
     fs["trainMat"] >> trainMat;
     fs.release(); 
 
-    SVMtrain(trainMat, labelsMat);
+    SVMtrain(trainMat, labelsMat, metodo);
 
     return 0;    
 }
