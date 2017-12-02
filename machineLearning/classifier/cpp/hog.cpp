@@ -44,14 +44,14 @@ HOGDescriptor hog(
     Size(40,40), //blocksize, lida com variacoes de iluminacao (2 x cellSize - normalmente)
     Size(20,20), //blockStride, controla o grau de normalização do contraste (0.5 x blockSize)
     Size(20,20), //cellSize, tamanho da descritor que é escolhido com base na escala dos recursos importantes para fazer a classificação 
-             18, //nbins
+             9, //nbins
               1, //derivAper
              -1, //winSigma
               0, //histogramNormType
             0.2, //L2HysThresh
               1,//gammal correction
               64,//nlevels=64
-              1//Use signed gradients 
+              0//Use signed gradients 
 );
 
 //Cria os descritores HOG das imagens
