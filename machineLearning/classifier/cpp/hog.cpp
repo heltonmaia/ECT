@@ -75,7 +75,6 @@ void convertVectortoMatrix(vector<vector<float>> &HOG, Mat &Mat, int descriptor_
     }
 }
 
-
 int main(){
     cout << "******Descritores HOG******\n";
     FileStorage fs("ymls/hog/trainMat.yml", FileStorage::WRITE);
@@ -121,7 +120,6 @@ int main(){
     fs2 << "testLabels" << testLabels;
     fs2 << "testMat" << testMat;
     fs2.release();
-
 
     cout << "Descitores HOG salvos com sucesso!\n";
     return 0;
