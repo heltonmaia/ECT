@@ -6,5 +6,5 @@ train
 test
 test_img
 edges
-/classifier/cpp/sampling/figures/*.jpg
-*.jpg
+classifier/cpp/sampling/classifications
+classifier/cpp/sampling/not 
