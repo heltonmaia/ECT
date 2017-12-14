@@ -31,7 +31,7 @@ void SVMtrain(Mat &trainMat, Mat &labelsMat, string &metodo){
     svm->setKernel(ml::SVM::POLY);
 	svm->setType(ml::SVM::C_SVC);
     svm->setC(1);
-    svm->setDegree(1);
+    svm->setDegree(0.6);
     svm->setGamma(0.50625);
     
     /*
@@ -40,7 +40,7 @@ void SVMtrain(Mat &trainMat, Mat &labelsMat, string &metodo){
     svm->setType(ml::SVM::C_SVC);
     svm->setKernel(ml::SVM::RBF);
     svm->setGamma(0.50625);
-    svm->setC(12.5);
+    svm->setC(1);
     */
     /*
     //kernel do tipo CHI2
