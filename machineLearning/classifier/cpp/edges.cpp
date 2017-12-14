@@ -51,7 +51,7 @@ void createEdges(Mat &edges, vector<Mat> &images){
         //elimina ruidos pelo metodo gaussiano 
         GaussianBlur(images[index], images[index], Size(3,3), 0, 0, BORDER_DEFAULT );
     
-        Canny(images[index], images[index], 100, 300, 3);
+        Canny(images[index], images[index], 80, 80, 3);
 
         //usando o operador lapaciano com o fato de que a segunda derivada nas extremidades do objeto sera zero
         //Laplacian(images[i], edge, CV_16S, 3, 1, 0 , BORDER_DEFAULT);
