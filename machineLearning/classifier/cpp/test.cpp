@@ -22,7 +22,7 @@ void SVMpredict(Mat &testMat, Mat &testResponse, string &metodo){
     svm->predict(testMat, testResponse); 
     cout << "Salvando as classificacoes ...\n";
     FileStorage fs("ymls/"+ metodo +"/testResponse.yml", FileStorage::WRITE);
-    fs << "testResponse" << testResponse;
+    fs << "testResponse" << vector<int>(testResponse);
     fs.release(); 
 }
 
