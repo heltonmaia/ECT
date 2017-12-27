@@ -13,29 +13,36 @@ using namespace std;
 using namespace cv;
 
 // Rotulos dos arquivos
-vector<int> trainLabels, testLabels; 
+vector<int> trainLabels, testLabels;
 
-void load_images( String dirname, vector<Mat> &img_lst, int classe, vector<int> &labels){
+
+void load_images( String dirname, vector<Mat> &img_lst, int classe, vector<int> &labels, vector<String> &names){
     vector< String > files;
     glob( dirname, files );
     for ( size_t i = 0; i < files.size(); ++i ){
         //cout << files[i] << endl;
         Mat img = imread( files[i] ); // load the image
         img_lst.push_back( img );
-        labels.push_back(classe);
+        labels.push_back(classe);        
+        names.push_back( files[i] );
     }    
 }
 
-void getsTrainingFiles(vector<Mat> &traningImages){
+void getsTrainingFiles(vector<Mat> &traningImages, FileStorage &file){
+    vector<String> training_files;
     for(int i=1;i<9;i++){
-        load_images("training_files/"+to_string(i), traningImages, i, trainLabels);
+        load_images("training_files/"+to_string(i), traningImages, i, trainLabels, training_files);
     }
+    file << "training_files" << training_files;
 }
 
-void getTestFiles(vector<Mat> &testImages){
+void getTestFiles(vector<Mat> &testImages, FileStorage &file){
+    vector<String> test_files;
     for(int i=1;i<9;i++){
-        load_images("test_files/"+to_string(i), testImages, i, testLabels);
+        load_images("test_files/"+to_string(i), testImages, i, testLabels, test_files);
     }
+    file << "test_files" << test_files;
+    file.release();
 }
 
 
@@ -79,12 +86,13 @@ int main(){
     cout << "******Descritores HOG******\n";
     FileStorage fs("ymls/hog/trainMat.yml", FileStorage::WRITE);
     FileStorage fs2("ymls/hog/testMat.yml", FileStorage::WRITE);
+    FileStorage fileNames("ymls/hog/fileNames.yml", FileStorage::WRITE);
 
     cout << "Adquirindo arquivos ...\n";
     // pega os arquivos de treino e teste
     vector<Mat> traningImages, testImages;
-    getsTrainingFiles(traningImages);
-    getTestFiles(testImages);
+    getsTrainingFiles(traningImages, fileNames);
+    getTestFiles(testImages, fileNames);
    
     cout << "Criando os descritores HOG ...\n";
 
@@ -122,5 +130,18 @@ int main(){
     fs2.release();
 
     cout << "Descitores HOG salvos com sucesso!\n";
+
+
+
+    /*
+    FileStorage file("ymls/hog/testResponse.yml", FileStorage::WRITE);
+    vector<int> wrongs;
+    file["wrongs"] >> wrongs;
+    file.release();
+
+    imshow("0", testImages[wrongs[0]]);
+    waitKey();
+    */
+
     return 0;
 }
