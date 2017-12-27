@@ -25,7 +25,7 @@ void SVMParams(ml::SVM *svm){
 //Todas as ações da SVM
 void SVMtrain(Mat &trainMat, Mat &labelsMat, string &metodo){    
     // Configura a SVM
-    //Kernel do tipo polinomial de grau 3 (best one so far)
+    //Kernel do tipo polinomial
     
     Ptr<ml::SVM> svm = cv::ml::SVM::create();
     svm->setKernel(ml::SVM::POLY);
