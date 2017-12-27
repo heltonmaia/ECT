@@ -61,7 +61,7 @@ void SVMtrain(Mat &trainMat, Mat &labelsMat, string &metodo){
     int i = clock();
     cout << "Treinando o classificador ...\n";
     svm->train(trainMat, ml::ROW_SAMPLE, labelsMat);
-    //svm->trainAuto(trainingMat, ml::ROW_SAMPLE, labelsMat);
+    //svm->trainAuto(traiMat, ml::ROW_SAMPLE, labelsMat);
     int f = clock();
     cout << "O treinamento levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s\n";
 
