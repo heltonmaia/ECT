@@ -15,10 +15,10 @@ using namespace cv;
 void SVMpredict(Mat &testMat, Mat &testResponse, string &metodo){
 
     //Carrega a SVM
-    cout << "Carregando a svm ...\n";
+    cout << "Carregando a SVM ...\n";
     Ptr<ml::SVM> svm = ml::StatModel::load<ml::SVM>("ymls/"+ metodo +"/RATS_POLY.yml");
 
-    cout << "Classificando ...\n";
+    cout << "Classificando imagens de teste ...\n";
     svm->predict(testMat, testResponse); 
     cout << "Salvando as classificacoes ...\n";
     FileStorage fs("ymls/"+ metodo +"/testResponse.yml", FileStorage::WRITE);
@@ -26,7 +26,7 @@ void SVMpredict(Mat &testMat, Mat &testResponse, string &metodo){
     fs.release(); 
 }
 
-void SVMevaluate(Mat &testResponse, vector<int> testLabels){
+void SVMevaluate(Mat &testResponse, vector<int> testLabels, vector<String> names, vector<String> &wrongs){
     
     // Informacoes
     int totalClassifications = 0, totalCorrect = 0, totalWrong = 0;
@@ -37,6 +37,7 @@ void SVMevaluate(Mat &testResponse, vector<int> testLabels){
             totalCorrect++;
         }else{
             totalWrong++;
+            wrongs.push_back( names[i] );
         } 
         totalClassifications++;
     }
@@ -59,6 +60,7 @@ int main(int argc, char **argv){
     string metodo = argv[1];
 
     cout << "Lendo os dados ...\n";
+
     FileStorage fs("ymls/"+ metodo +"/testMat.yml", FileStorage::READ);
 
     vector<int> testLabels;
@@ -67,15 +69,25 @@ int main(int argc, char **argv){
     Mat testMat, testResponse;
     fs["testMat"] >> testMat;
     fs.release(); 
+
+    FileStorage fs2("ymls/"+ metodo +"/fileNames.yml", FileStorage::READ);
+    vector<String> fileNames;
+    fs2["test_files"] >> fileNames;
+    fs2.release(); 
     
     //classifica as imagens de teste
     int i = clock();
     SVMpredict(testMat, testResponse, metodo);
     int f = clock();
     cout << "A classficacao levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s\n";
-   
+    
+    vector<String> wrongs;
     //avalia as classificações feitas
-    SVMevaluate(testResponse, testLabels);
+    SVMevaluate(testResponse, testLabels, fileNames, wrongs);
+
+    FileStorage fs3("ymls/"+ metodo +"/testResponse.yml", FileStorage::APPEND);
+    fs3 << "wrongs" << wrongs;
+    fs3.release();     
 
     return 0;
 }
