@@ -1,12 +1,12 @@
-### Instalação do Hadoop na raspberry
+# Instalação do Hadoop na raspberry
 
 #### Link para baixar imagem do raspbian:
 
 https://downloads.raspberrypi.org/raspbian/images/raspbian-2017-07-05/2017-07-05-raspbian-jessie.zip
 
-#### Para instalar imagem no cartão foi utilizado o etcher. 
+Para instalar imagem no cartão foi utilizado o etcher. 
 
-Link para baixar o etcher
+#### Link para baixar o etcher
 
 https://etcher.io/
 
@@ -34,7 +34,7 @@ sudo update-alternatives --config java
 
 Selecione a opção /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/bin/java.
 
-Para verificar se instalação foi realizada com sucesso:
+#### Para verificar se instalação foi realizada com sucesso:
 
 java -version
 
@@ -104,7 +104,7 @@ protoc --version
 
 ## Instalação do Apache Maven
     
-####Baixar e descompactar o apache maven: 
+#### Baixar e descompactar o apache maven: 
               
 cd /usr/local
 
@@ -141,7 +141,7 @@ mvn -version
 
 ## Configuração de rede na Raspberry
 
-Desativar o ipv6:
+#### Desativar o ipv6:
 
 sudo nano /etc/sysctl.conf
 
@@ -155,9 +155,9 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 net.ipv6.conf.eth0.disable_ipv6 = 1
 
-Nota: Caso queira habilitar no futuro, troque o valor 1 por 0.
+ **Nota:** Caso queira habilitar no futuro, troque o valor 1 por 0.
 
-Em seguida reinicie o serviço com o comando abaixo:
+#### Em seguida reinicie o serviço com o comando abaixo:
 
 sudo sysctl -p
 
@@ -219,7 +219,7 @@ ssh node1
 
 exit
   
-Instalação do Hadoop-2.7.5:
+## Instalação do Hadoop-2.7.5
 
 #### Baixar e descompactar o hadoop:
 
@@ -235,9 +235,11 @@ cd hadoop-2.7.5-src
 
 nano pom.xml
 
-Em seguida, pressione Ctrl+Shift + - (Ctrl+ _) Insira o número da linha igual a 82. Adicione  entre  <properties></properties>  a tags a seguir:
+Em seguida, pressione Ctrl+Shift + - (Ctrl+ _) Insira o número da linha igual a 82. Adicione  entre  ``` <properties></properties>```  a tags a seguir:
 
+```xml
 <additionalparam>-Xdoclint:none</additionalparam>
+```
 
 #### Também será necessária a instalação do patch HADOOP-9320:
 
@@ -325,278 +327,158 @@ Abra o arquivo com nano ou outro editor de preferência:
 sudo nano core-site.xml
 
 Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
-
+```xml
 <configuration>
-    
   <property>
-    
     <name>fs.default.name</name>
-    
     <value>hdfs://node1:9000</value>
-    
   </property>
-  
 </configuration>
+```
 
 Da mesma maneira com os demais:
 
 #### hdfs-site
-
-sudo nano hdfs-site.xml
-
+```xml
 <configuration>
-    
   <property>
-    
     <name>dfs.replication</name>
-    
     <value>1</value>
-    
   </property>
-  
   <property>
-    
     <name>dfs.blocksize</name>
-    
     <value>5242880</value>
-    
   </property>
-  
   <property>
-    
     <name>dfs.namenode.name.dir</name>
-    
     <value>file:/opt/hadoop/hadoop_data/hdfs/namenode</value>
-    
   </property>
-  
   <property>
-    
     <name>dfs.datanode.name.dir</name>
-    
     <value>file:/opt/hadoop/hadoop_data/hdfs/datanode</value>
-    
   </property>
-  
 </configuration>
+```
 
 #### yarn-site
 
 sudo nano yarn-site.xml
 
+```xml
 <configuration>
-    
     <property>
-    
         <name>yarn.resourcemanager.resource-tracker.address</name>
-        
         <value>node1:8025</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.resourcemanager.scheduler.address</name>
-        
         <value>node1:8035</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.resourcemanager.address</name>
-        
         <value>node1:8050</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.nodemanager.aux-services</name>
-        
         <value>mapreduce_shuffle</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.nodemanager.resource.cpu-vcores</name>
-        
         <value>4</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.nodemanager.resource.memory-mb</name>
-        
         <value>768</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.scheduler.minimum-allocation-mb</name>
-        
         <value>64</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.scheduler.maximum-allocation-mb</name>
-        
         <value>256</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.scheduler.minimum-allocation-vcores</name>
-        
         <value>1</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.scheduler.maximum-allocation-vcores</name>
-        
         <value>4</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.nodemanager.vmem-check-enabled</name>
-        
         <value>true</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.nodemanager.pmem-check-enabled</name>
-        
         <value>true</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.nodemanager.vmem-pmem-ratio</name>
-        
         <value>2.1</value>
-        
     </property>
-    
 </configuration>
+```
 
 #### mapred-site
 
 cp mapred-site.xml.template mapred-site.xml
 
 sudo nano mapred-site.xml
-
+```xml
 <configuration>
-    
     <property>
-    
         <name>mapreduce.framework.name</name>
-        
         <value>yarn</value>
-        
     </property>
-    
     <property>
-    
         <name>mapreduce.map.memory.mb</name>
-        
         <value>256</value>
-        
     </property>
-    
     <property>
-    
         <name>mapreduce.map.java.opts</name>
-        
         <value>-Xmx204m</value>
-        
     </property>
-    
     <property>
-    
         <name>mapreduce.map.cpu.vcores</name>
-        
         <value>2</value>
-        
     </property>
-    
     <property>
-    
         <name>mapreduce.reduce.memory.mb</name>
-        
         <value>128</value>
-        
     </property>
-    
     <property>
-    
         <name>mapreduce.reduce.java.opts</name>
-        
         <value>-Xmx102m</value>
-        
     </property>
-    
     <property>
-    
         <name>mapreduce.reduce.cpu.vcores</name>
-        
         <value>2</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.app.mapreduce.am.resource.mb</name>
-        
         <value>128</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.app.mapreduce.am.command-opts</name>
-        
         <value>-Xmx102m</value>
-        
     </property>
-    
     <property>
-    
         <name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
-        
         <value>1</value>
-        
     </property>
-    
     <property>
-    
         <name>mapreduce.job.maps</name>
-        
         <value>4</value>
-        
     </property>
-    
     <property>
-    
         <name>mapreduce.job.reduces</name>
-        
         <value>4</value>
-        
     </property>
-    
 </configuration>
+
+```
 
 #### Crie pastas e permissões para o HDFS
 
