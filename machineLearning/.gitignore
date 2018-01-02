@@ -7,6 +7,6 @@ train
 test
 test_img
 edges
-visu_hog
+visu
 classifier/cpp/sampling/*
 classifier/cpp/analiseDePertencimento/* 
