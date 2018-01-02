@@ -1,3 +1,4 @@
+.gitignore
 #ignora os .yml pois estavam muito grandes
 *.yml
 #ignora os executaveis
@@ -6,5 +7,6 @@ train
 test
 test_img
 edges
+visu_hog
 classifier/cpp/sampling/*
 classifier/cpp/analiseDePertencimento/* 
