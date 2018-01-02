@@ -62,14 +62,14 @@ HOGDescriptor hog(
 );
 
 //Cria os descritores HOG das imagens
-void createHOG(vector<vector<float>> &trainHOG, vector<Mat> &images){
+void createHOG(vector<vector<float>> &HOG, vector<Mat> &images){
     for(int i=0; i<images.size(); i++){
         cvtColor( images[i], images[i], CV_BGR2GRAY );
         //elimina ruidos pelo metodo gaussiano 
         GaussianBlur(images[i], images[i], Size(3,3), 0, 0, BORDER_DEFAULT );
         vector<float> descriptors;
         hog.compute(images[i], descriptors);
-        trainHOG.push_back(descriptors);  
+        HOG.push_back(descriptors);  
     }      
 }
 
