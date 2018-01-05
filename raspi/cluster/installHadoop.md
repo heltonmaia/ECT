@@ -1,4 +1,4 @@
-# Instalação do Hadoop na raspberry
+# Instalação do Hadoop na Raspberry PI 3 modelo B
 
 #### Link para baixar imagem do raspbian:
 
@@ -120,7 +120,7 @@ sudo nano /etc/profile.d/apache-maven.sh
 
 Adicione as variáveis abaixo ao arquivo apache-maven.sh
 
-export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 
 export M2_HOME=/usr/local/apache-maven
 
@@ -136,7 +136,7 @@ source /etc/profile.d/apache-maven.sh
 
 #### Para verificar se instalação foi realizada com sucesso:
               
-mvn -version
+mvn --version
 
 
 ## Configuração de rede na Raspberry
@@ -195,7 +195,7 @@ sudo nano /etc/hostname
 
 Agora reset a Raspberry
 
-Configuração do usuário hadoop
+## Configuração do usuário hadoop
 
 #### Adicione um grupo, um usuário e, em seguida, adicione o usuário ao grupo:
 
