@@ -194,11 +194,11 @@ HOGDescriptor hog(
 );
 
 //Cria os descritores HOG das imagens
-void createHOG(vector<float> &HOG, Mat &image){
+void createHOG(vector<float> &HOG, Mat image){
  
-    cvtColor( image, image, CV_BGR2GRAY );
+    //cvtColor( image, image, CV_BGR2GRAY );
     //elimina ruidos pelo metodo gaussiano 
-    GaussianBlur(image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
+    //GaussianBlur(image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
     
     hog.compute(image, HOG);      
 }
@@ -206,25 +206,9 @@ void createHOG(vector<float> &HOG, Mat &image){
 //Cria os descritores de contorno das imagens
 Mat createEdges(Mat in){
     Mat image = in;
-    //trandforma a imagem para grayscale
-    //cvtColor(image, image, CV_BGR2GRAY);
-
-    //elimina ruidos pelo metodo gaussiano 
-    //GaussianBlur(image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
-
+    
     Canny(image, image, 80, 80, 3);
 
-    //usando o operador lapaciano com o fato de que a segunda derivada nas extremidades do objeto sera zero
-    //Laplacian(images[i], edge, CV_16S, 3, 1, 0 , BORDER_DEFAULT);
-    /*
-    int ii = 0; //coluna atual
-    
-    for (int i = 0; i < image.rows; i++){
-        for (int j = 0; j < image.cols; j++){
-            edges.at<float>(0, ii++) = image.at<uchar>(i, j);
-        }
-    } 
-    */
     return image;    
 }
 
@@ -232,16 +216,17 @@ int main(){
 
     cout << "******VIZUALIZAÇÂO DO DESCRITOR HOG******\n";
 
-    Mat img = imread("visualizations/img.jpg");
-
+    Mat img = imread("visualizations/1787.jpg");
+    
+    
     vector<float> HOG;
     createHOG(HOG, img);
 
     cout << "Tamanho do descritor: " << HOG.size() << endl;
 
-    Mat visu = get_hogdescriptor_visu( img, HOG, Size(300, 300) );
+    //Mat visu = get_hogdescriptor_visu( img, HOG, Size(300, 300) );
 
-    imwrite("visualizations/hog_visu.png", visu);
+    //imwrite("visualizations/hog_visu.png", visu);
     
     Mat edges = createEdges(img);
 
@@ -250,6 +235,6 @@ int main(){
     cout << "Imagens salvas!\n";
     //imshow("Descritor HOG", visu);
     //waitKey(0);
-
+    
     return 0;
 }
