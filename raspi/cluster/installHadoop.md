@@ -14,6 +14,10 @@ https://etcher.io/
 
 sudo -i
 
+apt-get update
+
+apt-get upgrade
+
 apt-get install  zlib1g zlib1g-dbg  zlib1g-dev zlibc libssl-dev lbzip2  libzip-dev  pbzip2 
 
 apt-get install libfuse-dev libsnappy-dev libsnappy-java pkg-config libbz2-dev
@@ -1409,9 +1413,13 @@ your	4
 
 ```
 
-## Problemas com a execurção de tarefas no hadoop
+## Problemas com a execurção de tarefas no hadoop?
+
+#### Dica 1:
 
 Confira se todos os 6 serviços foram inicializados, se o ipv6 estar desabilitado, as configurações de rede estática e os arquivos de configuração do hadoop. Estando tudo correto reinicie a placa, quando estiver ligada novamente inicie os serviços do hadoop. Por fim, tente reexecutar a tarefa.
+
+#### Dica 2:
 
 Caso ocorra a inicialização da execução, mas a presente falha ao longo do processo uma das causas mais comum é o safe modo ativo. Em algumas situações o HDFS entra em modo de segurança impedindo a execução das tarefas como no exemplo abaixo.
 
@@ -1460,7 +1468,7 @@ The number of live datanodes 1 has reached the minimum number 0. Safe mode will 
 	at org.apache.hadoop.examples.QuasiMonteCarlo.estimatePi(QuasiMonteCarlo.java:282)
 	at org.apache.hadoop.examples.QuasiMonteCarlo.run(QuasiMonteCarlo.java:355)
 	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
-	at org.apache.hadoop.examples.QuasiMonteCarlo.main(QuasiMonteCarlo.java:363)
+	at org.apache.hadoop.examples.QuasiMonteCarlo.main(QuasiMonObs.: As vezesteCarlo.java:363)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -1477,7 +1485,7 @@ The number of live datanodes 1 has reached the minimum number 0. Safe mode will 
 
 ```
 
-Para consultar se safe mode estar ativo utilize o comando a seguir:
+#### Para consultar se safe mode estar ativo utilize o comando a seguir:
 
 hdfs dfsadmin -safemode get
 
@@ -1487,7 +1495,7 @@ Safe mode is ON
 
 ```
 
-Caso esteja ativo o utilize o comando abaixo para desativar:
+#### Caso esteja ativo o utilize o comando abaixo para desativar:
 
 hdfs dfsadmin -safemode leave
 
@@ -1496,6 +1504,22 @@ hduser@node1:/opt/hadoop/bin $ hdfs dfsadmin -safemode leave
 Safe mode is OFF
 
 ```
+## Acessar informações do hadoop pelo browser
+
+Um forma agradável de obter informações sobre aplicações, nós, armazenamento e ferramentas do hadoop é utilizando o navegador de internet por meio dos links abaixo:
+
+Localmente na placa:
+
+http://node1:50070
+
+http://node1:8088
+
+Externamente a placa, mas na mesma rede:
+
+http://192.168.1.104:50070
+
+http://192.168.1.104:8088
+
 ## Referências:
 
 http://data.andyburgin.co.uk/post/157450047463/running-hue-on-a-raspberry-pi-hadoop-cluster
