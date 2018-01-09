@@ -1413,7 +1413,7 @@ your	4
 
 ```
 
-## Problemas com a execurção de tarefas no hadoop?
+## Problemas com a execução de tarefas no hadoop?
 
 #### Dica 1:
 
