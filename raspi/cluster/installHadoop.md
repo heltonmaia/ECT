@@ -42,6 +42,14 @@ Selecione a opção /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/bin/java.
 
 java -version
 
+```
+hduser@node1:~ $ java -version
+java version "1.8.0_65"
+Java(TM) SE Runtime Environment (build 1.8.0_65-b17)
+Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
+
+```
+
 ## Instalação do protobuf 2.5.0
 
 ### 1ª opção de instalação do protobuf
@@ -676,6 +684,8 @@ hduser@node1:/opt/hadoop/sbin $ jps
 
 #### Finalizar serviços em execução
 
+cd $HADOOP_INSTALL/sbin
+
 ./stop-dfs.sh 
 
 ```
@@ -704,7 +714,99 @@ no proxyserver to stop
 
 cd $HADOOP_INSTALL/bin
 
-./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar pi 2 4
+./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar pi 4 2 
+
+```
+hduser@node1:cd $HADOOP_INSTALL/bin
+hduser@node1:/opt/hadoop/bin $ ./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar pi 4 2
+Number of Maps  = 4
+Samples per Map = 2
+Wrote input for Map #0
+Wrote input for Map #1
+Wrote input for Map #2
+Wrote input for Map #3
+Starting Job
+18/01/08 22:00:49 INFO client.RMProxy: Connecting to ResourceManager at node1/192.168.1.104:8050
+18/01/08 22:00:53 INFO input.FileInputFormat: Total input paths to process : 4
+18/01/08 22:00:54 INFO mapreduce.JobSubmitter: number of splits:4
+18/01/08 22:00:55 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1515459417185_0001
+18/01/08 22:00:58 INFO impl.YarnClientImpl: Submitted application application_1515459417185_0001
+18/01/08 22:00:59 INFO mapreduce.Job: The url to track the job: http://node1:8088/proxy/application_1515459417185_0001/
+18/01/08 22:00:59 INFO mapreduce.Job: Running job: job_1515459417185_0001
+18/01/08 22:01:58 INFO mapreduce.Job: Job job_1515459417185_0001 running in uber mode : false
+18/01/08 22:01:58 INFO mapreduce.Job:  map 0% reduce 0%
+18/01/08 22:02:44 INFO mapreduce.Job:  map 25% reduce 0%
+18/01/08 22:02:44 INFO mapreduce.Job: Task Id : attempt_1515459417185_0001_m_000001_0, Status : FAILED
+Container killed on request. Exit code is 137
+Container exited with a non-zero exit code 137
+Killed by external signal
+
+18/01/08 22:03:11 INFO mapreduce.Job:  map 75% reduce 0%
+18/01/08 22:03:28 INFO mapreduce.Job:  map 100% reduce 0%
+18/01/08 22:03:30 INFO mapreduce.Job:  map 100% reduce 100%
+18/01/08 22:03:31 INFO mapreduce.Job: Job job_1515459417185_0001 completed successfully
+18/01/08 22:03:32 INFO mapreduce.Job: Counters: 51
+	File System Counters
+		FILE: Number of bytes read=94
+		FILE: Number of bytes written=611857
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=1048
+		HDFS: Number of bytes written=215
+		HDFS: Number of read operations=19
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=3
+	Job Counters 
+		Failed map tasks=1
+		Launched map tasks=5
+		Launched reduce tasks=1
+		Other local map tasks=1
+		Data-local map tasks=4
+		Total time spent by all maps in occupied slots (ms)=607748
+		Total time spent by all reduces in occupied slots (ms)=33332
+		Total time spent by all map tasks (ms)=151937
+		Total time spent by all reduce tasks (ms)=16666
+		Total vcore-milliseconds taken by all map tasks=303874
+		Total vcore-milliseconds taken by all reduce tasks=33332
+		Total megabyte-milliseconds taken by all map tasks=38895872
+		Total megabyte-milliseconds taken by all reduce tasks=2133248
+	Map-Reduce Framework
+		Map input records=4
+		Map output records=8
+		Map output bytes=72
+		Map output materialized bytes=112
+		Input split bytes=576
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=2
+		Reduce shuffle bytes=112
+		Reduce input records=8
+		Reduce output records=0
+		Spilled Records=16
+		Shuffled Maps =4
+		Failed Shuffles=0
+		Merged Map outputs=4
+		GC time elapsed (ms)=2807
+		CPU time spent (ms)=9550
+		Physical memory (bytes) snapshot=719986688
+		Virtual memory (bytes) snapshot=1523646464
+		Total committed heap usage (bytes)=502022144
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=472
+	File Output Format Counters 
+		Bytes Written=97
+Job Finished in 164.174 seconds
+Estimated value of Pi is 3.50000000000000000000
+
+```
 
 ### Exemplo wordCount:
 
@@ -718,12 +820,682 @@ cd /opt/hadoop/bin
 
 ./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar wordcount /license.txt /license-out.txt
 
+```
+
+hduser@node1:/opt/hadoop/bin $ ./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar wordcount /license.txt /license-out.txt
+18/01/08 22:37:04 INFO client.RMProxy: Connecting to ResourceManager at node1/192.168.1.104:8050
+18/01/08 22:37:07 INFO input.FileInputFormat: Total input paths to process : 1
+18/01/08 22:37:08 INFO mapreduce.JobSubmitter: number of splits:1
+18/01/08 22:37:08 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1515459417185_0002
+18/01/08 22:37:09 INFO impl.YarnClientImpl: Submitted application application_1515459417185_0002
+18/01/08 22:37:09 INFO mapreduce.Job: The url to track the job: http://node1:8088/proxy/application_1515459417185_0002/
+18/01/08 22:37:09 INFO mapreduce.Job: Running job: job_1515459417185_0002
+18/01/08 22:37:32 INFO mapreduce.Job: Job job_1515459417185_0002 running in uber mode : false
+18/01/08 22:37:32 INFO mapreduce.Job:  map 0% reduce 0%
+18/01/08 22:37:49 INFO mapreduce.Job:  map 100% reduce 0%
+18/01/08 22:38:17 INFO mapreduce.Job:  map 100% reduce 100%
+18/01/08 22:38:19 INFO mapreduce.Job: Job job_1515459417185_0002 completed successfully
+18/01/08 22:38:20 INFO mapreduce.Job: Counters: 49
+	File System Counters
+		FILE: Number of bytes read=29655
+		FILE: Number of bytes written=669267
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=86518
+		HDFS: Number of bytes written=22239
+		HDFS: Number of read operations=15
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=8
+	Job Counters 
+		Launched map tasks=1
+		Launched reduce tasks=4
+		Data-local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=57352
+		Total time spent by all reduces in occupied slots (ms)=189936
+		Total time spent by all map tasks (ms)=14338
+		Total time spent by all reduce tasks (ms)=94968
+		Total vcore-milliseconds taken by all map tasks=28676
+		Total vcore-milliseconds taken by all reduce tasks=189936
+		Total megabyte-milliseconds taken by all map tasks=3670528
+		Total megabyte-milliseconds taken by all reduce tasks=12155904
+	Map-Reduce Framework
+		Map input records=1594
+		Map output records=12580
+		Map output bytes=135125
+		Map output materialized bytes=29655
+		Input split bytes=94
+		Combine input records=12580
+		Combine output records=1914
+		Reduce input groups=1914
+		Reduce shuffle bytes=29655
+		Reduce input records=1914
+		Reduce output records=1914
+		Spilled Records=3828
+		Shuffled Maps =4
+		Failed Shuffles=0
+		Merged Map outputs=4
+		GC time elapsed (ms)=2395
+		CPU time spent (ms)=13500
+		Physical memory (bytes) snapshot=413200384
+		Virtual memory (bytes) snapshot=1211461632
+		Total committed heap usage (bytes)=187437056
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=86424
+	File Output Format Counters 
+		Bytes Written=22239
+
+```
 #### Para visualizar o resultado do wordcount siga os passos a seguir:
 
 hdfs dfs -copyToLocal /license-out.txt ~/
 
-nano ~/license-out.txt/part-r-00000
+cat ~/license-out.txt/part-r-00000
+```
+hduser@node1:/opt/hadoop/bin $ cat  ~/license-out.txt/part-r-00000
+"Contributor"	2
+"Derivative	1
+"Legal	1
+"License");	1
+"Licensed	1
+"Work"	1
+"You"	1
+"submitted"	1
+("AGREEMENT").	1
+(1) for	2
+(MIT)	1
+(NOT	2
+(a) the	1
+(an	1
+(and	3
+(b) otherwise	1
+(based	1
+(d)	5
+(except	7
+(excluding	5
+(http://code.google.com/p/leveldb/),	1
+(i) the	1
+(if	4
+-	13
+---------------------------------------------------------------------	1
+/*	1
+0.52	1
+034819	1
+1	1
+1.10. Original	1
+1.11.	1
+1.12. Source	1
+1.4.	1
+1.4. Executable means	1
+1.7.10	1
+1.8.	1
+1.8. Licensable means	1
+1. Definitions. 	1
+1995),	4
+2.1	3
+2.1(a)	1
+2.5	1
+2001-2016,	1
+2005,	1
+2012	1
+227.7202-4	2
+3.	4
+3.2.	2
+3.6.	2
+4.1.	2
+4.3,	2
+6.1	1
+6.3.	2
+7.	4
+9	1
+<COPYRIGHT	1
+<organization>	1
+=============	1
+A	23
+ACCEPTANCE	1
+ACCOMPANYING	1
+ALL	3
+ALLOW	2
+APPENDIX:	1
+APPLICABLE	2
+AUTHOR	2
+AUTHORIZED	2
+Additional	3
+All	13
+Availability	2
+BE	19
+BUT	29
+BY	12
+Bozhanov	1
+By	1
+C.	2
+C.F.R.	8
+CAUSED	13
+CHARACTER	2
+COMMON	2
+COMPUTER	2
+CONSEQUENTIAL	17
+Catholique	1
+Claims	6
+Claims means	1
+Code.	3
+Commission	1
+Contracts	2
+Contributions.	2
+Contributor.	8
+Contributor:	1
+Core	3
+D3	1
+DFAR,	2
+DISCLAIMED.	12
+DISCLAIMER	5
+DISCLAIMER. 	1
+DO	2
+Database	1
+Derivative	17
+Developer)	2
+Disclaimer	1
+EXEMPLARY,	13
+EXPRESSLY	2
+Entity	3
+European	1
+Everyone	1
+External	1
+FIT	2
+FOR	48
+FORTH	2
+For	18
+Foundation	4
+GOODWILL,	2
+Group.	1
+Group:	2
+Hamcrest	1
+INCLUDING	5
+INCLUDING,	17
+INJURY	2
+IS”	1
+Institute	1
+Jakub	1
+LEGAL	2
+LIABILITY	6
+LIABILITY,	31
+LIABLE	19
+LICENSE	6
+LOSS	14
+Larger	10
+Legal	3
+License	54
+License,	10
+License. 	9
+Licensed	3
+Licensor	8
+Licensor,	1
+MAY	2
+Modifications.	3
+NON-INFRINGING.	2
+NONINFRINGEMENT.	5
+NOR	1
+Niels	1
+Nothing	2
+Notices.	2
+Notwithstanding	5
+OF	168
+ON	16
+OR	169
+Object	4
+Obligations. 	1
+OneLab	1
+PART	2
+PROVIDED	21
+Participant.	1
+Patents"	1
+Patents.	1
+Pawel	1
+Permission	6
+Program;	1
+RECIPIENT	1
+RECIPIENT'S	1
+RESULTING	2
+RI	1
+RIGHTS	2
+RISK	2
+Recipient	11
+Recipient's	6
+Red	1
+Redistribution	12
+Required	2
+Rights	2
+SERVICES;	12
+SHOULD	2
+SOFTWARE	32
+SOFTWARE,	14
+SPECIAL,	15
+SUCH	23
+Sale	2
+Section	9
+Sections 2.1	1
+Sections 2.1(a)	1
+Sections 6.1	1
+Section 2.1(b)	1
+Software	72
+Software,	21
+Software. 	2
+Software means	2
+Source	28
+State	1
+THAT	2
+THE	116
+TO	15
+TO,	24
+Terms.	2
+That	1
+The	44
+To	1
+URIs	1
+United	5
+Version;	2
+Versions	2
+Version”	1
+WHETHER	20
+While	2
+Work.	1
+YOU.	3
+York	1
+You.	2
+You:	2
+Your	27
+a	128
+above	30
+above,	8
+absence	2
+acceptance	1
+accordance	1
+account	1
+actions	1
+add	2
+additional	4
+admission	2
+against	14
+against,	1
+agrees	2
+all	29
+alleging	5
+allow	2
+alone.	1
+along	1
+also	5
+always	3
+and/or	36
+and 	2
+appear.	1
+applicable	9
+appropriate	1
+archives.	1
+assign	1
+at	12
+attempt	2
+attorneys	1
+author	1
+authorized	2
+authorship,	2
+available	31
+avoid	1
+b)	5
+be	48
+before	1
+below	4
+beyond	2
+binaries	3
+boilerplate	1
+brackets	1
+brackets!)	1
+breach.	2
+brought	2
+bundles	11
+but	7
+by	113
+by,	5
+calculation	1
+cannot	1
+cause	5
+caused	5
+cease	1
+character	1
+choose	6
+claims	10
+claims,	8
+clause	4
+clear	6
+code.	2
+common	5
+compiler	1
+compliance	10
+computer	11
+consequential	2
+construed	3
+contains	5
+content	1
+continue	3
+control	7
+control,	2
+conversions	1
+conveyed	4
+copies	13
+copying	1
+creation	2
+damage	1
+days	4
+defined	5
+definition,	4
+delete	2
+deleted	2
+derivative	5
+derived	9
+devices. 	1
+different	5
+differs	2
+disclaimer	12
+disclaims	2
+do	13
+document. 	1
+easier	1
+entity	14
+entity,	3
+entity. 	1
+errors,	1
+exchange. 	1
+executed	1
+expiration	2
+expressly	4
+expressly,	1
+external	1
+fails	1
+files.	1
+following	60
+for	59
+for,	3
+forth	6
+forum	1
+full	1
+given	3
+goodwill,	1
+granted:	4
+grantor.	1
+grants	9
+grossly	1
+hadoop-hdfs-project/hadoop-hdfs/src/main/webapps/static/bootstrap-3.0.2	1
+hadoop-tools/hadoop-sls/src/main/html/css/bootstrap.min.css	1
+hadoop-tools/hadoop-sls/src/main/html/js/thirdparty/d3-LICENSE	1
+hadoop-tools/hadoop-sls/src/main/html/js/thirdparty/d3.v3.js	1
+hadoop-tools/hadoop-sls/src/main/html/js/thirdparty/jquery.js	1
+hardware)	1
+hereby	20
+herein.	3
+hereto,	1
+hold	1
+https://groups.google.com/forum/#!forum/lz4c	1
+ii)	2
+improving	1
+inability	1
+includes	7
+including	20
+including,	3
+indemnify	5
+indemnify,	1
+indirectly	5
+indirectly,	2
+infringements	4
+institute	1
+intended	3
+issue	1
+it	19
+item,	1
+itself	4
+least	1
+legal	7
+leveldbjni	1
+leveldbjni-all	1
+liability	15
+liability. 	1
+liable	1
+libraries	1
+license	45
+license,	2
+license: 	2
+licensed	1
+licensee)	1
+licenses;	1
+limitations	1
+lists,	1
+loss	2
+made.	1
+makes	7
+making	1
+making,	4
+management	3
+manner.	1
+many	2
+material	1
+may	48
+mechanical	1
+meet	1
+modifications:	1
+must:	1
+name	11
+native	1
+nature,	2
+negligent	1
+nor	8
+nothing	1
+number.	3
+object	4
+obligations	5
+obligations,	1
+obtaining	5
+obtaining,	1
+of	399
+of,	8
+offers	1
+official	1
+on	37
+or	270
+or,	1
+owned	3
+owner.	1
+part	12
+partners	1
+per	1
+percent	3
+perform,	6
+permission	6
+permit	5
+power,	3
+practice,	2
+preferred	1
+preferred,	1
+previous	4
+product.	2
+programs	1
+project	2
+prospectively	2
+provide	2
+provided	36
+provision	9
+qualify,	1
+received.	1
+recipient's	1
+recipients'	1
+regulations	2
+remainder	1
+represents	3
+reproduce	13
+reproduce,	6
+required	5
+reserves	1
+resulting	2
+revision	1
+rights	56
+sale	1
+sale,	4
+section	1
+section,	1
+secure	1
+see:	1
+separable	1
+separate	4
+service	1
+should	4
+snappy	1
+software	42
+soon	1
+source	33
+source,	1
+special,	2
+src/google/protobuf/stubs/atomicops_internals_power.h.	1
+state	1
+stated	3
+submitted.	1
+such	87
+suitable	1
+syntax	1
+terminate	7
+terminate,	1
+terms.	1
+that	116
+the	649
+thereof);	3
+thereof.	2
+those	9
+through	6
+time.	3
+to	241
+to,	2
+tracking	1
+trademark	2
+trademark,	1
+transfer	2
+translation	1
+understands	1
+understood,	1
+user	2
+validly	2
+value	2
+versions	3
+viewable	1
+was	4
+whether	9
+which	32
+which,	2
+whom	8
+within	20
+work.	2
+worldwide,	4
+would	1
+xmlenc	1
+your	4
+“Executable”	1
+“Larger	1
+“Licensable”	1
+“Participant”)	1
+“Source	1
 
+
+```
+
+## Problemas com a execurção de tarefas no hadoop
+
+Confira se todos os 6 serviços foram inicializados, se o ipv6 estar desabilitado, as configurações de rede estática e os arquivos de configuração do hadoop. Estando tudo correto reinicie a placa, quando estiver ligada novamente inicie os serviços do hadoop. Por fim, tente reexecutar a tarefa.
+
+Caso ocorra a inicialização da execução, mas a presente falha ao longo do processo uma das causas mais comum é o safe modo ativo. Em algumas situações o HDFS entra em modo de segurança impedindo a execução das tarefas como no exemplo abaixo.
+
+```
+
+hduser@node1:/opt/hadoop/bin $ ./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar pi 4 2
+Number of Maps  = 4
+Samples per Map = 2
+org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.hdfs.server.namenode.SafeModeException): Cannot create directory /user/hduser/QuasiMonteCarlo_1515458168837_676260225/in. Name node is in safe mode.
+The reported blocks 0 needs additional 40 blocks to reach the threshold 0,9990 of total blocks 40.
+The number of live datanodes 1 has reached the minimum number 0. Safe mode will be turned off automatically once the thresholds have been reached.
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.checkNameNodeSafeMode(FSNamesystem.java:1335)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.mkdirs(FSNamesystem.java:3866)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.mkdirs(NameNodeRpcServer.java:984)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.mkdirs(ClientNamenodeProtocolServerSideTranslatorPB.java:634)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:616)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:982)
+	at org.apache.hadoop.ipc.Server$Handler$1.run(Server.java:2217)
+	at org.apache.hadoop.ipc.Server$Handler$1.run(Server.java:2213)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1754)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2213)
+
+	at org.apache.hadoop.ipc.Client.call(Client.java:1476)
+	at org.apache.hadoop.ipc.Client.call(Client.java:1413)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Invoker.invoke(ProtobufRpcEngine.java:229)
+	at com.sun.proxy.$Proxy10.mkdirs(Unknown Source)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolTranslatorPB.mkdirs(ClientNamenodeProtocolTranslatorPB.java:563)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.apache.hadoop.io.retry.RetryInvocationHandler.invokeMethod(RetryInvocationHandler.java:191)
+	at org.apache.hadoop.io.retry.RetryInvocationHandler.invoke(RetryInvocationHandler.java:102)
+	at com.sun.proxy.$Proxy11.mkdirs(Unknown Source)
+	at org.apache.hadoop.hdfs.DFSClient.primitiveMkdir(DFSClient.java:3014)
+	at org.apache.hadoop.hdfs.DFSClient.mkdirs(DFSClient.java:2984)
+	at org.apache.hadoop.hdfs.DistributedFileSystem$21.doCall(DistributedFileSystem.java:1047)
+	at org.apache.hadoop.hdfs.DistributedFileSystem$21.doCall(DistributedFileSystem.java:1043)
+	at org.apache.hadoop.fs.FileSystemLinkResolver.resolve(FileSystemLinkResolver.java:81)
+	at org.apache.hadoop.hdfs.DistributedFileSystem.mkdirsInternal(DistributedFileSystem.java:1061)
+	at org.apache.hadoop.hdfs.DistributedFileSystem.mkdirs(DistributedFileSystem.java:1036)
+	at org.apache.hadoop.fs.FileSystem.mkdirs(FileSystem.java:1880)
+	at org.apache.hadoop.examples.QuasiMonteCarlo.estimatePi(QuasiMonteCarlo.java:282)
+	at org.apache.hadoop.examples.QuasiMonteCarlo.run(QuasiMonteCarlo.java:355)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
+	at org.apache.hadoop.examples.QuasiMonteCarlo.main(QuasiMonteCarlo.java:363)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.apache.hadoop.util.ProgramDriver$ProgramDescription.invoke(ProgramDriver.java:71)
+	at org.apache.hadoop.util.ProgramDriver.run(ProgramDriver.java:144)
+	at org.apache.hadoop.examples.ExampleDriver.main(ExampleDriver.java:74)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+
+```
+
+Para consultar se safe mode estar ativo utilize o comando a seguir:
+
+hdfs dfsadmin -safemode get
+
+```
+hduser@node1:/opt/hadoop/bin $ hdfs dfsadmin -safemode get
+Safe mode is ON
+
+```
+
+Caso esteja ativo o utilize o comando abaixo para desativar:
+
+hdfs dfsadmin -safemode leave
+
+```
+hduser@node1:/opt/hadoop/bin $ hdfs dfsadmin -safemode leave
+Safe mode is OFF
+
+```
 ## Referências:
 
 http://data.andyburgin.co.uk/post/157450047463/running-hue-on-a-raspberry-pi-hadoop-cluster
