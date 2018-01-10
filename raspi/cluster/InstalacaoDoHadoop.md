@@ -296,6 +296,87 @@ cd hadoop-2.7.5-src
 
 mvn package -Pdist,native -DskipTests -Dtar
 
+Ao final do processo espera-se obter sucesso em todos os pacotes.
+```
+...
+
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] Apache Hadoop Main ................................. SUCCESS [  7.786 s]
+[INFO] Apache Hadoop Build Tools .......................... SUCCESS [  5.599 s]
+[INFO] Apache Hadoop Project POM .......................... SUCCESS [  8.169 s]
+[INFO] Apache Hadoop Annotations .......................... SUCCESS [ 12.486 s]
+[INFO] Apache Hadoop Assemblies ........................... SUCCESS [  1.004 s]
+[INFO] Apache Hadoop Project Dist POM ..................... SUCCESS [  5.103 s]
+[INFO] Apache Hadoop Maven Plugins ........................ SUCCESS [ 14.080 s]
+[INFO] Apache Hadoop MiniKDC .............................. SUCCESS [ 25.260 s]
+[INFO] Apache Hadoop Auth ................................. SUCCESS [ 19.645 s]
+[INFO] Apache Hadoop Auth Examples ........................ SUCCESS [ 12.382 s]
+[INFO] Apache Hadoop Common ............................... SUCCESS [08:43 min]
+[INFO] Apache Hadoop NFS .................................. SUCCESS [ 33.713 s]
+[INFO] Apache Hadoop KMS .................................. SUCCESS [01:43 min]
+[INFO] Apache Hadoop Common Project ....................... SUCCESS [  1.908 s]
+[INFO] Apache Hadoop HDFS ................................. SUCCESS [18:41 min]
+[INFO] Apache Hadoop HttpFS ............................... SUCCESS [02:14 min]
+[INFO] Apache Hadoop HDFS BookKeeper Journal .............. SUCCESS [ 34.151 s]
+[INFO] Apache Hadoop HDFS-NFS ............................. SUCCESS [ 18.870 s]
+[INFO] Apache Hadoop HDFS Project ......................... SUCCESS [  0.186 s]
+[INFO] hadoop-yarn ........................................ SUCCESS [  0.247 s]
+[INFO] hadoop-yarn-api .................................... SUCCESS [04:29 min]
+[INFO] hadoop-yarn-common ................................. SUCCESS [03:57 min]
+[INFO] hadoop-yarn-server ................................. SUCCESS [  1.549 s]
+[INFO] hadoop-yarn-server-common .......................... SUCCESS [01:04 min]
+[INFO] hadoop-yarn-server-nodemanager ..................... SUCCESS [01:55 min]
+[INFO] hadoop-yarn-server-web-proxy ....................... SUCCESS [ 20.086 s]
+[INFO] hadoop-yarn-server-applicationhistoryservice ....... SUCCESS [ 29.019 s]
+[INFO] hadoop-yarn-server-resourcemanager ................. SUCCESS [01:18 min]
+[INFO] hadoop-yarn-server-tests ........................... SUCCESS [ 17.978 s]
+[INFO] hadoop-yarn-client ................................. SUCCESS [ 22.427 s]
+[INFO] hadoop-yarn-server-sharedcachemanager .............. SUCCESS [ 24.147 s]
+[INFO] hadoop-yarn-applications ........................... SUCCESS [  0.359 s]
+[INFO] hadoop-yarn-applications-distributedshell .......... SUCCESS [ 15.424 s]
+[INFO] hadoop-yarn-applications-unmanaged-am-launcher ..... SUCCESS [ 12.780 s]
+[INFO] hadoop-yarn-site ................................... SUCCESS [  0.346 s]
+[INFO] hadoop-yarn-registry ............................... SUCCESS [ 29.259 s]
+[INFO] hadoop-yarn-project ................................ SUCCESS [ 42.047 s]
+[INFO] hadoop-mapreduce-client ............................ SUCCESS [  1.707 s]
+[INFO] hadoop-mapreduce-client-core ....................... SUCCESS [01:35 min]
+[INFO] hadoop-mapreduce-client-common ..................... SUCCESS [01:42 min]
+[INFO] hadoop-mapreduce-client-shuffle .................... SUCCESS [ 12.791 s]
+[INFO] hadoop-mapreduce-client-app ........................ SUCCESS [01:03 min]
+[INFO] hadoop-mapreduce-client-hs ......................... SUCCESS [ 41.184 s]
+[INFO] hadoop-mapreduce-client-jobclient .................. SUCCESS [ 52.799 s]
+[INFO] hadoop-mapreduce-client-hs-plugins ................. SUCCESS [ 13.776 s]
+[INFO] Apache Hadoop MapReduce Examples ................... SUCCESS [ 37.708 s]
+[INFO] hadoop-mapreduce ................................... SUCCESS [ 27.087 s]
+[INFO] Apache Hadoop MapReduce Streaming .................. SUCCESS [ 22.420 s]
+[INFO] Apache Hadoop Distributed Copy ..................... SUCCESS [01:04 min]
+[INFO] Apache Hadoop Archives ............................. SUCCESS [ 12.542 s]
+[INFO] Apache Hadoop Rumen ................................ SUCCESS [ 28.560 s]
+[INFO] Apache Hadoop Gridmix .............................. SUCCESS [ 18.383 s]
+[INFO] Apache Hadoop Data Join ............................ SUCCESS [  7.268 s]
+[INFO] Apache Hadoop Ant Tasks ............................ SUCCESS [  5.620 s]
+[INFO] Apache Hadoop Extras ............................... SUCCESS [  8.909 s]
+[INFO] Apache Hadoop Pipes ................................ SUCCESS [ 44.512 s]
+[INFO] Apache Hadoop OpenStack support .................... SUCCESS [ 14.286 s]
+[INFO] Apache Hadoop Amazon Web Services support .......... SUCCESS [05:11 min]
+[INFO] Apache Hadoop Azure support ........................ SUCCESS [01:50 min]
+[INFO] Apache Hadoop Client ............................... SUCCESS [01:26 min]
+[INFO] Apache Hadoop Mini-Cluster ......................... SUCCESS [ 14.930 s]
+[INFO] Apache Hadoop Scheduler Load Simulator ............. SUCCESS [ 37.110 s]
+[INFO] Apache Hadoop Tools Dist ........................... SUCCESS [01:21 min]
+[INFO] Apache Hadoop Tools ................................ SUCCESS [  0.343 s]
+[INFO] Apache Hadoop Distribution ......................... SUCCESS [07:41 min]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 01:20 h
+[INFO] Finished at: 2018-01-06T00:14:08Z
+[INFO] Final Memory: 85M/224M
+[INFO] ------------------------------------------------------------------------
+
+```
+
 cd hadoop-2.7.5-src/hadoop-dist/target/
 
 cp -R hadoop-2.7.5 /opt/hadoop
