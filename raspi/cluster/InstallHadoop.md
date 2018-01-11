@@ -1,16 +1,16 @@
-# Instalação do Hadoop na Raspberry PI 3 modelo B
+# Installing Hadoop on Raspberry PI 3 model B
 
-#### Link para baixar imagem do raspbian:
+#### Link to download image of raspbian
 
 https://downloads.raspberrypi.org/raspbian/images/raspbian-2017-07-05/2017-07-05-raspbian-jessie.zip
 
-Para instalar imagem no cartão foi utilizado o etcher. 
+Write image in micro sd card was utilized the etcher. 
 
-#### Link para baixar o etcher
+#### Link to download etcher
 
 https://etcher.io/
 
-## Instalação das dependências necessárias
+## Installing necessaries dependencies
 
 sudo -i
 
@@ -26,23 +26,23 @@ apt-get install ssh build-essential  g++ autoconf automake libtool cmake pkgconf
 
 apt-get install zip unzip
 
-## Instalação do java
+## Installing java
 
-Antes de iniciar  a instalação confira  se o java já veio instalado como de costume no Raspbian jessie mais recentes.
+*Before starting the installation check if java already be installed on Raspbian.*
 
-#### Instalar o java:
+#### Install java:
 
 sudo -i
 
 apt-get install oracle-java8-jdk
 
-#### Utilize a comando a seguir para selecionar a versão do java:
+is#### Use the following command to select the java version:
 
 update-alternatives --config java
 
 Selecione a opção /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/bin/java.
 
-#### Para verificar se instalação foi realizada com sucesso:
+#### The following command verify that the installation was successful:
 
 java -version
 
@@ -54,11 +54,11 @@ Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 
 ```
 
-## Instalação do protobuf 2.5.0
+## Installing protobuf 2.5.0
 
-### 1ª opção de instalação do protobuf
+### 1st option to install protobuf
 
-#### Baixar e descompactar o protobuf:
+#### Download and  install protobuf:
 
 sudo -i
 
@@ -74,13 +74,13 @@ cd protobufOfCluster-master
 
 cd protobuf-2.5.0
 
-#### Gere os arquivos de configuração da compilação:
+#### Then generate the build configuration files:
 
 ./autogen.sh
 
 ./configure --prefix=/usr
 
-#### Compilação e instalação do protobuf:
+#### Build and install protobuf
 
 make
 
@@ -88,7 +88,7 @@ make check
 
 make install
 
-#### Para verificar se instalação foi realizada com sucesso:
+#### The following command verify that the installation was successful:
 
 protoc --version
 ```
@@ -97,9 +97,10 @@ libprotoc 2.5.0
 
 ```
 
-## 2ª opção de instalação do protobuf
 
-#### Baixar e descompactar o protobuf:
+### 2st option to install protobuf
+
+#### Download and  install protobuf:
 
 sudo -i
 
@@ -111,11 +112,11 @@ tar xzvf protobuf-2.5.0.tar.gz
 
 cd protobuf-2.5.0
 
-#### Gere os arquivos de configuração da compilação:
+#### Then generate the build configuration files:
 
 ./configure --prefix=/usr
 
-#### Compilação e instalação do protobuf:
+#### Build and install protobuf
 
 make
 
@@ -123,7 +124,7 @@ make check
 
 sudo make install
 
-#### Para verificar se instalação foi realizada com sucesso:
+#### The following command verify that the installation was successful:
 
 protoc --version
 ```
@@ -132,9 +133,10 @@ libprotoc 2.5.0
 
 ```
 
-## Instalação do Apache Maven
+## Installing Apache Maven
     
-#### Baixar e descompactar o apache maven: 
+#### Download and  install apache maven: 
+
 sudo -i
 
 apt-get update  
@@ -147,11 +149,11 @@ tar xzf apache-maven-3.5.2-bin.tar.gz
 
 ln -s apache-maven-3.5.2 apache-maven
 
-Configuração das variáveis de ambientes, utilize o comando abaixo para criar o arquivo.
+Configuring environment variables, use the command below to create the file.
 
 nano /etc/profile.d/apache-maven.sh
 
-Adicione as variáveis abaixo ao arquivo apache-maven.sh
+Add the variables below to apache-maven.sh
 
 ```
 export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
@@ -159,13 +161,12 @@ export M2_HOME=/usr/local/apache-maven
 export MAVEN_HOME=/usr/local/apache-maven
 export PATH=${M2_HOME}/bin:${PATH}
 ```
-Em seguida, saia e salve o arquivo com os comandos de tecla Ctrl + X, Y, enter.
 
-#### Para atualizar as alterações utilize o comando a seguir: 
+#### To update the changes use the following command: 
 
 source /etc/profile.d/apache-maven.sh
 
-#### Para verificar se instalação foi realizada com sucesso:
+#### The following command verify that the installation was successful:
               
 mvn --version
 
@@ -179,61 +180,61 @@ Default locale: pt_BR, platform encoding: UTF-8
 OS name: "linux", version: "4.9.35-v7+", arch: "arm", family: "unix"
 
 ```
-## Configuração de rede na Raspberry
+## Network setting on Raspberry
 
-#### Desativar o ipv6:
+#### Disable ipv6:
 
 sudo -i
 
 nano /etc/sysctl.conf
 
-#### Altere o arquivo conforme as informações abaixo, caso não exista adicione:
+#### Change the file according to the information below, if it does not exist add:
+
 ```
 net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
 net.ipv6.conf.eth0.disable_ipv6 = 1
 ```
- **Nota:** Caso queira habilitar no futuro, troque o valor 1 por 0.
-
-#### Em seguida reinicie o serviço com o comando abaixo:
-
+ #### Then restart the service with the command below:
+ 
 sysctl -p
 
-## Configurar rede para modo estático 
+## Configure network for static mode 
 
-#### O comando exibirá o endereço de ip da máquina:
+#### The command will display the IP address of the machine:
 
 hostname -I
 
-#### Adicione ao arquivo de interfaces o modo estático para o eth0:
+#### Add to the interfaces file the static mode for eth0:
 
 nano /etc/network/interfaces
 
-#### Neste caso, foi utilizada a configuração abaixo, que pode mudar de acordo com a necessidade de cada caso.
+#### In this case, the following configuration was used, which can change according to the need of each case.
+
 ```
 iface eth0 inet static
 address 192.168.1.103
 netmask 255.255.255.0
 gateway 192.168.1.1
 ```
-#### Em seguida abra o arquivo hosts:
+#### Then edit the hosts file:
 
 nano /etc/hosts
 
-#### Adicione ao arquivo a linha abaixo e salve:
+#### Add to file the line below and save:
 ```
 192.168.1.103   node1
 ```
-#### Por fim abrir os arquivos hostname e substitua o nome Raspberry por node1:
+#### Finally open the hostname files and replace the Raspberry name with node1:
 
 nano /etc/hostname
 
-Agora reset a Raspberry
+Reboot the Raspberry! 
 
 ## Configuração do usuário hadoop
 
-#### Adicione um grupo, um usuário e, em seguida, adicione o usuário ao grupo:
+#### Add a group, a user and then add the user to the group
 
 sudo addgroup hadoop
 
@@ -241,7 +242,7 @@ sudo adduser --ingroup hadoop hduser
 
 sudo adduser hduser sudo
 
-#### Mude os usuários e crie a chave SSH sem senha:
+#### Switch users and create SSH key with no passphrase
 
 su hduser
 
@@ -249,15 +250,15 @@ ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
-Testar conexão ssh:
+#### Test the SSH connection
 
 ssh node1
 
 exit
   
-## Instalação do Hadoop-2.7.5
+## Installing Hadoop-2.7.5
 
-#### Baixar e descompactar o hadoop:
+#### Download and extrac hadoop:
 
 sudo -i
 
@@ -267,7 +268,7 @@ tar -xvzf hadoop-2.7.5.tar.gz
 
 cd hadoop-2.7.5-src
 
-#### Configuração para instruir o processo de compilação para arquitetura ARM:
+#### Configuration to instruct the build process for ARM architecture:
 
 nano pom.xml
 
@@ -277,7 +278,7 @@ Em seguida, pressione Ctrl+Shift + - (Ctrl+ _) Insira o número da linha igual a
 <additionalparam>-Xdoclint:none</additionalparam>
 ```
 
-#### Também será necessária a instalação do patch HADOOP-9320:
+#### You will also need to install the HADOOP-9320 patch:
 
 sudo -i
 
@@ -288,7 +289,7 @@ wget https://issues.apache.org/jira/secure/attachment/12570212/HADOOP-9320.patch
 patch < HADOOP-9320.patch
 
 
-#### O comando a seguir dará início a processo de compilação:
+#### The following command will begin the compilation process:
 
 sudo -i
 
@@ -296,7 +297,8 @@ cd hadoop-2.7.5-src
 
 mvn package -Pdist,native -DskipTests -Dtar
 
-Ao final do processo espera-se obter sucesso em todos os pacotes.
+At the end of the process it is expected to be successful in all packages.
+
 ```
 ...
 
@@ -387,9 +389,9 @@ chown -R hduser:hadoop hadoop
 
 tar -zcvf /root/hadoop-2.7.5.armf.tar.gz hadoop 
 
-(Para possíveis backup)
+(To backup)
 
-#### Adicione ao final de /etc/bash.bashrc as seguintes linhas de exportação:
+#### Add to the end of /etc/bash.bashrc the following export lines:
 
 su hduser
 
@@ -410,19 +412,19 @@ export HADOOP_OPTS="$HADOOP_OPTS -Djava.net.preferIPv4Stack=true -Djava.security
 #HADOOP VARIABLES END
 ```
 
-#### Aplique essas alterações:
+#### Apply these changes:
 
 source ~/.bashrc
 
-#### Variáveis de ambiente Hadoop:
+#### Hadoop Environment Variables:
 
 sudo nano /opt/hadoop/etc/hadoop/hadoop-env.sh
 
-#### Descometa e atualiza as duas linhas de exportação do hadoop_env.sh:
+#### uncomment and update the hadoop_env.sh export lines:
  
 export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 
-#### Para verificar se a compilação da biblioteca nativa foi realizada com sucesso:
+#### To verify that the native library build was successful:
 
 su hduser
 
@@ -440,7 +442,7 @@ lz4:     true revision:99
 bzip2:   true /lib/arm-linux-gnueabihf/libbz2.so.1
 openssl: true /usr/lib/arm-linux-gnueabihf/libcrypto.so
 ```
-#### Para verificar se instalação foi realizada com sucesso:
+#### The following command verify that the installation was successful:
 
 su hduser
 
@@ -457,17 +459,17 @@ This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.7.5.j
 
 ```
 
-## Definir os arquivos de configuração para modo pseudo distribuído do hadoop
+## Define the configuration files for pseudo-distributed hadoop mode
 
 cd /opt/hadoop/etc/hadoop
 
 ### core-site
 
-Abra o arquivo com nano ou outro editor de preferência:
+Open the file with nano or another editor of preference:
 
 sudo nano core-site.xml
 
-Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
+Then, replace the tags ```<configuration></configuration>``` with the lower ones
 
 ```xml
 <configuration>
@@ -478,7 +480,7 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 </configuration>
 ```
 
-Da mesma maneira com os demais:
+In the same manner with the others:
 
 #### hdfs-site
 
@@ -626,7 +628,7 @@ sudo nano mapred-site.xml
 
 ```
 
-#### Crie pastas e permissões para o HDFS
+#### Create folders and permissions for HDFS
 
 sudo mkdir -p /opt/hadoop/hadoop_data/hdfs/namenode
 
@@ -636,7 +638,7 @@ sudo chown hduser:hadoop /opt/hadoop/hadoop_data/hdfs -R
 
 sudo chmod 750 /opt/hadoop/hadoop_data/hdfs
 
-#### Formatar o HDFS
+#### Format HDFS
 
 cd $HADOOP_INSTALL
 
@@ -717,7 +719,7 @@ SHUTDOWN_MSG: Shutting down NameNode at node1/192.168.1.104
 
 ```
 
-#### Inicializar serviços do hadoop
+#### start services
 
 cd $HADOOP_HOME/sbin
 
@@ -1601,7 +1603,7 @@ http://192.168.1.104:50070
 
 http://192.168.1.104:8088
 
-## Referências:
+## Inspiration
 
 http://data.andyburgin.co.uk/post/157450047463/running-hue-on-a-raspberry-pi-hadoop-cluster
 
