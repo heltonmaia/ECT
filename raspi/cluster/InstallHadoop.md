@@ -36,11 +36,11 @@ sudo -i
 
 apt-get install oracle-java8-jdk
 
-is#### Use the following command to select the java version:
+#### Use the following command to select the java version:
 
 update-alternatives --config java
 
-Selecione a opção /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/bin/java.
+Select option  /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/bin/java.
 
 #### The following command verify that the installation was successful:
 
@@ -459,7 +459,7 @@ This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.7.5.j
 
 ```
 
-## Define the configuration files for pseudo-distributed hadoop mode
+ ## Define the configuration files hadoop for pseudo distributed  mode
 
 cd /opt/hadoop/etc/hadoop
 
@@ -754,7 +754,7 @@ localhost: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodeman
 
 ```
 
-#### Lista serviços em execução
+#### List running services
 
 jps 
 
@@ -769,7 +769,7 @@ hduser@node1:/opt/hadoop/sbin $ jps
 
 ```
 
-#### Finalizar serviços em execução
+#### Stop running services
 
 cd $HADOOP_INSTALL/sbin
 
@@ -795,9 +795,9 @@ no proxyserver to stop
 
 ```
 
-## Testes de funcionamento do hadoop
+## Hadoop running tests
 
-### Exemplo do cálculo do valor de PI:
+### Run a Hadoop provided example, pi, which calculates the value of pi
 
 cd $HADOOP_INSTALL/bin
 
@@ -897,7 +897,7 @@ Estimated value of Pi is 3.50000000000000000000
 
 ### Exemplo wordCount:
 
-#### Copie o arquivo, verifique HDFS para o arquivo, então execute WordCount no arquivo:
+#### Copy the file,check HDFS for the file then run wordCount on the file
 
 hdfs dfs -copyFromLocal /opt/hadoop/LICENSE.txt /license.txt
 
@@ -980,7 +980,7 @@ hduser@node1:/opt/hadoop/bin $ ./hadoop jar /opt/hadoop/share/hadoop/mapreduce/h
 		Bytes Written=22239
 
 ```
-#### Para visualizar o resultado do wordcount siga os passos a seguir:
+#### to view the Wordcount result follow the below steps:
 
 hdfs dfs -copyToLocal /license-out.txt ~/
 
@@ -1496,15 +1496,15 @@ your	4
 
 ```
 
-## Problemas com a execução de tarefas no hadoop?
+## Problems with running jobs in hadoop?
 
 #### Dica 1:
 
-Confira se todos os 6 serviços foram inicializados, se o ipv6 estar desabilitado, as configurações de rede estática e os arquivos de configuração do hadoop. Estando tudo correto reinicie a placa, quando estiver ligada novamente inicie os serviços do hadoop. Por fim, tente reexecutar a tarefa.
+Make sure all 6 services have been initialized, if ipv6 is disabled, the static network settings and the hadoop configuration files. If all is correct reboot the board, when it is connected again start hadoop services. Finally, try re-executing the job.
 
 #### Dica 2:
 
-Caso ocorra a inicialização da execução, mas a presente falha ao longo do processo uma das causas mais comum é o safe modo ativo. Em algumas situações o HDFS entra em modo de segurança impedindo a execução das tarefas como no exemplo abaixo.
+In case the job initialization occurs, but the  present fault over the process. One of the most common causes is the safe mode active . In some situations the HDFS enters into safe mode preventing the execution of the tasks as in the example below.
 
 ```
 
@@ -1568,7 +1568,7 @@ The number of live datanodes 1 has reached the minimum number 0. Safe mode will 
 
 ```
 
-#### Para consultar se safe mode estar ativo utilize o comando a seguir:
+#### To check if safe mode is active use the following command:
 
 hdfs dfsadmin -safemode get
 
@@ -1578,7 +1578,7 @@ Safe mode is ON
 
 ```
 
-#### Caso esteja ativo o utilize o comando abaixo para desativar:
+#### If it is active or use the command below to deactivate:
 
 hdfs dfsadmin -safemode leave
 
@@ -1587,17 +1587,17 @@ hduser@node1:/opt/hadoop/bin $ hdfs dfsadmin -safemode leave
 Safe mode is OFF
 
 ```
-## Acessar informações do hadoop pelo browser
+## Accessing Hadoop on Browser
 
-Um forma agradável de obter informações sobre aplicações, nós, armazenamento e ferramentas do hadoop é utilizando o navegador de internet por meio dos links abaixo:
+A nice way to get information about hadoop applications, nodes, storage, and tools is by using the  browser through the urls below:
 
-Localmente na placa:
+Locally on bord:
 
 http://node1:50070
 
 http://node1:8088
 
-Externamente a placa, mas na mesma rede:
+Externally the board, but on the same network:
 
 http://192.168.1.104:50070
 
