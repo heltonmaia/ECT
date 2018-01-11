@@ -1589,7 +1589,7 @@ Safe mode is OFF
 
 A nice way to get information about hadoop applications, nodes, storage, and tools is by using the  browser through the urls below:
 
-Locally on bord:
+Locally on board:
 
 http://node1:50070
 
