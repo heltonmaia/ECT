@@ -231,7 +231,7 @@ nano /etc/hostname
 
 Agora reset a Raspberry
 
-## Configuração do usuário hadoop
+## Criando usuário para Hadoop
 
 #### Adicione um grupo, um usuário e, em seguida, adicione o usuário ao grupo:
 
