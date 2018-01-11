@@ -232,7 +232,7 @@ nano /etc/hostname
 
 Reboot the Raspberry! 
 
-## Configuração do usuário hadoop
+## Creating a user for Hadoop
 
 #### Add a group, a user and then add the user to the group
 
