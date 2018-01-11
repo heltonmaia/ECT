@@ -10,7 +10,7 @@ Write image in micro sd card was utilized the etcher.
 
 https://etcher.io/
 
-## Installing necessaries dependencies
+## Installing dependencies
 
 sudo -i
 
@@ -58,7 +58,7 @@ Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 
 ### 1st option to install protobuf
 
-#### Download and  install protobuf:
+#### Download and  unpack  protobuf:
 
 sudo -i
 
@@ -116,7 +116,7 @@ cd protobuf-2.5.0
 
 ./configure --prefix=/usr
 
-#### Build and install protobuf
+#### Build and unpack  protobuf
 
 make
 
@@ -135,7 +135,7 @@ libprotoc 2.5.0
 
 ## Installing Apache Maven
     
-#### Download and  install apache maven: 
+#### Download and  unpack  apache maven: 
 
 sudo -i
 
@@ -387,9 +387,7 @@ cd /opt
 
 chown -R hduser:hadoop hadoop
 
-tar -zcvf /root/hadoop-2.7.5.armf.tar.gz hadoop 
-
-(To backup)
+tar -zcvf /root/hadoop-2.7.5.armf.tar.gz hadoop  (To backup)
 
 #### Add to the end of /etc/bash.bashrc the following export lines:
 
@@ -420,7 +418,7 @@ source ~/.bashrc
 
 sudo nano /opt/hadoop/etc/hadoop/hadoop-env.sh
 
-#### uncomment and update the hadoop_env.sh export lines:
+#### Uncomment and update the hadoop_env.sh export lines:
  
 export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 
@@ -469,7 +467,7 @@ Open the file with nano or another editor of preference:
 
 sudo nano core-site.xml
 
-Then, replace the tags ```<configuration></configuration>``` with the lower ones
+Then, replace the tags ```<configuration></configuration>``` with the lower ones.
 
 ```xml
 <configuration>
@@ -897,7 +895,7 @@ Estimated value of Pi is 3.50000000000000000000
 
 ### Exemplo wordCount:
 
-#### Copy the file,check HDFS for the file then run wordCount on the file
+#### Copy the file,check HDFS for the file then run wordCount on the file:
 
 hdfs dfs -copyFromLocal /opt/hadoop/LICENSE.txt /license.txt
 
@@ -980,7 +978,7 @@ hduser@node1:/opt/hadoop/bin $ ./hadoop jar /opt/hadoop/share/hadoop/mapreduce/h
 		Bytes Written=22239
 
 ```
-#### to view the Wordcount result follow the below steps:
+#### to view the Wordcount result follow the steps below:
 
 hdfs dfs -copyToLocal /license-out.txt ~/
 
@@ -1498,11 +1496,11 @@ your	4
 
 ## Problems with running jobs in hadoop?
 
-#### Dica 1:
+#### Clue 1:
 
 Make sure all 6 services have been initialized, if ipv6 is disabled, the static network settings and the hadoop configuration files. If all is correct reboot the board, when it is connected again start hadoop services. Finally, try re-executing the job.
 
-#### Dica 2:
+#### Clue 2:
 
 In case the job initialization occurs, but the  present fault over the process. One of the most common causes is the safe mode active . In some situations the HDFS enters into safe mode preventing the execution of the tasks as in the example below.
 
