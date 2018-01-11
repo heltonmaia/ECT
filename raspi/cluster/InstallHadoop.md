@@ -793,7 +793,7 @@ no proxyserver to stop
 
 ```
 
-## Hadoop running tests
+## Hadoop performance checks
 
 ### Run a Hadoop provided example, pi, which calculates the value of pi
 
