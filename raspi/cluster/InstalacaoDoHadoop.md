@@ -10,7 +10,7 @@ Para instalar imagem no cartão foi utilizado o etcher.
 
 https://etcher.io/
 
-## Instalação das dependências necessárias
+## Instalação das dependências
 
 sudo -i
 
@@ -42,7 +42,7 @@ update-alternatives --config java
 
 Selecione a opção /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/bin/java.
 
-#### Para verificar se instalação foi realizada com sucesso:
+#### Verifique se instalação foi realizada com sucesso:
 
 java -version
 
@@ -88,7 +88,7 @@ make check
 
 make install
 
-#### Para verificar se instalação foi realizada com sucesso:
+#### Verifique se instalação foi realizada com sucesso:
 
 protoc --version
 ```
@@ -123,7 +123,7 @@ make check
 
 sudo make install
 
-#### Para verificar se instalação foi realizada com sucesso:
+#### Verifique se instalação foi realizada com sucesso:
 
 protoc --version
 ```
@@ -161,11 +161,11 @@ export PATH=${M2_HOME}/bin:${PATH}
 ```
 Em seguida, saia e salve o arquivo com os comandos de tecla Ctrl + X, Y, enter.
 
-#### Para atualizar as alterações utilize o comando a seguir: 
+#### Atualize as alterações utilize o comando a seguir: 
 
 source /etc/profile.d/apache-maven.sh
 
-#### Para verificar se instalação foi realizada com sucesso:
+#### Verifique se instalação foi realizada com sucesso:
               
 mvn --version
 
@@ -288,7 +288,7 @@ wget https://issues.apache.org/jira/secure/attachment/12570212/HADOOP-9320.patch
 patch < HADOOP-9320.patch
 
 
-#### O comando a seguir dará início a processo de compilação:
+#### O comando a seguir iniciará o processo de compilação:
 
 sudo -i
 
@@ -418,7 +418,7 @@ source ~/.bashrc
 
 sudo nano /opt/hadoop/etc/hadoop/hadoop-env.sh
 
-#### Descometa e atualiza as duas linhas de exportação do hadoop_env.sh:
+#### Descometa e atualiza a  linha de exportação do hadoop_env.sh:
  
 export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 
@@ -440,7 +440,7 @@ lz4:     true revision:99
 bzip2:   true /lib/arm-linux-gnueabihf/libbz2.so.1
 openssl: true /usr/lib/arm-linux-gnueabihf/libcrypto.so
 ```
-#### Para verificar se instalação foi realizada com sucesso:
+#### Verifique se instalação foi realizada com sucesso:
 
 su hduser
 
@@ -717,7 +717,7 @@ SHUTDOWN_MSG: Shutting down NameNode at node1/192.168.1.104
 
 ```
 
-#### Inicializar serviços do hadoop
+#### Inicializar serviços do Hadoop
 
 cd $HADOOP_HOME/sbin
 
