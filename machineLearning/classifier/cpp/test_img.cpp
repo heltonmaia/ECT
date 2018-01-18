@@ -10,6 +10,8 @@
 #include <opencv2/ml.hpp>
 #include "opencv2/objdetect.hpp"
 
+// Testes do tempo de execucao
+#include <ctime>
 
 using namespace std;
 using namespace cv;
@@ -32,12 +34,25 @@ HOGDescriptor hog(
 );
 
 //Cria os descritores HOG das imagens
-void createTestHOG(vector<vector<float>> &testHOG, Mat imgMat){
+void createHOG(vector<vector<float>> &testHOG, Mat imgMat){
     
     vector<float> descriptors;
     hog.compute(imgMat, descriptors);
     testHOG.push_back(descriptors);
             
+}
+
+//Cria os descritores de contorno das imagens
+void createEdges(Mat &edges, Mat imgMat){
+    //trandforma a imagem para grayscale
+    //cvtColor(imgMat, imgMat, CV_BGR2GRAY);
+
+    //elimina ruidos pelo metodo gaussiano 
+    GaussianBlur(imgMat, imgMat, Size(3,3), 0, 0, BORDER_DEFAULT );
+
+    Canny(imgMat, edges, 80, 80, 3);
+
+    
 }
 
 //converte os descritores em matrizes
@@ -51,7 +66,6 @@ void convertVectortoMatrix(vector<vector<float>> &testHOG, Mat &testMat, int des
 
 }
 
-
 void SVMtest(Mat &testMat, Mat &testResponse){
 
     //Carrega a SVM
@@ -63,27 +77,40 @@ void SVMtest(Mat &testMat, Mat &testResponse){
 
 
 int main(int argc, char **argv){
-    cout << "******Testando o classificador em uma unica imagem (img.jpg)******\n";
+    cout << "******Descritores de uma unica imagem******\n";
     //Carrega a SVM
-    cout << endl <<"Carregando a svm..." << endl;
-    Ptr<ml::SVM> svm = ml::StatModel::load<ml::SVM>("rats_everywhere.yml");
+    //cout << endl <<"Carregando a svm..." << endl;
+    //Ptr<ml::SVM> svm = ml::StatModel::load<ml::SVM>("ymls/hog/RATS_POLY.yml");
 
     // le a imagem (grayscale)
-    Mat imgMat = imread("img.jpg", 0);
+    Mat imgMat = imread("visualizations/1787.jpg", 0);
 
-    vector<vector<float>> testHOG;
-    createTestHOG(testHOG, imgMat);
+    cout << "HOG:\n";
 
-    int descriptor_size = testHOG[0].size();
-    cout << "Tamanho dos descritores: " << descriptor_size << endl;
+    vector<vector<float>> HOG;
+    
+    int i = clock();
+    createHOG(HOG, imgMat);
+    int f = clock();
+    cout << "Tempo para criação do descritor: " << (f-i)/(float)CLOCKS_PER_SEC << "s\n";
 
-    Mat testMat(testHOG.size(),descriptor_size,CV_32FC1);
-    convertVectortoMatrix(testHOG, testMat, descriptor_size);
 
+    int descriptor_size = HOG[0].size();
+    cout << "Tamanho do descritor: " << descriptor_size << endl;
 
-    Mat testResponse;
-    SVMtest(testMat, testResponse);
-    cout << "Predito -> " << testResponse << endl;
+    Mat testMat(HOG.size(),descriptor_size,CV_32FC1);
+    convertVectortoMatrix(HOG, testMat, descriptor_size);
+
+    cout << "EDGES:\n";
+
+    Mat edges;
+
+    int j = clock();
+    createEdges(edges, imgMat);
+    int k = clock();
+    cout << "Tempo para criação do descritor: " << (k-j)/(float)CLOCKS_PER_SEC << "s\n";
+
+    cout << "Tamanho do descritor: " << edges.rows * edges.cols << endl;
    
     return 0;
 }
