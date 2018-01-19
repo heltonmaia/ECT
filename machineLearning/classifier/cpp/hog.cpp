@@ -15,6 +15,7 @@ using namespace cv;
 // Rotulos dos arquivos
 vector<int> trainLabels, testLabels;
 
+vector<float>times;
 
 void load_images( String dirname, vector<Mat> &img_lst, int classe, vector<int> &labels, vector<String> &names){
     vector< String > files;
@@ -63,14 +64,35 @@ HOGDescriptor hog(
 
 //Cria os descritores HOG das imagens
 void createHOG(vector<vector<float>> &HOG, vector<Mat> &images){
+    int start, end; 
     for(int i=0; i<images.size(); i++){
+        start = clock();
         cvtColor( images[i], images[i], CV_BGR2GRAY );
         //elimina ruidos pelo metodo gaussiano 
         GaussianBlur(images[i], images[i], Size(3,3), 0, 0, BORDER_DEFAULT );
         vector<float> descriptors;
         hog.compute(images[i], descriptors);
         HOG.push_back(descriptors);  
-    }      
+        end = clock();
+        times.push_back( (end-start)/(float)CLOCKS_PER_SEC );  
+    }     
+}
+
+void timeStatistics(float mean){
+
+    FileStorage timesFile("ymls/hog/timesFile.yml", FileStorage::WRITE);
+
+    float variance = 0.0;
+    for(auto i : times){
+        variance += ( pow((i - mean), 2) ) / (float)times.size();
+    }
+    cout << "\nStatistics"
+         << "\nVariance: " << variance
+         << "\nSTD: " << sqrt(variance) << endl;  
+
+    timesFile << "variance" << variance
+        << "std" << sqrt(variance)
+        << "times" << times;
 }
 
 //converte os descritores em uma unica matriz
@@ -107,6 +129,7 @@ int main(){
     Mat trainMat(trainHOG.size(), descriptor_size, CV_32FC1);
     convertVectortoMatrix(trainHOG, trainMat, descriptor_size);
     int f = clock();
+    float sumTimes = (f-i)/(float)CLOCKS_PER_SEC; 
     cout << "\tA analise das imagens de treino levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
 
@@ -122,6 +145,7 @@ int main(){
     Mat testMat(testHOG.size(),descriptor_size,CV_32FC1);
     convertVectortoMatrix(testHOG, testMat, descriptor_size);
     f = clock();
+    sumTimes += (f-i)/(float)CLOCKS_PER_SEC; 
     cout << "\tA analise das imagens de teste levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
 
@@ -142,6 +166,8 @@ int main(){
     imshow("0", testImages[wrongs[0]]);
     waitKey();
     */
+    //showTimes();
+    timeStatistics( sumTimes/1800.0 );
 
     return 0;
 }

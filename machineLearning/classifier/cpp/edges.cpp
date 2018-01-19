@@ -5,6 +5,7 @@
 
 // Testes do tempo de execucao
  #include <ctime>
+ #include <cmath>
 
 // OpenCV
 #include <opencv2/core.hpp>
@@ -17,6 +18,8 @@ using namespace cv;
 
 // Rotulos dos arquivos
 vector<int> trainLabels, testLabels; 
+
+vector<float>times;
 
 void load_images( String dirname, vector<Mat> &img_lst, int classe, vector<int> &labels){
     vector< String > files;
@@ -43,8 +46,10 @@ void getTestFiles(vector<Mat> &testImages){
 
 //Cria os descritores de contorno das imagens
 void createEdges(Mat &edges, vector<Mat> &images){
-        
+     int start, end;   
     for(int index=0; index < images.size(); index++){
+
+        start = clock();
         //trandforma a imagem para grayscale
         cvtColor(images[index], images[index], CV_BGR2GRAY);
 
@@ -63,9 +68,36 @@ void createEdges(Mat &edges, vector<Mat> &images){
                 edges.at<float>(index, ii++) = images[index].at<uchar>(i, j);
             }
         } 
-          
+        
+        end = clock();
+        times.push_back( (end-start)/(float)CLOCKS_PER_SEC );                  
     }
 
+}
+
+void showTimes() {
+    cout << "Times: [ \n";
+    for(auto i : times){
+        cout << '\t' << i << '\n';
+    }
+    cout << "] \n";
+}
+
+void timeStatistics(float mean){
+
+    FileStorage timesFile("ymls/edges/timesFile.yml", FileStorage::WRITE);
+
+    float variance = 0.0;
+    for(auto i : times){
+        variance += ( pow((i - mean), 2) ) / (float)times.size();
+    }
+    cout << "\nStatistics"
+         << "\nVariance: " << variance
+         << "\nSTD: " << sqrt(variance) << endl;  
+
+    timesFile << "variance" << variance
+        << "std" << sqrt(variance)
+        << "times" << times;
 }
 
 int main(){
@@ -87,6 +119,7 @@ int main(){
     int i = clock();
     createEdges(trainEdge, traningImages);
     int f = clock();
+    float sumTimes = (f-i)/(float)CLOCKS_PER_SEC; 
     cout << "\tA analise das imagens de treino levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
     fs << "labelsMat" << Mat(trainLabels);
@@ -98,6 +131,7 @@ int main(){
     i = clock();
     createEdges(testEdge, testImages);
     f = clock();
+    sumTimes += (f-i)/(float)CLOCKS_PER_SEC;
     cout << "\tA analise das imagens de teste levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
     fs2 << "testLabels" << testLabels;
@@ -111,6 +145,8 @@ int main(){
     imshow("Contorno",testImages[10]);
     waitKey(0);
     */
-    
+
+    timeStatistics( sumTimes/1800.0 );
+
     return 0;
 }
