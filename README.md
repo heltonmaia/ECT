@@ -21,5 +21,9 @@ This repository contains general information about projects under development at
 
 * Image classification using SVM
 
+* Object tracking using OpenCV
+
+* Deep Learning group
+
 
  
