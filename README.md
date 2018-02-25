@@ -1,8 +1,8 @@
 # General information 
+This repository contains general information about projects under development at School of Science and Technology ECT/UFRN.
 
-* School of Science and Technology (ECT) - http://www.ect.ufrn.br
+http://www.ect.ufrn.br
 
-* Federal University of Rio Grande do Norte (UFRN) - http://www.ufrn.br
 
 ## Professor
 
@@ -21,6 +21,8 @@
 ## Projects
 
 * Distributed Processing Using Raspberry Pi Cluster and Apache Hadoop
+
+* Image classification using SVM
 
 
  
