@@ -245,9 +245,11 @@ sudo adduser hduser sudo
 
 su hduser
 
-ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+mkdir ~/.ssh
 
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+ssh-keygen -t rsa -P ""
+
+cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
 
 Testar conexão ssh:
 
