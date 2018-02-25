@@ -19,11 +19,11 @@ This repository contains general information about projects under development at
 
 * Distributed Processing Using Raspberry Pi Cluster and Apache Hadoop
 
-* Image classification using SVM
+* Image Classification Using Support Vector Machines
 
-* Object tracking using OpenCV
+* Object Tracking with OpenCV
 
-* Deep Learning group
+* Deep Learning Group
 
 
  
