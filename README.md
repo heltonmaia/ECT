@@ -1,4 +1,4 @@
-# === General information ===
+# General information 
 
 * School of Science and Technology (ECT) - http://www.ect.ufrn.br
 
