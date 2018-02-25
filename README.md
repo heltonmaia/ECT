@@ -14,8 +14,6 @@
 
 * Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
 
-* Lucas Soares Pereira Barros - lucassoares-sp@hotmail.com
-
 * Richardson Santiago - richardsonsantiago@ufrn.edu.br
 
 * Lucas de Azevedo Lima - lucaslima0313@gmail.com
