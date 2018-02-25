@@ -1,9 +1,6 @@
 # General information 
 This repository contains general information about projects under development at School of Science and Technology ECT/UFRN.
 
-http://www.ect.ufrn.br
-
-
 ## Professor
 
 * Helton Maia - helton.maia@ect.ufrn.br
