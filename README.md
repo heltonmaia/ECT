@@ -17,4 +17,10 @@
 * Richardson Santiago - richardsonsantiago@ufrn.edu.br
 
 * Lucas de Azevedo Lima - lucaslima0313@gmail.com
+
+## Projects
+
+* Distributed Processing Using Raspberry Pi Cluster and Apache Hadoop
+
+
  
