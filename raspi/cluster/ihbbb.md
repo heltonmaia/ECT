@@ -28,13 +28,20 @@ apt-get install zip unzip
 
 ## Instalação do java
 
-Antes de iniciar  a instalação confira  se o java já veio instalado como de costume no Raspbian jessie mais recentes.
 
 #### Instalar o java:
 
 sudo -i
 
-apt-get install oracle-java8-jdk
+echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" | tee -a /etc/apt/sources.list
+
+echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" | tee -a /etc/apt/sources.list
+
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+
+apt-get update
+
+apt-get install oracle-java8-installer
 
 #### Utilize a comando a seguir para selecionar a versão do java:
 
@@ -399,7 +406,7 @@ sudo nano /etc/bash.bashrc
 
 ```
 #HADOOP VARIABLES START
-export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 export HADOOP_HOME=/opt/hadoop
 export HADOOP_INSTALL=$HADOOP_HOME
 export PATH=$PATH:$HADOOP_HOME/bin
@@ -422,7 +429,7 @@ sudo nano /opt/hadoop/etc/hadoop/hadoop-env.sh
 
 #### Descometa e atualiza a  linha de exportação do hadoop_env.sh:
  
-export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
 #### Para verificar se a compilação da biblioteca nativa foi realizada com sucesso:
 
@@ -512,6 +519,20 @@ sudo nano hdfs-site.xml
 sudo nano yarn-site.xml
 
 ```xml
+<?xml version="1.0"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
 <configuration>
     <property>
         <name>yarn.resourcemanager.resource-tracker.address</name>
@@ -531,11 +552,11 @@ sudo nano yarn-site.xml
     </property>
     <property>
         <name>yarn.nodemanager.resource.cpu-vcores</name>
-        <value>4</value>
+        <value>1</value>
     </property>
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
-        <value>768</value>
+        <value>256</value>
     </property>
     <property>
         <name>yarn.scheduler.minimum-allocation-mb</name>
@@ -543,7 +564,7 @@ sudo nano yarn-site.xml
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-mb</name>
-        <value>256</value>
+        <value>128</value>
     </property>
     <property>
         <name>yarn.scheduler.minimum-allocation-vcores</name>
@@ -551,7 +572,7 @@ sudo nano yarn-site.xml
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
-        <value>4</value>
+        <value>1</value>
     </property>
     <property>
         <name>yarn.nodemanager.vmem-check-enabled</name>
@@ -575,6 +596,24 @@ cp mapred-site.xml.template mapred-site.xml
 sudo nano mapred-site.xml
 
 ```xml
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
 <configuration>
     <property>
         <name>mapreduce.framework.name</name>
@@ -582,35 +621,35 @@ sudo nano mapred-site.xml
     </property>
     <property>
         <name>mapreduce.map.memory.mb</name>
-        <value>256</value>
+        <value>128</value>
     </property>
     <property>
         <name>mapreduce.map.java.opts</name>
-        <value>-Xmx204m</value>
+        <value>-Xmx102m</value>
     </property>
     <property>
         <name>mapreduce.map.cpu.vcores</name>
-        <value>2</value>
+        <value>1</value>
     </property>
     <property>
         <name>mapreduce.reduce.memory.mb</name>
-        <value>128</value>
+        <value>64</value>
     </property>
     <property>
         <name>mapreduce.reduce.java.opts</name>
-        <value>-Xmx102m</value>
+        <value>-Xmx51m</value>
     </property>
     <property>
         <name>mapreduce.reduce.cpu.vcores</name>
-        <value>2</value>
+        <value>1</value>
     </property>
     <property>
         <name>yarn.app.mapreduce.am.resource.mb</name>
-        <value>128</value>
+        <value>64</value>
     </property>
     <property>
         <name>yarn.app.mapreduce.am.command-opts</name>
-        <value>-Xmx102m</value>
+        <value>-Xmx51m</value>
     </property>
     <property>
         <name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
@@ -728,31 +767,36 @@ cd $HADOOP_HOME/sbin
 ./start-dfs.sh
 
 ```
-hduser@node1:/opt/hadoop $ cd $HADOOP_HOME/sbin
-hduser@node1:/opt/hadoop/sbin $ ./start-dfs.sh
+Java HotSpot(TM) Client VM warning: You have loaded library /opt/hadoop/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.
+It's highly recommended that you fix the library with 'execstack -c <libfile>', or link it with '-z noexecstack'.
+18/02/26 00:33:13 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Starting namenodes on [node1]
+node1: Ubuntu 16.04.4 LTS
 node1: starting namenode, logging to /opt/hadoop/logs/hadoop-hduser-namenode-node1.out
-The authenticity of host 'localhost (127.0.0.1)' can't be established.
-ECDSA key fingerprint is f9:eb:95:56:22:12:6e:2e:28:03:e9:ec:ec:83:dd:d5.
-Are you sure you want to continue connecting (yes/no)? yes
-localhost: Warning: Permanently added 'localhost' (ECDSA) to the list of known hosts.
+localhost: Ubuntu 16.04.4 LTS
 localhost: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node1.out
 Starting secondary namenodes [0.0.0.0]
 The authenticity of host '0.0.0.0 (0.0.0.0)' can't be established.
-ECDSA key fingerprint is f9:eb:95:56:22:12:6e:2e:28:03:e9:ec:ec:83:dd:d5.
+ECDSA key fingerprint is SHA256:N67e2419NO00x51jBbgTzVTwHB9Jjx+Fs405LuS0dfQ.
 Are you sure you want to continue connecting (yes/no)? yes
 0.0.0.0: Warning: Permanently added '0.0.0.0' (ECDSA) to the list of known hosts.
-0.0.0.0: starting secondarynamenode, logging to /opt/hadoop/logs/hadoop-hduser-secondarynamenode-node1.out
+0.0.0.0: dispatch_protocol_error: type 7 seq 3
+0.0.0.0: dispatch_protocol_error: Connection to 127.0.0.1 port 22: Broken pipe
+Java HotSpot(TM) Client VM warning: You have loaded library /opt/hadoop/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.
+It's highly recommended that you fix the library with 'execstack -c <libfile>', or link it with '-z noexecstack'.
+18/02/26 00:51:33 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
 
 ```
 
 ./start-yarn.sh
 
 ```
-hduser@node1:/opt/hadoop/sbin $ ./start-yarn.sh
 starting yarn daemons
 starting resourcemanager, logging to /opt/hadoop/logs/yarn-hduser-resourcemanager-node1.out
+localhost: Ubuntu 16.04.4 LTS
 localhost: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node1.out
+
 
 ```
 
@@ -762,12 +806,12 @@ jps
 
 ```
 hduser@node1:/opt/hadoop/sbin $ jps
-2209 Jps
-2082 NodeManager
-1992 ResourceManager
-1819 SecondaryNameNode
-1661 DataNode
-1567 NameNode
+3142 Jps
+2919 SecondaryNameNode
+2538 DataNode
+2202 ResourceManager
+2299 NodeManager
+2445 NameNode
 
 ```
 
