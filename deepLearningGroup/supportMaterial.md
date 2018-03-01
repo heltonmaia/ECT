@@ -1,8 +1,9 @@
 
-### Books
-* Ian Goodfellow and Yoshua Bengio and Aaron Courville: http://www.deeplearningbook.org/
+### Books/Tutorials
+* Ian Goodfellow and Yoshua Bengio and Aaron Courville - http://www.deeplearningbook.org/
 * Jianxin Wu, “Introduction to Convolutional Neural Networks”
 * Starter Bundle, “Deep Learning for Computer Vision with Python”
+* Python Brasil - http://wiki.python.org.br/DocumentacaoPython
 
 
 ### Introduction
