@@ -27,3 +27,6 @@ https://youtu.be/IHZwWFHWa-w
 
 * Gradient descent, how neural networks learn | Chapter 2, deep learning
 https://youtu.be/IHZwWFHWa-w
+
+* Machine Learning - Supervised VS Unsupervised Learning
+https://youtu.be/cfj6yaYE86U
