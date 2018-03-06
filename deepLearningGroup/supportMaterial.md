@@ -2,6 +2,7 @@
 ### Books/Tutorials
 * Ian Goodfellow and Yoshua Bengio and Aaron Courville - http://www.deeplearningbook.org/
 * Jianxin Wu, “Introduction to Convolutional Neural Networks”
+* Introduction CNN - http://arun-aiml.blogspot.com.br/2017/07/convolutional-neural-networks.html
 * Starter Bundle, “Deep Learning for Computer Vision with Python”
 * Python Brasil - http://wiki.python.org.br/DocumentacaoPython
 
