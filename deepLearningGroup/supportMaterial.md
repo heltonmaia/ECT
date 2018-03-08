@@ -1,11 +1,9 @@
 
-### Books/Tutorials
+### Books
 * Ian Goodfellow and Yoshua Bengio and Aaron Courville - http://www.deeplearningbook.org/
 * Jianxin Wu, “Introduction to Convolutional Neural Networks”
 * Introduction CNN - http://arun-aiml.blogspot.com.br/2017/07/convolutional-neural-networks.html
 * Starter Bundle, “Deep Learning for Computer Vision with Python”
-* Python Brasil - http://wiki.python.org.br/DocumentacaoPython
-
 
 ### Introduction
 * Do You Need Help Getting Started with Applied Machine Learning?
@@ -14,6 +12,10 @@ https://machinelearningmastery.com/start-here/
 * A Beginner's Guide To Understanding Convolutional Neural Networks
 https://adeshpande3.github.io/adeshpande3.github.io/A-Beginner's-Guide-To-Understanding-Convolutional-Neural-Networks/
 
+### Tutorials
+ * Gradient Descent: https://towardsdatascience.com/gradient-descent-in-a-nutshell-eaf8c18212f0
+ * Python Brasil - http://wiki.python.org.br/DocumentacaoPython
+ 
 ### Configuration
 * Create virtual environments for python with conda
 https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
