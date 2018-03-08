@@ -14,10 +14,8 @@ https://adeshpande3.github.io/adeshpande3.github.io/A-Beginner's-Guide-To-Unders
 
 ### Tutorials
  * Gradient Descent: https://towardsdatascience.com/gradient-descent-in-a-nutshell-eaf8c18212f0
- * Python Brasil - http://wiki.python.org.br/DocumentacaoPython
- 
-### Configuration
-* Create virtual environments for python with conda
+ * Python Brasil - http://wiki.python.org.br/DocumentacaoPython 
+ * Create virtual environments for python with conda
 https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
 
 ### Examples
