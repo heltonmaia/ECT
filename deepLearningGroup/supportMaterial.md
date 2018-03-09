@@ -17,6 +17,7 @@ https://adeshpande3.github.io/adeshpande3.github.io/A-Beginner's-Guide-To-Unders
  * Python Brasil - http://wiki.python.org.br/DocumentacaoPython 
  * Create virtual environments for python with conda
 https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
+ * Image Processing in OpenCV: http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_tutorials.html 
 
 ### Examples
 * Using neural nets to recognize handwritten digits
