@@ -1,0 +1,50 @@
+"""
+Após intalar o keras no linux o backend padrão é o theano
+como vamos utilizar o tensorflow é necessário fazer uma 
+alteração no script de inicialização do keras.
+P.S.: Se por acaso alguém estiver usando um Mac o tensorflow 
+já é padrão
+"""
+
+# Instalações:
+conda install -c conda-forge tensorflow keras -y
+
+# Verificando se vai dar problema:
+cat ${Caminho para seu ambiente}/etc/conda/activate.d/keras_activate.sh 
+
+"""
+Se o output for: 
+#!/bin/bash
+if [ "$(uname)" == "Darwin" ]
+then
+    # for Mac OSX
+    export KERAS_BACKEND=tensorflow
+elif [ "$(uname)" == "Linux" ]
+then
+    # for Linux
+    export KERAS_BACKEND=theano
+fi
+"""
+
+# Use um editor de texto para editar o arquivo:
+# Troque a linha 'export KERAS_BACKEND=theano' por 'export KERAS_BACKEND=tensorflow'
+gedit ${Caminho para seu ambiente}/etc/conda/activate.d/keras_activate.sh
+
+# Verificando se tudo deu certo:
+cat ${Caminho para seu ambiente}/etc/conda/activate.d/keras_activate.sh 
+
+"""
+Output deve ser:
+#!/bin/bash
+if [ "$(uname)" = "Darwin" ]
+then
+    # for Mac OSX
+    export KERAS_BACKEND=tensorflow
+elif [ "$(uname)" = "Linux" ]
+then
+    # for Linux
+    export KERAS_BACKEND=tensorflow
+fi
+"""
+
+# GG

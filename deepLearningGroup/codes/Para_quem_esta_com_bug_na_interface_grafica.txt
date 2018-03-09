@@ -1,0 +1,17 @@
+# Removam o opencv de todos os jeitos que tentaram intalar 
+conda remove opencv 
+pip unsinstall opencv-python 
+
+# Instalem o gtk 
+conda install -c mw gtk2 -y
+
+# Instalem o OpenCV 3.3.0 
+conda install -c conda-forge opencv=3.3.0 -y
+
+# Verificar versões:
+# GUI:
+conda install anaconda-navigator
+anaconda-navigator
+
+# Terminal:
+conda list 
