@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-by helton
+@author:helton
 """
 import numpy as np
 import cv2
