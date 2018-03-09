@@ -3,7 +3,7 @@ import numpy as np
 from scipy import signal
 
 '''
-by richardson
+@author: richardson
 #convolution example - Book CNN, Figure 3
 k = np.array([[1,1], [1,1]])
 img = np.array([[1, 2, 3, 1], [4, 5, 6, 1], [7, 8, 9, 1]])
