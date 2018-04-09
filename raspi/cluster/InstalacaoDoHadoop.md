@@ -212,10 +212,12 @@ nano /etc/network/interfaces
 
 #### Neste caso, foi utilizada a configuração abaixo, que pode mudar de acordo com a necessidade de cada caso.
 ```
+auto eth0
 iface eth0 inet static
-address 192.168.1.103
-netmask 255.255.255.0
-gateway 192.168.1.1
+address 10.6.1.228
+netmask 255.255.252.0
+gateway 10.6.01
+dns-nameserver 10.6.0.98
 ```
 #### Em seguida abra o arquivo hosts:
 
@@ -223,7 +225,7 @@ nano /etc/hosts
 
 #### Adicione ao arquivo a linha abaixo e salve:
 ```
-192.168.1.103   node1
+10.6.1.228   node1
 ```
 #### Por fim abrir os arquivos hostname e substitua o nome Raspberry por node1:
 
@@ -515,15 +517,15 @@ sudo nano yarn-site.xml
 <configuration>
     <property>
         <name>yarn.resourcemanager.resource-tracker.address</name>
-        <value>node1:8025</value>
+        <value>node1:8031</value>
     </property>
     <property>
         <name>yarn.resourcemanager.scheduler.address</name>
-        <value>node1:8035</value>
+        <value>node1:8030</value>
     </property>
     <property>
         <name>yarn.resourcemanager.address</name>
-        <value>node1:8050</value>
+        <value>node1:8032</value>
     </property>
     <property>
         <name>yarn.nodemanager.aux-services</name>
@@ -1599,9 +1601,9 @@ http://node1:8088
 
 Externamente a placa, mas na mesma rede:
 
-http://192.168.1.104:50070
+http://10.6.1.228:50070
 
-http://192.168.1.104:8088
+http://10.6.1.228:8088
 
 ## Referências:
 
