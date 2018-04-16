@@ -1,7 +1,5 @@
 # Instalação do Hadoop de forma Distribuída
 
-## Configuração para o master e node
-
 ## Instalação do Hadoop na Raspberry PI 3 modelo B
 
 #### Link para baixar imagem do raspbian:
@@ -13,6 +11,8 @@ Para instalar imagem no cartão foi utilizado o etcher.
 #### Link para baixar o etcher
 
 https://etcher.io/
+
+## Configuração para o master e nos
 
 ## Instalação das dependências
 
@@ -255,69 +255,6 @@ sudo adduser --ingroup hadoop hduser
 
 sudo adduser hduser sudo
 
-#### Mude os usuários e crie a chave SSH sem senha:
-
-### Gerar um novo par de chaves públicas e privadas SSH no computador local é o primeiro passo para a autenticação com um servidor remoto sem uma senha.
-
-su hduser
-
-mkdir ~/.ssh
-
-ssh-keygen -t rsa -P ""
-
-### Adicionar a chave pública ao authorized_keys
-
-cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
-
-Testar conexão ssh:
-
-ssh master
-
-exit
-
-**OBS.:** a cópia da chave de ssh do master para nos deve ser feito após a realização dos passos anteriores em cada 
-### O ssh-copy-id é um pequeno script que copia sua chave pública ssh para um host remoto; anexando-o ao seu remote_keys autorizado.  Utilize  o comando para cópia o chave do master para nos:
-
-### Utilize  o comando para cópia o chave do master para node1:
-
-ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.226
-
-Testar conexão ssh:
-
-ssh 10.6.1.226 ou ssh node1
-
-exit
-
-### Utilize  o comando para cópia o chave do master para node2:
-
-ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.225
-
-Testar conexão ssh:
-
-ssh 10.6.1.225 ou ssh node2
-
-exit
-
-### Utilize  o comando para cópia o chave do master para node3:
-
-ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.227
-
-Testar conexão ssh:
-
-ssh 10.6.1.227 ou ssh node3
-
-exit
-
-### Utilize  o comando para cópia o chave do master para node4:
-
-ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.223
-
-Testar conexão ssh:
-
-ssh 10.6.1.223 ou ssh node4
-
-exit
-  
 ## Instalação do Hadoop-2.7.5
 
 #### Baixar e descompactar o hadoop:
@@ -614,24 +551,38 @@ sudo nano yarn-site.xml
 
 ```xml
 <configuration>
+	
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+	
+    <property>
+	<name>yarn.log-aggregation-enable</name>
+	<value>true</value>
+    <property>
+	
+        <name>yarn.resourcemanager.scheduler.address</name>
+        <value>master:8030</value>
+    </property>
+	
     <property>
         <name>yarn.resourcemanager.resource-tracker.address</name>
         <value>master:8031</value>
     </property>
 
     <property>
-        <name>yarn.resourcemanager.scheduler.address</name>
-        <value>master:8030</value>
-    </property>
-
-    <property>
         <name>yarn.resourcemanager.address</name>
         <value>master:8032</value>
     </property>
+    <property>
+	<name>yarn.resourcemanager.admin.address</name>
+	<value>master:8033</value>
+    </property>
 
     <property>
-        <name>yarn.nodemanager.aux-services</name>
-        <value>mapreduce_shuffle</value>
+	<name>yarn.resourcemanager.webapp.address</name>
+	<value>master:8088</value>
     </property>
 
     <property>
@@ -758,7 +709,71 @@ sudo nano mapred-site.xml
 
 
 ```
+**OBS1.:** para diminuir o trabalho e ganhar tempo o ideal é criar uma imagem do sistema do master para gravar nós.
+Etapas apenas para o master
+### Crie a chave SSH sem senha:
 
+#### Gerar um novo par de chaves públicas e privadas SSH no computador local é o primeiro passo para a autenticação com um servidor remoto sem uma senha.
+
+su hduser
+
+mkdir ~/.ssh
+
+ssh-keygen -t rsa -P ""
+
+#### Adicionar a chave pública ao authorized_keys
+
+cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
+
+Testar conexão ssh:
+
+ssh master
+
+exit
+
+**OBS2.:** a cópia da chave de ssh do master para nos deve ser feito após a realização dos passos anteriores em cada 
+
+### O ssh-copy-id é um pequeno script que copia sua chave pública ssh para um host remoto; anexando-o ao seu remote_keys autorizado.  Utilize  o comando para cópia o chave do master para nos:
+
+#### Utilize  o comando para cópia o chave do master para node1:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.226
+
+Testar conexão ssh:
+
+ssh 10.6.1.226 ou ssh node1
+
+exit
+
+#### Utilize  o comando para cópia o chave do master para node2:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.225
+
+Testar conexão ssh:
+
+ssh 10.6.1.225 ou ssh node2
+
+exit
+
+#### Utilize  o comando para cópia o chave do master para node3:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.227
+
+Testar conexão ssh:
+
+ssh 10.6.1.227 ou ssh node3
+
+exit
+
+#### Utilize  o comando para cópia o chave do master para node4:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.223
+
+Testar conexão ssh:
+
+ssh 10.6.1.223 ou ssh node4
+
+exit
 #### Crie pastas e permissões para o HDFS
 
 sudo mkdir -p /opt/hadoop/hadoop_data/hdfs/namenode
