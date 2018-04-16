@@ -242,7 +242,8 @@ nano /etc/hosts
 nano /etc/hostname
 
 **Nota:** Hostname deve ser configurando de acordo com o de cada placa, neste caso foi utilizado master para master e para nos node1, node2, node3 e node4.
-Agora reset a Raspberry
+
+**Agora reset a Raspberry**
 
 ## Criando usuário para Hadoop
 
@@ -274,6 +275,7 @@ ssh master
 
 exit
 
+**OBS.:** a cópia da chave de ssh do master para nos deve ser feito após a realização dos passos anteriores em cada 
 ### O ssh-copy-id é um pequeno script que copia sua chave pública ssh para um host remoto; anexando-o ao seu remote_keys autorizado.  Utilize  o comando para cópia o chave do master para nos:
 
 ### Utilize  o comando para cópia o chave do master para node1:
