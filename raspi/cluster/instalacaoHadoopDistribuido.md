@@ -1,4 +1,8 @@
-# Instalação do Hadoop na Raspberry PI 3 modelo B
+# Instalação do Hadoop de forma Distribuída
+
+## Configuração para o master e node
+
+## Instalação do Hadoop na Raspberry PI 3 modelo B
 
 #### Link para baixar imagem do raspbian:
 
@@ -219,18 +223,25 @@ netmask 255.255.252.0
 gateway 10.6.01
 dns-nameserver 10.6.0.98
 ```
+**Nota:** o endereço de ip deve ser configurando de acordo com o de cada placa.
+
 #### Em seguida abra o arquivo hosts:
 
 nano /etc/hosts
 
 #### Adicione ao arquivo a linha abaixo e salve:
 ```
-10.6.1.228   node1
+10.6.1.228 master
+10.6.1.226 node1
+10.6.1.225 node2
+10.6.1.227 node3
+10.6.1.223 node4
 ```
-#### Por fim abrir os arquivos hostname e substitua o nome Raspberry por node1:
+#### Por fim abrir os arquivos hostname e substitua o nome Raspberry por master:
 
 nano /etc/hostname
 
+**Nota:** Hostname deve ser configurando de acordo com o de cada placa, neste caso foi utilizado master para master e para nos node1, node2, node3 e node4.
 Agora reset a Raspberry
 
 ## Criando usuário para Hadoop
@@ -245,17 +256,63 @@ sudo adduser hduser sudo
 
 #### Mude os usuários e crie a chave SSH sem senha:
 
+### Gerar um novo par de chaves públicas e privadas SSH no computador local é o primeiro passo para a autenticação com um servidor remoto sem uma senha.
+
 su hduser
 
 mkdir ~/.ssh
 
 ssh-keygen -t rsa -P ""
 
+### Adicionar a chave pública ao authorized_keys
+
 cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
 
 Testar conexão ssh:
 
-ssh node1
+ssh master
+
+exit
+
+### O ssh-copy-id é um pequeno script que copia sua chave pública ssh para um host remoto; anexando-o ao seu remote_keys autorizado.  Utilize  o comando para cópia o chave do master para nos:
+
+### Utilize  o comando para cópia o chave do master para node1:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.226
+
+Testar conexão ssh:
+
+ssh 10.6.1.226 ou ssh node1
+
+exit
+
+### Utilize  o comando para cópia o chave do master para node2:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.225
+
+Testar conexão ssh:
+
+ssh 10.6.1.225 ou ssh node2
+
+exit
+
+### Utilize  o comando para cópia o chave do master para node3:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.227
+
+Testar conexão ssh:
+
+ssh 10.6.1.227 ou ssh node3
+
+exit
+
+### Utilize  o comando para cópia o chave do master para node4:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.223
+
+Testar conexão ssh:
+
+ssh 10.6.1.223 ou ssh node4
 
 exit
   
@@ -475,10 +532,17 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 
 ```xml
 <configuration>
+
   <property>
     <name>fs.default.name</name>
-    <value>hdfs://node1:9000</value>
+    <value>hdfs://master:9000</value>
   </property>
+
+  <property>
+    <name>dfs.permissions</name>
+    <value>false</value>
+  </property>
+
 </configuration>
 ```
 
@@ -490,23 +554,56 @@ sudo nano hdfs-site.xml
 
 ```xml
 <configuration>
+
   <property>
     <name>dfs.replication</name>
-    <value>1</value>
+    <value>3</value>
   </property>
+
   <property>
     <name>dfs.blocksize</name>
     <value>5242880</value>
   </property>
+
   <property>
     <name>dfs.namenode.name.dir</name>
     <value>file:/opt/hadoop/hadoop_data/hdfs/namenode</value>
   </property>
+
   <property>
     <name>dfs.datanode.name.dir</name>
     <value>file:/opt/hadoop/hadoop_data/hdfs/datanode</value>
   </property>
+
+  <property>
+    <name>dfs.permissions</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>dfs.datanode.use.datanode.hostname</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.http-address</name>
+    <value>master:50070</value>
+    <description>Your NameNode hostname for http access.</description>
+  </property>
+
+  <property>
+    <name>dfs.namenode.secondary.http-address</name>
+    <value>master:50090</value>
+    <description>Your Secondary NameNode hostname for http access.</description>
+  </property>
+
 </configuration>
+
 ```
 
 #### yarn-site
@@ -517,24 +614,29 @@ sudo nano yarn-site.xml
 <configuration>
     <property>
         <name>yarn.resourcemanager.resource-tracker.address</name>
-        <value>node1:8031</value>
+        <value>master:8031</value>
     </property>
+
     <property>
         <name>yarn.resourcemanager.scheduler.address</name>
-        <value>node1:8030</value>
+        <value>master:8030</value>
     </property>
+
     <property>
         <name>yarn.resourcemanager.address</name>
-        <value>node1:8032</value>
+        <value>master:8032</value>
     </property>
+
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
     </property>
+
     <property>
         <name>yarn.nodemanager.resource.cpu-vcores</name>
         <value>4</value>
     </property>
+
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
         <value>768</value>
@@ -543,30 +645,37 @@ sudo nano yarn-site.xml
         <name>yarn.scheduler.minimum-allocation-mb</name>
         <value>64</value>
     </property>
+
     <property>
         <name>yarn.scheduler.maximum-allocation-mb</name>
         <value>256</value>
     </property>
+
     <property>
         <name>yarn.scheduler.minimum-allocation-vcores</name>
         <value>1</value>
     </property>
+
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
         <value>4</value>
     </property>
+
     <property>
         <name>yarn.nodemanager.vmem-check-enabled</name>
         <value>true</value>
     </property>
+
     <property>
         <name>yarn.nodemanager.pmem-check-enabled</name>
         <value>true</value>
     </property>
+
     <property>
         <name>yarn.nodemanager.vmem-pmem-ratio</name>
         <value>2.1</value>
     </property>
+
 </configuration>
 ```
 
@@ -579,54 +688,72 @@ sudo nano mapred-site.xml
 ```xml
 <configuration>
     <property>
+      <name>mapred.job.tracker</name>
+      <value>master:9001</value>
+    </property>
+
+    <property>
         <name>mapreduce.framework.name</name>
         <value>yarn</value>
     </property>
+
     <property>
         <name>mapreduce.map.memory.mb</name>
         <value>256</value>
     </property>
+
     <property>
         <name>mapreduce.map.java.opts</name>
         <value>-Xmx204m</value>
     </property>
+
     <property>
         <name>mapreduce.map.cpu.vcores</name>
         <value>2</value>
     </property>
+
     <property>
         <name>mapreduce.reduce.memory.mb</name>
         <value>128</value>
     </property>
+
     <property>
         <name>mapreduce.reduce.java.opts</name>
         <value>-Xmx102m</value>
     </property>
+
     <property>
         <name>mapreduce.reduce.cpu.vcores</name>
         <value>2</value>
     </property>
+
     <property>
         <name>yarn.app.mapreduce.am.resource.mb</name>
         <value>128</value>
     </property>
+
     <property>
         <name>yarn.app.mapreduce.am.command-opts</name>
         <value>-Xmx102m</value>
     </property>
+
     <property>
         <name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
         <value>1</value>
     </property>
+
     <property>
         <name>mapreduce.job.maps</name>
         <value>4</value>
     </property>
+
     <property>
         <name>mapreduce.job.reduces</name>
         <value>4</value>
     </property>
+
 </configuration>
+
 
 ```
 
