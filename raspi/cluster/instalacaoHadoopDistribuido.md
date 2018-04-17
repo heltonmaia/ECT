@@ -57,6 +57,11 @@ Java(TM) SE Runtime Environment (build 1.8.0_65-b17)
 Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 
 ```
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.htmljava
+sudo mkdir /opt/jdk
+sudo tar -zxf jdk-8u161-linux-arm-vfp-hflt.tar.gz -C /opt/jdk
+sudo update-alternatives --install /usr/bin/java java  /opt/jdk/jdk1.8.0_161/bin/java 100
+sudo update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_161/bin/javac 100
 
 ## Instalação do protobuf 2.5.0
 
@@ -220,7 +225,7 @@ auto eth0
 iface eth0 inet static
 address 10.6.1.228
 netmask 255.255.252.0
-gateway 10.6.01
+gateway 10.6.0.1
 dns-nameserver 10.6.0.98
 ```
 **Nota:** o endereço de ip deve ser configurando de acordo com o de cada placa.
@@ -392,6 +397,8 @@ tar -zcvf /root/hadoop-2.7.5.armf.tar.gz hadoop
 #### Adicione ao final de /etc/bash.bashrc as seguintes linhas de exportação:
 
 su hduser
+
+sudo cp -a /etc/bash.bashrc /etc/bash.bashrc.original
 
 sudo nano /etc/bash.bashrc
 
