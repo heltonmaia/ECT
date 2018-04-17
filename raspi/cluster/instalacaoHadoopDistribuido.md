@@ -457,7 +457,7 @@ This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.7.5.j
 
 ```
 
-## Definir os arquivos de configuração para modo pseudo distribuído do hadoop
+## Definir os arquivos de configuração para modo distribuído do hadoop
 
 cd /opt/hadoop/etc/hadoop
 
@@ -471,17 +471,14 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 
 ```xml
 <configuration>
-
   <property>
     <name>fs.default.name</name>
     <value>hdfs://master:9000</value>
   </property>
-
   <property>
     <name>dfs.permissions</name>
     <value>false</value>
   </property>
-
 </configuration>
 ```
 
@@ -493,54 +490,44 @@ sudo nano hdfs-site.xml
 
 ```xml
 <configuration>
-
   <property>
     <name>dfs.replication</name>
     <value>3</value>
   </property>
-
   <property>
     <name>dfs.blocksize</name>
     <value>5242880</value>
   </property>
-
   <property>
     <name>dfs.namenode.name.dir</name>
     <value>file:/opt/hadoop/hadoop_data/hdfs/namenode</value>
   </property>
-
   <property>
     <name>dfs.datanode.name.dir</name>
     <value>file:/opt/hadoop/hadoop_data/hdfs/datanode</value>
   </property>
-
   <property>
     <name>dfs.permissions</name>
     <value>false</value>
   </property>
-
   <property>
     <name>dfs.datanode.use.datanode.hostname</name>
     <value>false</value>
   </property>
-
   <property>
     <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
     <value>false</value>
   </property>
-
   <property>
     <name>dfs.namenode.http-address</name>
     <value>master:50070</value>
     <description>Your NameNode hostname for http access.</description>
   </property>
-
   <property>
     <name>dfs.namenode.secondary.http-address</name>
     <value>master:50090</value>
     <description>Your Secondary NameNode hostname for http access.</description>
   </property>
-
 </configuration>
 
 ```
@@ -551,26 +538,21 @@ sudo nano yarn-site.xml
 
 ```xml
 <configuration>
-	
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
     </property>
-	
     <property>
 	<name>yarn.log-aggregation-enable</name>
 	<value>true</value>
     <property>
-	
         <name>yarn.resourcemanager.scheduler.address</name>
         <value>master:8030</value>
     </property>
-	
     <property>
         <name>yarn.resourcemanager.resource-tracker.address</name>
         <value>master:8031</value>
     </property>
-
     <property>
         <name>yarn.resourcemanager.address</name>
         <value>master:8032</value>
@@ -579,17 +561,14 @@ sudo nano yarn-site.xml
 	<name>yarn.resourcemanager.admin.address</name>
 	<value>master:8033</value>
     </property>
-
     <property>
 	<name>yarn.resourcemanager.webapp.address</name>
 	<value>master:8088</value>
     </property>
-
     <property>
         <name>yarn.nodemanager.resource.cpu-vcores</name>
         <value>4</value>
     </property>
-
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
         <value>768</value>
@@ -598,37 +577,30 @@ sudo nano yarn-site.xml
         <name>yarn.scheduler.minimum-allocation-mb</name>
         <value>64</value>
     </property>
-
     <property>
         <name>yarn.scheduler.maximum-allocation-mb</name>
         <value>256</value>
     </property>
-
     <property>
         <name>yarn.scheduler.minimum-allocation-vcores</name>
         <value>1</value>
     </property>
-
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
         <value>4</value>
     </property>
-
     <property>
         <name>yarn.nodemanager.vmem-check-enabled</name>
         <value>true</value>
     </property>
-
     <property>
         <name>yarn.nodemanager.pmem-check-enabled</name>
         <value>true</value>
     </property>
-
     <property>
         <name>yarn.nodemanager.vmem-pmem-ratio</name>
         <value>2.1</value>
     </property>
-
 </configuration>
 ```
 
@@ -644,73 +616,76 @@ sudo nano mapred-site.xml
       <name>mapred.job.tracker</name>
       <value>master:9001</value>
     </property>
-
     <property>
         <name>mapreduce.framework.name</name>
         <value>yarn</value>
     </property>
-
     <property>
         <name>mapreduce.map.memory.mb</name>
         <value>256</value>
     </property>
-
     <property>
         <name>mapreduce.map.java.opts</name>
         <value>-Xmx204m</value>
     </property>
-
     <property>
         <name>mapreduce.map.cpu.vcores</name>
         <value>2</value>
     </property>
-
     <property>
         <name>mapreduce.reduce.memory.mb</name>
         <value>128</value>
     </property>
-
     <property>
         <name>mapreduce.reduce.java.opts</name>
         <value>-Xmx102m</value>
     </property>
-
     <property>
         <name>mapreduce.reduce.cpu.vcores</name>
         <value>2</value>
     </property>
-
     <property>
         <name>yarn.app.mapreduce.am.resource.mb</name>
         <value>128</value>
     </property>
-
     <property>
         <name>yarn.app.mapreduce.am.command-opts</name>
         <value>-Xmx102m</value>
     </property>
-
     <property>
         <name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
         <value>1</value>
     </property>
-
     <property>
         <name>mapreduce.job.maps</name>
         <value>4</value>
     </property>
-
     <property>
         <name>mapreduce.job.reduces</name>
         <value>4</value>
     </property>
-
 </configuration>
 
 
 ```
-**OBS1.:** para diminuir o trabalho e ganhar tempo o ideal é criar uma imagem do sistema do master para gravar nós.
-Etapas apenas para o master
+#### Adicione todos hostname dos slaves. salvar e fechar.
+
+sudo nano /opt/hadoop/etc/hadoop/slaves
+
+````
+node1
+node2 
+node3
+node4
+
+````
+
+**OBS1.:** para diminuir o trabalho e ganhar tempo o ideal é criar uma imagem do sistema do master para gravar nós. Outra opção é cópiar por meio de SCP.
+su hduser
+sudo scp -r /opt/hadoop/* hduser@10.6.1.225:/opt/hadoop
+
+# Etapas apenas para o master
+
 ### Crie a chave SSH sem senha:
 
 #### Gerar um novo par de chaves públicas e privadas SSH no computador local é o primeiro passo para a autenticação com um servidor remoto sem uma senha.
@@ -733,7 +708,7 @@ exit
 
 **OBS2.:** a cópia da chave de ssh do master para nos deve ser feito após a realização dos passos anteriores em cada 
 
-### O ssh-copy-id é um pequeno script que copia sua chave pública ssh para um host remoto; anexando-o ao seu remote_keys autorizado.  Utilize  o comando para cópia o chave do master para nos:
+#### O ssh-copy-id é um script utilizado para copia sua chave pública ssh para um host remoto; anexando-o ao seu remote_keys autorizado.  Utilize  o comando para cópia o chave do master para nos:
 
 #### Utilize  o comando para cópia o chave do master para node1:
 
@@ -797,66 +772,14 @@ STARTUP_MSG: Starting NameNode
 STARTUP_MSG:   host = node1/192.168.1.104
 STARTUP_MSG:   args = [-format]
 STARTUP_MSG:   version = 2.7.5
-STARTUP_MSG:   classpath = /opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/jackson-jaxrs-1.9.13.jar:/opt/hadoop/share/hadoop/common/lib/guava-11.0.2.jar:/opt/hadoop/share/hadoop/common/lib/httpclient-4.2.5.jar:/opt/hadoop/share/hadoop/common/lib/apacheds-i18n-2.0.0-M15.jar:/opt/hadoop/share/hadoop/common/lib/jsch-0.1.54.jar:/opt/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar:/opt/hadoop/share/hadoop/common/lib/commons-digester-1.8.jar:/opt/hadoop/share/hadoop/common/lib/xz-1.0.jar:/opt/hadoop/share/hadoop/common/lib/servlet-api-2.5.jar:/opt/hadoop/share/hadoop/common/lib/stax-api-1.0-2.jar:/opt/hadoop/share/hadoop/common/lib/jetty-sslengine-6.1.26.jar:/opt/hadoop/share/hadoop/common/lib/curator-framework-2.7.1.jar:/opt/hadoop/share/hadoop/common/lib/commons-configuration-1.6.jar:/opt/hadoop/share/hadoop/common/lib/paranamer-2.3.jar:/opt/hadoop/share/hadoop/common/lib/zookeeper-3.4.6.jar:/opt/hadoop/share/hadoop/common/lib/jets3t-0.9.0.jar:/opt/hadoop/share/hadoop/common/lib/slf4j-api-1.7.10.jar:/opt/hadoop/share/hadoop/common/lib/commons-math3-3.1.1.jar:/opt/hadoop/share/hadoop/common/lib/commons-io-2.4.jar:/opt/hadoop/share/hadoop/common/lib/jackson-xc-1.9.13.jar:/opt/hadoop/share/hadoop/common/lib/jaxb-impl-2.2.3-1.jar:/opt/hadoop/share/hadoop/common/lib/log4j-1.2.17.jar:/opt/hadoop/share/hadoop/common/lib/protobuf-java-2.5.0.jar:/opt/hadoop/share/hadoop/common/lib/hadoop-auth-2.7.5.jar:/opt/hadoop/share/hadoop/common/lib/commons-logging-1.1.3.jar:/opt/hadoop/share/hadoop/common/lib/jaxb-api-2.2.2.jar:/opt/hadoop/share/hadoop/common/lib/jsr305-3.0.0.jar:/opt/hadoop/share/hadoop/common/lib/commons-httpclient-3.1.jar:/opt/hadoop/share/hadoop/common/lib/commons-collections-3.2.2.jar:/opt/hadoop/share/hadoop/common/lib/jackson-mapper-asl-1.9.13.jar:/opt/hadoop/share/hadoop/common/lib/asm-3.2.jar:/opt/hadoop/share/hadoop/common/lib/httpcore-4.2.5.jar:/opt/hadoop/share/hadoop/common/lib/api-asn1-api-1.0.0-M20.jar:/opt/hadoop/share/hadoop/common/lib/netty-3.6.2.Final.jar:/opt/hadoop/share/hadoop/common/lib/jsp-api-2.1.jar:/opt/hadoop/share/hadoop/common/lib/commons-codec-1.4.jar:/opt/hadoop/share/hadoop/common/lib/gson-2.2.4.jar:/opt/hadoop/share/hadoop/common/lib/commons-lang-2.6.jar:/opt/hadoop/share/hadoop/common/lib/java-xmlbuilder-0.4.jar:/opt/hadoop/share/hadoop/common/lib/jetty-util-6.1.26.jar:/opt/hadoop/share/hadoop/common/lib/commons-net-3.1.jar:/opt/hadoop/share/hadoop/common/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/opt/hadoop/share/hadoop/common/lib/junit-4.11.jar:/opt/hadoop/share/hadoop/common/lib/commons-cli-1.2.jar:/opt/hadoop/share/hadoop/common/lib/commons-compress-1.4.1.jar:/opt/hadoop/share/hadoop/common/lib/jersey-json-1.9.jar:/opt/hadoop/share/hadoop/common/lib/jettison-1.1.jar:/opt/hadoop/share/hadoop/common/lib/api-util-1.0.0-M20.jar:/opt/hadoop/share/hadoop/common/lib/jackson-core-asl-1.9.13.jar:/opt/hadoop/share/hadoop/common/lib/curator-recipes-2.7.1.jar:/opt/hadoop/share/hadoop/common/lib/hadoop-annotations-2.7.5.jar:/opt/hadoop/share/hadoop/common/lib/htrace-core-3.1.0-incubating.jar:/opt/hadoop/share/hadoop/common/lib/xmlenc-0.52.jar:/opt/hadoop/share/hadoop/common/lib/avro-1.7.4.jar:/opt/hadoop/share/hadoop/common/lib/jersey-core-1.9.jar:/opt/hadoop/share/hadoop/common/lib/commons-beanutils-1.7.0.jar:/opt/hadoop/share/hadoop/common/lib/jersey-server-1.9.jar:/opt/hadoop/share/hadoop/common/lib/jetty-6.1.26.jar:/opt/hadoop/share/hadoop/common/lib/activation-1.1.jar:/opt/hadoop/share/hadoop/common/lib/hamcrest-core-1.3.jar:/opt/hadoop/share/hadoop/common/lib/curator-client-2.7.1.jar:/opt/hadoop/share/hadoop/common/lib/mockito-all-1.8.5.jar:/opt/hadoop/share/hadoop/common/lib/commons-beanutils-core-1.8.0.jar:/opt/hadoop/share/hadoop/common/lib/snappy-java-1.0.4.1.jar:/opt/hadoop/share/hadoop/common/hadoop-common-2.7.5-tests.jar:/opt/hadoop/share/hadoop/common/hadoop-common-2.7.5.jar:/opt/hadoop/share/hadoop/common/hadoop-nfs-2.7.5.jar:/opt/hadoop/share/hadoop/hdfs:/opt/hadoop/share/hadoop/hdfs/lib/guava-11.0.2.jar:/opt/hadoop/share/hadoop/hdfs/lib/servlet-api-2.5.jar:/opt/hadoop/share/hadoop/hdfs/lib/commons-io-2.4.jar:/opt/hadoop/share/hadoop/hdfs/lib/log4j-1.2.17.jar:/opt/hadoop/share/hadoop/hdfs/lib/protobuf-java-2.5.0.jar:/opt/hadoop/share/hadoop/hdfs/lib/commons-logging-1.1.3.jar:/opt/hadoop/share/hadoop/hdfs/lib/leveldbjni-all-1.8.jar:/opt/hadoop/share/hadoop/hdfs/lib/jsr305-3.0.0.jar:/opt/hadoop/share/hadoop/hdfs/lib/jackson-mapper-asl-1.9.13.jar:/opt/hadoop/share/hadoop/hdfs/lib/asm-3.2.jar:/opt/hadoop/share/hadoop/hdfs/lib/commons-daemon-1.0.13.jar:/opt/hadoop/share/hadoop/hdfs/lib/netty-3.6.2.Final.jar:/opt/hadoop/share/hadoop/hdfs/lib/commons-codec-1.4.jar:/opt/hadoop/share/hadoop/hdfs/lib/commons-lang-2.6.jar:/opt/hadoop/share/hadoop/hdfs/lib/jetty-util-6.1.26.jar:/opt/hadoop/share/hadoop/hdfs/lib/commons-cli-1.2.jar:/opt/hadoop/share/hadoop/hdfs/lib/netty-all-4.0.23.Final.jar:/opt/hadoop/share/hadoop/hdfs/lib/jackson-core-asl-1.9.13.jar:/opt/hadoop/share/hadoop/hdfs/lib/htrace-core-3.1.0-incubating.jar:/opt/hadoop/share/hadoop/hdfs/lib/xmlenc-0.52.jar:/opt/hadoop/share/hadoop/hdfs/lib/jersey-core-1.9.jar:/opt/hadoop/share/hadoop/hdfs/lib/jersey-server-1.9.jar:/opt/hadoop/share/hadoop/hdfs/lib/jetty-6.1.26.jar:/opt/hadoop/share/hadoop/hdfs/lib/xml-apis-1.3.04.jar:/opt/hadoop/share/hadoop/hdfs/lib/xercesImpl-2.9.1.jar:/opt/hadoop/share/hadoop/hdfs/hadoop-hdfs-nfs-2.7.5.jar:/opt/hadoop/share/hadoop/hdfs/hadoop-hdfs-2.7.5.jar:/opt/hadoop/share/hadoop/hdfs/hadoop-hdfs-2.7.5-tests.jar:/opt/hadoop/share/hadoop/yarn/lib/jackson-jaxrs-1.9.13.jar:/opt/hadoop/share/hadoop/yarn/lib/guava-11.0.2.jar:/opt/hadoop/share/hadoop/yarn/lib/jersey-client-1.9.jar:/opt/hadoop/share/hadoop/yarn/lib/xz-1.0.jar:/opt/hadoop/share/hadoop/yarn/lib/servlet-api-2.5.jar:/opt/hadoop/share/hadoop/yarn/lib/stax-api-1.0-2.jar:/opt/hadoop/share/hadoop/yarn/lib/zookeeper-3.4.6.jar:/opt/hadoop/share/hadoop/yarn/lib/javax.inject-1.jar:/opt/hadoop/share/hadoop/yarn/lib/commons-io-2.4.jar:/opt/hadoop/share/hadoop/yarn/lib/jackson-xc-1.9.13.jar:/opt/hadoop/share/hadoop/yarn/lib/jaxb-impl-2.2.3-1.jar:/opt/hadoop/share/hadoop/yarn/lib/log4j-1.2.17.jar:/opt/hadoop/share/hadoop/yarn/lib/protobuf-java-2.5.0.jar:/opt/hadoop/share/hadoop/yarn/lib/commons-logging-1.1.3.jar:/opt/hadoop/share/hadoop/yarn/lib/leveldbjni-all-1.8.jar:/opt/hadoop/share/hadoop/yarn/lib/jaxb-api-2.2.2.jar:/opt/hadoop/share/hadoop/yarn/lib/jsr305-3.0.0.jar:/opt/hadoop/share/hadoop/yarn/lib/commons-collections-3.2.2.jar:/opt/hadoop/share/hadoop/yarn/lib/jackson-mapper-asl-1.9.13.jar:/opt/hadoop/share/hadoop/yarn/lib/asm-3.2.jar:/opt/hadoop/share/hadoop/yarn/lib/jersey-guice-1.9.jar:/opt/hadoop/share/hadoop/yarn/lib/netty-3.6.2.Final.jar:/opt/hadoop/share/hadoop/yarn/lib/commons-codec-1.4.jar:/opt/hadoop/share/hadoop/yarn/lib/commons-lang-2.6.jar:/opt/hadoop/share/hadoop/yarn/lib/jetty-util-6.1.26.jar:/opt/hadoop/share/hadoop/yarn/lib/commons-cli-1.2.jar:/opt/hadoop/share/hadoop/yarn/lib/commons-compress-1.4.1.jar:/opt/hadoop/share/hadoop/yarn/lib/guice-3.0.jar:/opt/hadoop/share/hadoop/yarn/lib/jersey-json-1.9.jar:/opt/hadoop/share/hadoop/yarn/lib/jettison-1.1.jar:/opt/hadoop/share/hadoop/yarn/lib/jackson-core-asl-1.9.13.jar:/opt/hadoop/share/hadoop/yarn/lib/jersey-core-1.9.jar:/opt/hadoop/share/hadoop/yarn/lib/jersey-server-1.9.jar:/opt/hadoop/share/hadoop/yarn/lib/jetty-6.1.26.jar:/opt/hadoop/share/hadoop/yarn/lib/activation-1.1.jar:/opt/hadoop/share/hadoop/yarn/lib/zookeeper-3.4.6-tests.jar:/opt/hadoop/share/hadoop/yarn/lib/aopalliance-1.0.jar:/opt/hadoop/share/hadoop/yarn/lib/guice-servlet-3.0.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-server-tests-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-registry-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-server-sharedcachemanager-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-server-common-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-api-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-client-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-common-2.7.5.jar:/opt/hadoop/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/lib/xz-1.0.jar:/opt/hadoop/share/hadoop/mapreduce/lib/paranamer-2.3.jar:/opt/hadoop/share/hadoop/mapreduce/lib/javax.inject-1.jar:/opt/hadoop/share/hadoop/mapreduce/lib/commons-io-2.4.jar:/opt/hadoop/share/hadoop/mapreduce/lib/log4j-1.2.17.jar:/opt/hadoop/share/hadoop/mapreduce/lib/protobuf-java-2.5.0.jar:/opt/hadoop/share/hadoop/mapreduce/lib/leveldbjni-all-1.8.jar:/opt/hadoop/share/hadoop/mapreduce/lib/jackson-mapper-asl-1.9.13.jar:/opt/hadoop/share/hadoop/mapreduce/lib/asm-3.2.jar:/opt/hadoop/share/hadoop/mapreduce/lib/jersey-guice-1.9.jar:/opt/hadoop/share/hadoop/mapreduce/lib/netty-3.6.2.Final.jar:/opt/hadoop/share/hadoop/mapreduce/lib/junit-4.11.jar:/opt/hadoop/share/hadoop/mapreduce/lib/commons-compress-1.4.1.jar:/opt/hadoop/share/hadoop/mapreduce/lib/guice-3.0.jar:/opt/hadoop/share/hadoop/mapreduce/lib/jackson-core-asl-1.9.13.jar:/opt/hadoop/share/hadoop/mapreduce/lib/hadoop-annotations-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/lib/avro-1.7.4.jar:/opt/hadoop/share/hadoop/mapreduce/lib/jersey-core-1.9.jar:/opt/hadoop/share/hadoop/mapreduce/lib/jersey-server-1.9.jar:/opt/hadoop/share/hadoop/mapreduce/lib/hamcrest-core-1.3.jar:/opt/hadoop/share/hadoop/mapreduce/lib/aopalliance-1.0.jar:/opt/hadoop/share/hadoop/mapreduce/lib/guice-servlet-3.0.jar:/opt/hadoop/share/hadoop/mapreduce/lib/snappy-java-1.0.4.1.jar:/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-app-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-2.7.5.jar:/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.5-tests.jar:/opt/hadoop/contrib/capacity-scheduler/*.jar
+STARTUP_MSG:   classpath = /opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/jackson-jaxrs-
+...
+
 STARTUP_MSG:   build = Unknown -r Unknown; compiled by 'root' on 2018-01-05T22:55Z
 STARTUP_MSG:   java = 1.8.0_65
 ************************************************************/
-18/01/07 18:05:12 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]
-18/01/07 18:05:12 INFO namenode.NameNode: createNameNode [-format]
-Formatting using clusterid: CID-b42dbd1b-5f69-4e43-931e-552df21b4c9e
-18/01/07 18:05:16 INFO namenode.FSNamesystem: No KeyProvider found.
-18/01/07 18:05:16 INFO namenode.FSNamesystem: fsLock is fair: true
-18/01/07 18:05:16 INFO namenode.FSNamesystem: Detailed lock hold time metrics enabled: false
-18/01/07 18:05:16 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit=1000
-18/01/07 18:05:16 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: The block deletion will start around 2018 jan 07 18:05:16
-18/01/07 18:05:16 INFO util.GSet: Computing capacity for map BlocksMap
-18/01/07 18:05:16 INFO util.GSet: VM type       = 32-bit
-18/01/07 18:05:16 INFO util.GSet: 2.0% max memory 966.8 MB = 19.3 MB
-18/01/07 18:05:16 INFO util.GSet: capacity      = 2^22 = 4194304 entries
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: dfs.block.access.token.enable=false
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: defaultReplication         = 1
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: maxReplication             = 512
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: minReplication             = 1
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: replicationRecheckInterval = 3000
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: encryptDataTransfer        = false
-18/01/07 18:05:16 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000
-18/01/07 18:05:16 INFO namenode.FSNamesystem: fsOwner             = hduser (auth:SIMPLE)
-18/01/07 18:05:16 INFO namenode.FSNamesystem: supergroup          = supergroup
-18/01/07 18:05:16 INFO namenode.FSNamesystem: isPermissionEnabled = true
-18/01/07 18:05:16 INFO namenode.FSNamesystem: HA Enabled: false
-18/01/07 18:05:16 INFO namenode.FSNamesystem: Append Enabled: true
-18/01/07 18:05:18 INFO util.GSet: Computing capacity for map INodeMap
-18/01/07 18:05:18 INFO util.GSet: VM type       = 32-bit
-18/01/07 18:05:18 INFO util.GSet: 1.0% max memory 966.8 MB = 9.7 MB
-18/01/07 18:05:18 INFO util.GSet: capacity      = 2^21 = 2097152 entries
-18/01/07 18:05:18 INFO namenode.FSDirectory: ACLs enabled? false
-18/01/07 18:05:18 INFO namenode.FSDirectory: XAttrs enabled? true
-18/01/07 18:05:18 INFO namenode.FSDirectory: Maximum size of an xattr: 16384
-18/01/07 18:05:18 INFO namenode.NameNode: Caching file names occuring more than 10 times
-18/01/07 18:05:18 INFO util.GSet: Computing capacity for map cachedBlocks
-18/01/07 18:05:18 INFO util.GSet: VM type       = 32-bit
-18/01/07 18:05:18 INFO util.GSet: 0.25% max memory 966.8 MB = 2.4 MB
-18/01/07 18:05:18 INFO util.GSet: capacity      = 2^19 = 524288 entries
-18/01/07 18:05:18 INFO namenode.FSNamesystem: dfs.namenode.safemode.threshold-pct = 0.9990000128746033
-18/01/07 18:05:18 INFO namenode.FSNamesystem: dfs.namenode.safemode.min.datanodes = 0
-18/01/07 18:05:18 INFO namenode.FSNamesystem: dfs.namenode.safemode.extension     = 30000
-18/01/07 18:05:18 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10
-18/01/07 18:05:18 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10
-18/01/07 18:05:18 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25
-18/01/07 18:05:18 INFO namenode.FSNamesystem: Retry cache on namenode is enabled
-18/01/07 18:05:18 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis
-18/01/07 18:05:18 INFO util.GSet: Computing capacity for map NameNodeRetryCache
-18/01/07 18:05:18 INFO util.GSet: VM type       = 32-bit
-18/01/07 18:05:18 INFO util.GSet: 0.029999999329447746% max memory 966.8 MB = 297.0 KB
-18/01/07 18:05:18 INFO util.GSet: capacity      = 2^16 = 65536 entries
-18/01/07 18:05:19 INFO namenode.FSImage: Allocated new BlockPoolId: BP-1128740-192.168.1.104-1515359118807
-18/01/07 18:05:19 INFO common.Storage: Storage directory /opt/hadoop/hadoop_data/hdfs/namenode has been successfully formatted.
-18/01/07 18:05:19 INFO namenode.FSImageFormatProtobuf: Saving image file /opt/hadoop/hadoop_data/hdfs/namenode/current/fsimage.ckpt_0000000000000000000 using no compression
-18/01/07 18:05:19 INFO namenode.FSImageFormatProtobuf: Image file /opt/hadoop/hadoop_data/hdfs/namenode/current/fsimage.ckpt_0000000000000000000 of size 323 bytes saved in 0 seconds.
-18/01/07 18:05:19 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid >= 0
+...
+
 18/01/07 18:05:19 INFO util.ExitUtil: Exiting with status 0
 18/01/07 18:05:19 INFO namenode.NameNode: SHUTDOWN_MSG: 
 /************************************************************
@@ -1145,483 +1068,9 @@ hduser@node1:/opt/hadoop/bin $ cat  ~/license-out.txt/part-r-00000
 (1) for	2
 (MIT)	1
 (NOT	2
-(a) the	1
-(an	1
-(and	3
-(b) otherwise	1
-(based	1
-(d)	5
-(except	7
-(excluding	5
-(http://code.google.com/p/leveldb/),	1
-(i) the	1
-(if	4
--	13
----------------------------------------------------------------------	1
-/*	1
-0.52	1
-034819	1
-1	1
-1.10. Original	1
-1.11.	1
-1.12. Source	1
-1.4.	1
-1.4. Executable means	1
-1.7.10	1
-1.8.	1
-1.8. Licensable means	1
-1. Definitions. 	1
-1995),	4
-2.1	3
-2.1(a)	1
-2.5	1
-2001-2016,	1
-2005,	1
-2012	1
-227.7202-4	2
-3.	4
-3.2.	2
-3.6.	2
-4.1.	2
-4.3,	2
-6.1	1
-6.3.	2
-7.	4
-9	1
-<COPYRIGHT	1
-<organization>	1
-=============	1
-A	23
-ACCEPTANCE	1
-ACCOMPANYING	1
-ALL	3
-ALLOW	2
-APPENDIX:	1
-APPLICABLE	2
-AUTHOR	2
-AUTHORIZED	2
-Additional	3
-All	13
-Availability	2
-BE	19
-BUT	29
-BY	12
-Bozhanov	1
-By	1
-C.	2
-C.F.R.	8
-CAUSED	13
-CHARACTER	2
-COMMON	2
-COMPUTER	2
-CONSEQUENTIAL	17
-Catholique	1
-Claims	6
-Claims means	1
-Code.	3
-Commission	1
-Contracts	2
-Contributions.	2
-Contributor.	8
-Contributor:	1
-Core	3
-D3	1
-DFAR,	2
-DISCLAIMED.	12
-DISCLAIMER	5
-DISCLAIMER. 	1
-DO	2
-Database	1
-Derivative	17
-Developer)	2
-Disclaimer	1
-EXEMPLARY,	13
-EXPRESSLY	2
-Entity	3
-European	1
-Everyone	1
-External	1
-FIT	2
-FOR	48
-FORTH	2
-For	18
-Foundation	4
-GOODWILL,	2
-Group.	1
-Group:	2
-Hamcrest	1
-INCLUDING	5
-INCLUDING,	17
-INJURY	2
-IS”	1
-Institute	1
-Jakub	1
-LEGAL	2
-LIABILITY	6
-LIABILITY,	31
-LIABLE	19
-LICENSE	6
-LOSS	14
-Larger	10
-Legal	3
-License	54
-License,	10
-License. 	9
-Licensed	3
-Licensor	8
-Licensor,	1
-MAY	2
-Modifications.	3
-NON-INFRINGING.	2
-NONINFRINGEMENT.	5
-NOR	1
-Niels	1
-Nothing	2
-Notices.	2
-Notwithstanding	5
-OF	168
-ON	16
-OR	169
-Object	4
-Obligations. 	1
-OneLab	1
-PART	2
-PROVIDED	21
-Participant.	1
-Patents"	1
-Patents.	1
-Pawel	1
-Permission	6
-Program;	1
-RECIPIENT	1
-RECIPIENT'S	1
-RESULTING	2
-RI	1
-RIGHTS	2
-RISK	2
-Recipient	11
-Recipient's	6
-Red	1
-Redistribution	12
-Required	2
-Rights	2
-SERVICES;	12
-SHOULD	2
-SOFTWARE	32
-SOFTWARE,	14
-SPECIAL,	15
-SUCH	23
-Sale	2
-Section	9
-Sections 2.1	1
-Sections 2.1(a)	1
-Sections 6.1	1
-Section 2.1(b)	1
-Software	72
-Software,	21
-Software. 	2
-Software means	2
-Source	28
-State	1
-THAT	2
-THE	116
-TO	15
-TO,	24
-Terms.	2
-That	1
-The	44
-To	1
-URIs	1
-United	5
-Version;	2
-Versions	2
-Version”	1
-WHETHER	20
-While	2
-Work.	1
-YOU.	3
-York	1
-You.	2
-You:	2
-Your	27
-a	128
-above	30
-above,	8
-absence	2
-acceptance	1
-accordance	1
-account	1
-actions	1
-add	2
-additional	4
-admission	2
-against	14
-against,	1
-agrees	2
-all	29
-alleging	5
-allow	2
-alone.	1
-along	1
-also	5
-always	3
-and/or	36
-and 	2
-appear.	1
-applicable	9
-appropriate	1
-archives.	1
-assign	1
-at	12
-attempt	2
-attorneys	1
-author	1
-authorized	2
-authorship,	2
-available	31
-avoid	1
-b)	5
-be	48
-before	1
-below	4
-beyond	2
-binaries	3
-boilerplate	1
-brackets	1
-brackets!)	1
-breach.	2
-brought	2
-bundles	11
-but	7
-by	113
-by,	5
-calculation	1
-cannot	1
-cause	5
-caused	5
-cease	1
-character	1
-choose	6
-claims	10
-claims,	8
-clause	4
-clear	6
-code.	2
-common	5
-compiler	1
-compliance	10
-computer	11
-consequential	2
-construed	3
-contains	5
-content	1
-continue	3
-control	7
-control,	2
-conversions	1
-conveyed	4
-copies	13
-copying	1
-creation	2
-damage	1
-days	4
-defined	5
-definition,	4
-delete	2
-deleted	2
-derivative	5
-derived	9
-devices. 	1
-different	5
-differs	2
-disclaimer	12
-disclaims	2
-do	13
-document. 	1
-easier	1
-entity	14
-entity,	3
-entity. 	1
-errors,	1
-exchange. 	1
-executed	1
-expiration	2
-expressly	4
-expressly,	1
-external	1
-fails	1
-files.	1
-following	60
-for	59
-for,	3
-forth	6
-forum	1
-full	1
-given	3
-goodwill,	1
-granted:	4
-grantor.	1
-grants	9
-grossly	1
-hadoop-hdfs-project/hadoop-hdfs/src/main/webapps/static/bootstrap-3.0.2	1
-hadoop-tools/hadoop-sls/src/main/html/css/bootstrap.min.css	1
-hadoop-tools/hadoop-sls/src/main/html/js/thirdparty/d3-LICENSE	1
-hadoop-tools/hadoop-sls/src/main/html/js/thirdparty/d3.v3.js	1
-hadoop-tools/hadoop-sls/src/main/html/js/thirdparty/jquery.js	1
-hardware)	1
-hereby	20
-herein.	3
-hereto,	1
-hold	1
-https://groups.google.com/forum/#!forum/lz4c	1
-ii)	2
-improving	1
-inability	1
-includes	7
-including	20
-including,	3
-indemnify	5
-indemnify,	1
-indirectly	5
-indirectly,	2
-infringements	4
-institute	1
-intended	3
-issue	1
-it	19
-item,	1
-itself	4
-least	1
-legal	7
-leveldbjni	1
-leveldbjni-all	1
-liability	15
-liability. 	1
-liable	1
-libraries	1
-license	45
-license,	2
-license: 	2
-licensed	1
-licensee)	1
-licenses;	1
-limitations	1
-lists,	1
-loss	2
-made.	1
-makes	7
-making	1
-making,	4
-management	3
-manner.	1
-many	2
-material	1
-may	48
-mechanical	1
-meet	1
-modifications:	1
-must:	1
-name	11
-native	1
-nature,	2
-negligent	1
-nor	8
-nothing	1
-number.	3
-object	4
-obligations	5
-obligations,	1
-obtaining	5
-obtaining,	1
-of	399
-of,	8
-offers	1
-official	1
-on	37
-or	270
-or,	1
-owned	3
-owner.	1
-part	12
-partners	1
-per	1
-percent	3
-perform,	6
-permission	6
-permit	5
-power,	3
-practice,	2
-preferred	1
-preferred,	1
-previous	4
-product.	2
-programs	1
-project	2
-prospectively	2
-provide	2
-provided	36
-provision	9
-qualify,	1
-received.	1
-recipient's	1
-recipients'	1
-regulations	2
-remainder	1
-represents	3
-reproduce	13
-reproduce,	6
-required	5
-reserves	1
-resulting	2
-revision	1
-rights	56
-sale	1
-sale,	4
-section	1
-section,	1
-secure	1
-see:	1
-separable	1
-separate	4
-service	1
-should	4
-snappy	1
-software	42
-soon	1
-source	33
-source,	1
-special,	2
-src/google/protobuf/stubs/atomicops_internals_power.h.	1
-state	1
-stated	3
-submitted.	1
-such	87
-suitable	1
-syntax	1
-terminate	7
-terminate,	1
-terms.	1
-that	116
-the	649
-thereof);	3
-thereof.	2
-those	9
-through	6
-time.	3
-to	241
-to,	2
-tracking	1
-trademark	2
-trademark,	1
-transfer	2
-translation	1
-understands	1
-understood,	1
-user	2
-validly	2
-value	2
-versions	3
-viewable	1
+
+...
+
 was	4
 whether	9
 which	32
