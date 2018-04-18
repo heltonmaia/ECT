@@ -34,7 +34,9 @@ apt-get install zip unzip
 
 Antes de iniciar  a instalação confira  se o java já veio instalado como de costume no Raspbian jessie mais recentes.
 
-#### Instalar o java:
+### Instalar o java
+
+#### 1ª opção de instalação do java
 
 sudo -i
 
@@ -57,11 +59,24 @@ Java(TM) SE Runtime Environment (build 1.8.0_65-b17)
 Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 
 ```
-http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.htmljava
-sudo mkdir /opt/jdk
-sudo tar -zxf jdk-8u161-linux-arm-vfp-hflt.tar.gz -C /opt/jdk
-sudo update-alternatives --install /usr/bin/java java  /opt/jdk/jdk1.8.0_161/bin/java 100
-sudo update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_161/bin/javac 100
+
+#### 2ª opção de instalação do java
+
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+#### Baixar, criar diretório e descompactar o java:
+
+sudo -i
+
+wget http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-arm32-vfp-hflt.tar.gz
+
+mkdir /opt/jdk
+
+tar -zxf jdk-8u161-linux-arm-vfp-hflt.tar.gz -C /opt/jdk
+
+update-alternatives --install /usr/bin/java java  /opt/jdk/jdk1.8.0_161/bin/java 100
+
+update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_161/bin/javac 100
 
 ## Instalação do protobuf 2.5.0
 
@@ -1195,9 +1210,9 @@ Um forma agradável de obter informações sobre aplicações, nós, armazenamen
 
 Localmente na placa:
 
-http://node1:50070
+http://master:50070
 
-http://node1:8088
+http://master:8088
 
 Externamente a placa, mas na mesma rede:
 
@@ -1214,4 +1229,6 @@ http://www.widriksson.com/raspberry-pi-2-hadoop-2-cluster/
 https://medium.com/@jasonicarter/how-to-hadoop-at-home-with-raspberry-pi-part-1-3b71f1b8ac4e
 
 https://www.tutorialspoint.com/hadoop/
+
+http://hadoop.praveendeshmane.co.in/hadoop/hadoop-2-6-4-fully-distributed-mode-installation-on-ubuntu-14-04.jsp
 
