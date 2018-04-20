@@ -494,13 +494,18 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 ```xml
 <configuration>
   <property>
-    <name>fs.default.name</name>
-    <value>hdfs://master:9000</value>
+    <name>fs.defaultFS</name>
+    <value>file:///master:9000</value>
   </property>
   <property>
     <name>dfs.permissions</name>
     <value>false</value>
   </property>
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/tmp/hadoop/hduser</value>
+    <description>A base for other temporary directories.</description>
+</property>
 </configuration>
 ```
 
@@ -522,14 +527,14 @@ sudo nano hdfs-site.xml
   </property>
   <property>
     <name>dfs.namenode.name.dir</name>
-    <value>file:/opt/hadoop/hadoop_data/hdfs/namenode</value>
+    <value>file:///tmp/hadoop/hduser/dfs/name</value>
   </property>
   <property>
-    <name>dfs.datanode.name.dir</name>
-    <value>file:/opt/hadoop/hadoop_data/hdfs/datanode</value>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:///tmp/hadoop/hduser/dfs/data</value>
   </property>
   <property>
-    <name>dfs.permissions</name>
+    <name>dfs.permissions.enabled</name>
     <value>false</value>
   </property>
   <property>
