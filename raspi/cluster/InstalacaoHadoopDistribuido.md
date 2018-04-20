@@ -518,7 +518,7 @@ sudo nano hdfs-site.xml
   </property>
   <property>
     <name>dfs.blocksize</name>
-    <value>5242880</value>
+    <value>10485760</value>
   </property>
   <property>
     <name>dfs.namenode.name.dir</name>
@@ -563,10 +563,13 @@ sudo nano yarn-site.xml
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
+	<description>Long running service which executes on Node Manager(s) and provides MapReduce Sort and Shuffle functionality.</description>	
     </property>
     <property>
 	<name>yarn.log-aggregation-enable</name>
 	<value>true</value>
+	<description>Enable log aggregation so application logs are moved onto hdfs and are viewable via web ui after the application completed. The default location on hdfs is '/log' and can be changed via yarn.nodemanager.remote-app-log-dir property</description>
+    </property>
     <property>
         <name>yarn.resourcemanager.scheduler.address</name>
         <value>master:8030</value>
