@@ -1,6 +1,6 @@
 # Instalação do Hadoop de forma Distribuída
 
-## Instalação do Hadoop na Raspberry PI 3 modelo B
+## Instalação do Hadoop na Raspberry PI 3 modelo B ou BeagleBone Black
 
 #### Link para baixar imagem do raspbian:
 
@@ -66,9 +66,16 @@ http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.h
 
 #### Baixar, criar diretório e descompactar o java:
 
+
 sudo -i
 
-wget http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-arm32-vfp-hflt.tar.gz
+mkdir /opt/jdk
+
+####Entre no link abaixo e selecione a opção jdk-8u171-linux-arm32-vfp-hflt.tar.gz:
+
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+sudo -i
 
 mkdir /opt/jdk
 
@@ -501,12 +508,7 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
     <name>dfs.permissions</name>
     <value>false</value>
   </property>
-  <property>
-    <name>hadoop.tmp.dir</name>
-    <value>/tmp/hadoop/hduser</value>
-    <description>A base for other temporary directories.</description>
-</property>
-</configuration>
+ </configuration>
 ```
 
 Da mesma maneira com os demais:
@@ -527,11 +529,11 @@ sudo nano hdfs-site.xml
   </property>
   <property>
     <name>dfs.namenode.name.dir</name>
-    <value>file:///tmp/hadoop/hduser/dfs/name</value>
+    <value>file:///opt/hadoop/hadoop_data/hdfs/namenode</value>
   </property>
   <property>
     <name>dfs.datanode.data.dir</name>
-    <value>file:///tmp/hadoop/hduser/dfs/data</value>
+    <value>file:///opt/hadoop/hadoop_data/hdfs/datanode</value>
   </property>
   <property>
     <name>dfs.permissions.enabled</name>
