@@ -1,10 +1,15 @@
 # Instalação do Hadoop de forma Distribuída
 
-## Instalação do Hadoop na Raspberry PI 3 modelo B
+## Instalação do Hadoop na Raspberry PI 3 modelo B ou BeagleBone Black
 
-#### Link para baixar imagem do raspbian:
+#### Link para baixar imagem do raspbian para raspberry:
 
 https://downloads.raspberrypi.org/raspbian/images/raspbian-2017-07-05/2017-07-05-raspbian-jessie.zip
+
+#### Link para baixar imagem do bone-ubuntu-16.04.3-console-armhf para beaglebone black:
+
+https://rcn-ee.net/rootfs/2018-02-09/microsd/
+
 
 Para instalar imagem no cartão foi utilizado o etcher. 
 
@@ -34,7 +39,9 @@ apt-get install zip unzip
 
 Antes de iniciar  a instalação confira  se o java já veio instalado como de costume no Raspbian jessie mais recentes.
 
-#### Instalar o java:
+### Instalar o java
+
+#### 1ª opção de instalação do java
 
 sudo -i
 
@@ -57,6 +64,28 @@ Java(TM) SE Runtime Environment (build 1.8.0_65-b17)
 Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 
 ```
+
+#### 2ª opção de instalação do java
+
+#### Baixar, criar diretório e descompactar o java:
+
+sudo -i
+
+mkdir /opt/jdk
+
+####Entre no link abaixo e selecione a opção jdk-8u171-linux-arm32-vfp-hflt.tar.gz:
+
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+sudo -i
+
+mkdir /opt/jdk
+
+tar -zxf jdk-8u171-linux-arm-vfp-hflt.tar.gz -C /opt/jdk
+
+update-alternatives --install /usr/bin/java java  /opt/jdk/jdk1.8.0_171/bin/java 100
+
+update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_171/bin/javac 100
 
 ## Instalação do protobuf 2.5.0
 
@@ -220,7 +249,7 @@ auto eth0
 iface eth0 inet static
 address 10.6.1.228
 netmask 255.255.252.0
-gateway 10.6.01
+gateway 10.6.0.1
 dns-nameserver 10.6.0.98
 ```
 **Nota:** o endereço de ip deve ser configurando de acordo com o de cada placa.
@@ -393,6 +422,8 @@ tar -zcvf /root/hadoop-2.7.5.armf.tar.gz hadoop
 
 su hduser
 
+sudo cp -a /etc/bash.bashrc /etc/bash.bashrc.original
+
 sudo nano /etc/bash.bashrc
 
 ```
@@ -472,14 +503,14 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 ```xml
 <configuration>
   <property>
-    <name>fs.default.name</name>
-    <value>hdfs://master:9000</value>
+    <name>fs.defaultFS</name>
+    <value>file:///master:9000</value>
   </property>
   <property>
     <name>dfs.permissions</name>
     <value>false</value>
   </property>
-</configuration>
+ </configuration>
 ```
 
 Da mesma maneira com os demais:
@@ -496,18 +527,18 @@ sudo nano hdfs-site.xml
   </property>
   <property>
     <name>dfs.blocksize</name>
-    <value>5242880</value>
+    <value>10485760</value>
   </property>
   <property>
     <name>dfs.namenode.name.dir</name>
-    <value>file:/opt/hadoop/hadoop_data/hdfs/namenode</value>
+    <value>file:///opt/hadoop/hadoop_data/hdfs/namenode</value>
   </property>
   <property>
-    <name>dfs.datanode.name.dir</name>
-    <value>file:/opt/hadoop/hadoop_data/hdfs/datanode</value>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:///opt/hadoop/hadoop_data/hdfs/datanode</value>
   </property>
   <property>
-    <name>dfs.permissions</name>
+    <name>dfs.permissions.enabled</name>
     <value>false</value>
   </property>
   <property>
@@ -541,10 +572,13 @@ sudo nano yarn-site.xml
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
+	<description>Long running service which executes on Node Manager(s) and provides MapReduce Sort and Shuffle functionality.</description>	
     </property>
     <property>
 	<name>yarn.log-aggregation-enable</name>
 	<value>true</value>
+	<description>Enable log aggregation so application logs are moved onto hdfs and are viewable via web ui after the application completed. The default location on hdfs is '/log' and can be changed via yarn.nodemanager.remote-app-log-dir property</description>
+    </property>
     <property>
         <name>yarn.resourcemanager.scheduler.address</name>
         <value>master:8030</value>
@@ -1188,9 +1222,9 @@ Um forma agradável de obter informações sobre aplicações, nós, armazenamen
 
 Localmente na placa:
 
-http://node1:50070
+http://master:50070
 
-http://node1:8088
+http://master:8088
 
 Externamente a placa, mas na mesma rede:
 
@@ -1207,4 +1241,6 @@ http://www.widriksson.com/raspberry-pi-2-hadoop-2-cluster/
 https://medium.com/@jasonicarter/how-to-hadoop-at-home-with-raspberry-pi-part-1-3b71f1b8ac4e
 
 https://www.tutorialspoint.com/hadoop/
+
+http://hadoop.praveendeshmane.co.in/hadoop/hadoop-2-6-4-fully-distributed-mode-installation-on-ubuntu-14-04.jsp
 

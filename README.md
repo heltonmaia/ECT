@@ -9,7 +9,7 @@ This repository contains general information about projects under development at
 
 * Joanderson Lucas Laurentino Borges - joanderson_lucas@hotmail.com
 
-* Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
+* Hemerson Rafael P. Pontes - rafaelpontes1995@gmail.com
 
 * Richardson Santiago - richardsonsantiago@ufrn.edu.br
 
