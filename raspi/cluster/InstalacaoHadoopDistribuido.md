@@ -2,9 +2,14 @@
 
 ## Instalação do Hadoop na Raspberry PI 3 modelo B ou BeagleBone Black
 
-#### Link para baixar imagem do raspbian:
+#### Link para baixar imagem do raspbian para raspberry:
 
 https://downloads.raspberrypi.org/raspbian/images/raspbian-2017-07-05/2017-07-05-raspbian-jessie.zip
+
+#### Link para baixar imagem do bone-ubuntu-16.04.3-console-armhf para beaglebone black:
+
+https://rcn-ee.net/rootfs/2018-02-09/microsd/
+
 
 Para instalar imagem no cartão foi utilizado o etcher. 
 
@@ -62,10 +67,7 @@ Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 
 #### 2ª opção de instalação do java
 
-http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-
 #### Baixar, criar diretório e descompactar o java:
-
 
 sudo -i
 
@@ -79,11 +81,11 @@ sudo -i
 
 mkdir /opt/jdk
 
-tar -zxf jdk-8u161-linux-arm-vfp-hflt.tar.gz -C /opt/jdk
+tar -zxf jdk-8u171-linux-arm-vfp-hflt.tar.gz -C /opt/jdk
 
-update-alternatives --install /usr/bin/java java  /opt/jdk/jdk1.8.0_161/bin/java 100
+update-alternatives --install /usr/bin/java java  /opt/jdk/jdk1.8.0_171/bin/java 100
 
-update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_161/bin/javac 100
+update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_171/bin/javac 100
 
 ## Instalação do protobuf 2.5.0
 
