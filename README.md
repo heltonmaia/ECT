@@ -12,7 +12,7 @@
 
 * Joanderson Lucas Laurentino Borges - joanderson_lucas@hotmail.com
 
-* Hemerson Rafael P. Pontes - hrpp@ufrn.edu.br
+* Hemerson Rafael P. Pontes - rafaelpontes1995@gmail.com
 
 * Lucas Soares Pereira Barros - lucassoares-sp@hotmail.com
 
