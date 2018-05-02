@@ -306,7 +306,7 @@ sudo -i
 
 wget http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-2.7.6/hadoop-2.7.6-src.tar.gz
 
-tar -xvzf hadoop-2.7.6.tar.gz
+tar -xvzf hadoop-2.7.6-src.tar.gz
 
 cd hadoop-2.7.6-src
 
@@ -338,6 +338,10 @@ sudo -i
 cd hadoop-2.7.6-src
 
 mvn package -Pdist,native -DskipTests -Dtar
+
+Com o debug ativo:
+
+mvn package -Pdist,native -DskipTests -Dtar -C
 
 **OBS:** Devido a placa Beaglebone Black trava durante o processo de compilação 
 
