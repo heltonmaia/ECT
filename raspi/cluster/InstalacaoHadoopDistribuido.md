@@ -8,7 +8,7 @@ https://downloads.raspberrypi.org/raspbian/images/raspbian-2017-07-05/2017-07-05
 
 #### Link para baixar imagem do bone-ubuntu-16.04.3-console-armhf para beaglebone black:
 
-https://rcn-ee.net/rootfs/2018-02-09/microsd/
+https://rcn-ee.net/rootfs/2018-02-09/microsd/bone-ubuntu-16.04.3-console-armhf-2018-02-09-2gb.img.xz
 
 
 Para instalar imagem no cartão foi utilizado o etcher. 
@@ -19,7 +19,7 @@ https://etcher.io/
 
 ## Configuração para o master e nos
 
-## Instalação das dependências
+## Instalação das dependências na Rapberry e Beaglebone
 
 sudo -i
 
@@ -39,9 +39,9 @@ apt-get install zip unzip
 
 Antes de iniciar  a instalação confira  se o java já veio instalado como de costume no Raspbian jessie mais recentes.
 
-### Instalar o java
+### Instalar o java na Rapberry e Beaglebone
 
-#### 1ª opção de instalação do java
+#### 1ª opção de instalação do java (Raspberry)
 
 sudo -i
 
@@ -65,7 +65,7 @@ Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 
 ```
 
-#### 2ª opção de instalação do java
+#### 2ª opção de instalação do java (Raspberry ou Beaglebone)
 
 #### Baixar, criar diretório e descompactar o java:
 
@@ -87,7 +87,7 @@ update-alternatives --install /usr/bin/java java  /opt/jdk/jdk1.8.0_171/bin/java
 
 update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_171/bin/javac 100
 
-## Instalação do protobuf 2.5.0
+## Instalação do protobuf 2.5.0 na Rapberry e Beaglebone
 
 ### 1ª opção de instalação do protobuf
 
@@ -165,7 +165,7 @@ libprotoc 2.5.0
 
 ```
 
-## Instalação do Apache Maven
+## Instalação do Apache Maven na Rapberry e Beaglebone
     
 #### Baixar e descompactar o apache maven: 
 sudo -i
@@ -186,12 +186,24 @@ nano /etc/profile.d/apache-maven.sh
 
 Adicione as variáveis abaixo ao arquivo apache-maven.sh
 
+Para 1ª opção de instalação java:
+
 ```
 export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 export M2_HOME=/usr/local/apache-maven
 export MAVEN_HOME=/usr/local/apache-maven
 export PATH=${M2_HOME}/bin:${PATH}
 ```
+
+Para 2ª opção de instalação java:
+
+```
+export JAVA_HOME=/opt/jdk/jdk1.8.0_171/
+export M2_HOME=/usr/local/apache-maven
+export MAVEN_HOME=/usr/local/apache-maven
+export PATH=${M2_HOME}/bin:${PATH}
+```
+
 Em seguida, saia e salve o arquivo com os comandos de tecla Ctrl + X, Y, enter.
 
 #### Atualize as alterações utilize o comando a seguir: 
@@ -212,7 +224,7 @@ Default locale: pt_BR, platform encoding: UTF-8
 OS name: "linux", version: "4.9.35-v7+", arch: "arm", family: "unix"
 
 ```
-## Configuração de rede na Raspberry
+## Configuração de rede na Raspberry Rapberry e Beaglebone
 
 #### Desativar o ipv6:
 
@@ -260,17 +272,19 @@ nano /etc/hosts
 
 #### Adicione ao arquivo a linha abaixo e salve:
 ```
-10.6.1.228 master
-10.6.1.226 node1
-10.6.1.225 node2
-10.6.1.227 node3
-10.6.1.223 node4
+10.6.1.228	master
+10.6.1.226 	node1
+10.6.1.225 	node2
+10.6.1.227 	node3
+10.6.1.223 	node4
+10.6.1.229      node5
+10.6.1.230      node6
 ```
 #### Por fim abrir os arquivos hostname e substitua o nome Raspberry por master:
 
 nano /etc/hostname
 
-**Nota:** Hostname deve ser configurando de acordo com o de cada placa, neste caso foi utilizado master para master e para nos node1, node2, node3 e node4.
+**Nota:** Hostname deve ser configurando de acordo com o de cada placa, neste caso foi utilizado master para master e para nos node1, node2, node3, node4, node5 e node6.
 
 **Agora reset a Raspberry**
 
@@ -284,17 +298,17 @@ sudo adduser --ingroup hadoop hduser
 
 sudo adduser hduser sudo
 
-## Instalação do Hadoop-2.7.5
+## Instalação do Hadoop-2.7.6 Rapberry e Beaglebone
 
 #### Baixar e descompactar o hadoop:
 
 sudo -i
 
-wget http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-2.7.5/hadoop-2.7.5-src.tar.gz
+wget http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-2.7.6/hadoop-2.7.6-src.tar.gz
 
-tar -xvzf hadoop-2.7.5.tar.gz
+tar -xvzf hadoop-2.7.6.tar.gz
 
-cd hadoop-2.7.5-src
+cd hadoop-2.7.6-src
 
 #### Configuração para instruir o processo de compilação para arquitetura ARM:
 
@@ -310,7 +324,7 @@ Em seguida, pressione Ctrl+Shift + - (Ctrl+ _) Insira o número da linha igual a
 
 sudo -i
 
-cd hadoop-2.7.5-src/hadoop-common-project/hadoop-common/src
+cd hadoop-2.7.6-src/hadoop-common-project/hadoop-common/src
 
 wget https://issues.apache.org/jira/secure/attachment/12570212/HADOOP-9320.patch
 
@@ -321,11 +335,14 @@ patch < HADOOP-9320.patch
 
 sudo -i
 
-cd hadoop-2.7.5-src
+cd hadoop-2.7.6-src
 
 mvn package -Pdist,native -DskipTests -Dtar
 
+**OBS:** Devido a placa Beaglebone Black trava durante o processo de compilação 
+
 Ao final do processo espera-se obter sucesso em todos os pacotes.
+
 ```
 ...
 
@@ -406,15 +423,15 @@ Ao final do processo espera-se obter sucesso em todos os pacotes.
 
 ```
 
-cd hadoop-2.7.5-src/hadoop-dist/target/
+cd hadoop-2.7.6-src/hadoop-dist/target/
 
-cp -R hadoop-2.7.5 /opt/hadoop
+cp -R hadoop-2.7.6 /opt/hadoop
 
 cd /opt
 
 chown -R hduser:hadoop hadoop
 
-tar -zcvf /root/hadoop-2.7.5.armf.tar.gz hadoop 
+tar -zcvf /root/hadoop-2.7.6.armf.tar.gz hadoop 
 
 (Para possíveis backup)
 
