@@ -709,6 +709,10 @@ sudo nano yarn-site.xml
 		<description>Enable log aggregation so application logs are moved onto hdfs and are viewable via web ui after the application completed. The default location on hdfs is '/log' and can be changed via yarn.nodemanager.remote-app-log-dir property</description>
 	</property>
 	<property>
+		<name>yarn.resourcemanager.hostname</name>
+		<value>master</value>
+	</property>
+	<property>
 		<name>yarn.resourcemanager.scheduler.address</name>
 		<value>master:8030</value>
 	</property>
@@ -727,6 +731,10 @@ sudo nano yarn-site.xml
 	<property>
 		<name>yarn.resourcemanager.webapp.address</name>
 		<value>master:8088</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.webapp.https.address</name>
+		<value>master:8090</value>
 	</property>
 	<property>
 		<name>yarn.nodemanager.resource.cpu-vcores</name>
