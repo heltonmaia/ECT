@@ -328,6 +328,94 @@ cd hadoop-2.7.6-src/hadoop-common-project/hadoop-common/src
 
 wget https://issues.apache.org/jira/secure/attachment/12570212/HADOOP-9320.patch
 
+##### Se o link estiver inativo : 
+
+sudo nano HADOOP-9320.patch
+
+```
+diff --git a/hadoop-common-project/hadoop-common/src/JNIFlags.cmake b/hadoop-common-project/hadoop-common/src/JNIFlags.cmake
+index aba4c18..70a8d1c 100644
+--- a/hadoop-common-project/hadoop-common/src/JNIFlags.cmake
++++ b/hadoop-common-project/hadoop-common/src/JNIFlags.cmake
+@@ -34,37 +34,6 @@ if (JVM_ARCH_DATA_MODEL EQUAL 32)
+     endif ()
+ endif (JVM_ARCH_DATA_MODEL EQUAL 32)
+ 
+-# Determine float ABI of JVM on ARM Linux
+-if (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+-    find_program(READELF readelf)
+-    if (READELF MATCHES "NOTFOUND")
+-        message(WARNING "readelf not found; JVM float ABI detection disabled")
+-    else (READELF MATCHES "NOTFOUND")
+-        execute_process(
+-            COMMAND ${READELF} -A ${JAVA_JVM_LIBRARY}
+-            OUTPUT_VARIABLE JVM_ELF_ARCH
+-            ERROR_QUIET)
+-        if (NOT JVM_ELF_ARCH MATCHES "Tag_ABI_VFP_args: VFP registers")
+-            message("Soft-float JVM detected")
+-
+-            # Test compilation with -mfloat-abi=softfp using an arbitrary libc function
+-            # (typically fails with "fatal error: bits/predefs.h: No such file or directory"
+-            # if soft-float dev libraries are not installed)
+-            include(CMakePushCheckState)
+-            cmake_push_check_state()
+-            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mfloat-abi=softfp")
+-            include(CheckSymbolExists)
+-            check_symbol_exists(exit stdlib.h SOFTFP_AVAILABLE)
+-            if (NOT SOFTFP_AVAILABLE)
+-                message(FATAL_ERROR "Soft-float dev libraries required (e.g. 'apt-get install libc6-dev-armel' on Debian/Ubuntu)")
+-            endif (NOT SOFTFP_AVAILABLE)
+-            cmake_pop_check_state()
+-
+-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfloat-abi=softfp")
+-        endif ()
+-    endif (READELF MATCHES "NOTFOUND")
+-endif (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+-
+ IF("${CMAKE_SYSTEM}" MATCHES "Linux")
+     #
+     # Locate JNI_INCLUDE_DIRS and JNI_LIBRARIES.
+@@ -115,3 +84,37 @@ IF("${CMAKE_SYSTEM}" MATCHES "Linux")
+ ELSE()
+     find_package(JNI REQUIRED)
+ ENDIF()
++
++# Determine float ABI of JVM on ARM Linux
++if (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
++    find_program(READELF readelf)
++    if (READELF MATCHES "NOTFOUND")
++        message(WARNING "readelf not found; JVM float ABI detection disabled")
++    else (READELF MATCHES "NOTFOUND")
++        message(STATUS "Checking float ABI of ${JAVA_JVM_LIBRARY}")
++        execute_process(
++            COMMAND ${READELF} -A ${JAVA_JVM_LIBRARY}
++            OUTPUT_VARIABLE JVM_ELF_ARCH
++            ERROR_QUIET)
++        if (JVM_ELF_ARCH MATCHES "Tag_ABI_VFP_args: VFP registers")
++            message(STATUS "Hard-float JVM detected")
++        else ()
++            message(STATUS "Soft-float JVM detected")
++
++            # Test compilation with -mfloat-abi=softfp using an arbitrary libc function
++            # (typically fails with "fatal error: bits/predefs.h: No such file or directory"
++            # if soft-float dev libraries are not installed)
++            include(CMakePushCheckState)
++            cmake_push_check_state()
++            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mfloat-abi=softfp")
++            include(CheckSymbolExists)
++            check_symbol_exists(exit stdlib.h SOFTFP_AVAILABLE)
++            if (NOT SOFTFP_AVAILABLE)
++                message(FATAL_ERROR "Soft-float dev libraries required (e.g. 'apt-get install libc6-dev-armel' on Debian/Ubuntu)")
++            endif (NOT SOFTFP_AVAILABLE)
++            cmake_pop_check_state()
++
++            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfloat-abi=softfp")
++        endif ()
++    endif (READELF MATCHES "NOTFOUND")
++endif (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+
+```
+
 patch < HADOOP-9320.patch
 
 
@@ -337,13 +425,15 @@ sudo -i
 
 cd hadoop-2.7.6-src
 
+#### Sem o debug ativo:
+
 mvn package -Pdist,native -DskipTests -Dtar
 
-Com o debug ativo:
+#### Com o debug ativo:
 
 mvn package -Pdist,native -DskipTests -Dtar -C
 
-**OBS:** Devido a placa Beaglebone Black trava durante o processo de compilação 
+**OBS:** Devido a placa Beaglebone Black trava muito durante o processo de compilação e prasentar erros não contidos. Foi utilizado o hadoop compilado na Raspberry.
 
 Ao final do processo espera-se obter sucesso em todos os pacotes.
 
@@ -482,8 +572,8 @@ hadoop checknative -a
 
 ```
 hduser@node1:~ $ hadoop checknative -a
-18/01/07 17:50:09 INFO bzip2.Bzip2Factory: Successfully loaded & initialized native-bzip2 library system-native
-18/01/07 17:50:09 INFO zlib.ZlibFactory: Successfully loaded & initialized native-zlib library
+18/05/04 13:03:23 INFO bzip2.Bzip2Factory: Successfully loaded & initialized native-bzip2 library system-native
+18/05/04 13:03:23 INFO zlib.ZlibFactory: Successfully loaded & initialized native-zlib library
 Native library checking:
 hadoop:  true /opt/hadoop/lib/native/libhadoop.so.1.0.0
 zlib:    true /lib/arm-linux-gnueabihf/libz.so.1
@@ -500,13 +590,12 @@ hadoop version
 
 ```
 hduser@node1:~ $ hadoop version
-Hadoop 2.7.5
+Hadoop 2.7.6
 Subversion Unknown -r Unknown
-Compiled by root on 2018-01-05T22:55Z
+Compiled by root on 2018-05-02T18:05Z
 Compiled with protoc 2.5.0
-From source with checksum 9f118f95f47043332d51891e37f736e9
-This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.7.5.jar
-
+From source with checksum 71e2695531cb3360ab74598755d036
+This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.7.6.jar
 ```
 
 ## Definir os arquivos de configuração para modo distribuído do hadoop
@@ -523,15 +612,17 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 
 ```xml
 <configuration>
-  <property>
-    <name>fs.defaultFS</name>
-    <value>file:///master:9000</value>
-  </property>
-  <property>
-    <name>dfs.permissions</name>
-    <value>false</value>
-  </property>
- </configuration>
+	<property>
+    		<name>fs.defaultFS</name>
+    		<value>file:///master:9000</value>
+		<description> The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation. The uri's scheme determines the config property (fs.SCHEME.impl) naming the FileSystem implementation class. The uri's authority is used to determine the host, port, etc. for a filesystem.</description>
+  	</property>
+  	<property>
+    		<name>fhadoop.tmp.dir</name>
+    		<value>/opt/hadoop/hadoop_data/hdfs</value>
+		<description>A base for other temporary directories.</description>
+   	</property>
+</configuration>
 ```
 
 Da mesma maneira com os demais:
