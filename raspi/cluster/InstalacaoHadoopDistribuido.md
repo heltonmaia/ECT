@@ -699,14 +699,14 @@ sudo nano yarn-site.xml
 ```xml
 <configuration>
 	<property>
-	<name>yarn.nodemanager.aux-services</name>
-	<value>mapreduce_shuffle</value>
-	<description>Long running service which executes on Node Manager(s) and provides MapReduce Sort and Shuffle functionality.</description>	
+		<name>yarn.nodemanager.aux-services</name>
+		<value>mapreduce_shuffle</value>
+		<description>Long running service which executes on Node Manager(s) and provides MapReduce Sort and Shuffle functionality.</description>	
 	</property>
 	<property>
-	<name>yarn.log-aggregation-enable</name>
-	<value>true</value>
-	<description>Enable log aggregation so application logs are moved onto hdfs and are viewable via web ui after the application completed. The default location on hdfs is '/log' and can be changed via yarn.nodemanager.remote-app-log-dir property</description>
+		<name>yarn.log-aggregation-enable</name>
+		<value>true</value>
+		<description>Enable log aggregation so application logs are moved onto hdfs and are viewable via web ui after the application completed. The default location on hdfs is '/log' and can be changed via yarn.nodemanager.remote-app-log-dir property</description>
 	</property>
 	<property>
 		<name>yarn.resourcemanager.scheduler.address</name>
@@ -775,58 +775,58 @@ sudo nano mapred-site.xml
 
 ```xml
 <configuration>
-    <property>
-      <name>mapred.job.tracker</name>
-      <value>master:9001</value>
-    </property>
-    <property>
-        <name>mapreduce.framework.name</name>
-        <value>yarn</value>
-    </property>
-    <property>
-        <name>mapreduce.map.memory.mb</name>
-        <value>256</value>
-    </property>
-    <property>
-        <name>mapreduce.map.java.opts</name>
-        <value>-Xmx204m</value>
-    </property>
-    <property>
-        <name>mapreduce.map.cpu.vcores</name>
-        <value>2</value>
-    </property>
-    <property>
-        <name>mapreduce.reduce.memory.mb</name>
-        <value>128</value>
-    </property>
-    <property>
-        <name>mapreduce.reduce.java.opts</name>
-        <value>-Xmx102m</value>
-    </property>
-    <property>
-        <name>mapreduce.reduce.cpu.vcores</name>
-        <value>2</value>
-    </property>
-    <property>
-        <name>yarn.app.mapreduce.am.resource.mb</name>
-        <value>128</value>
-    </property>
-    <property>
-        <name>yarn.app.mapreduce.am.command-opts</name>
-        <value>-Xmx102m</value>
-    </property>
-    <property>
-        <name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
-        <value>1</value>
-    </property>
-    <property>
-        <name>mapreduce.job.maps</name>
-        <value>4</value>
-    </property>
-    <property>
-        <name>mapreduce.job.reduces</name>
-        <value>4</value>
-    </property>
+	<property>
+		<name>mapred.job.tracker</name>
+		<value>master:9001</value>
+	</property>
+	<property>
+		<name>mapreduce.framework.name</name>
+		<value>yarn</value>
+	</property>
+	<property>
+		<name>mapreduce.map.memory.mb</name>
+		<value>256</value>
+	</property>
+	<property>
+		<name>mapreduce.map.java.opts</name>
+		<value>-Xmx204m</value>
+	</property>
+	<property>
+		<name>mapreduce.map.cpu.vcores</name>
+		<value>2</value>
+	</property>
+	<property>
+		<name>mapreduce.reduce.memory.mb</name>
+		<value>128</value>
+	</property>
+	<property>
+		<name>mapreduce.reduce.java.opts</name>
+		<value>-Xmx102m</value>
+	</property>
+	<property>
+		<name>mapreduce.reduce.cpu.vcores</name>
+		<value>2</value>
+	</property>
+	<property>
+		<name>yarn.app.mapreduce.am.resource.mb</name>
+		<value>128</value>
+	</property>
+	<property>
+		<name>yarn.app.mapreduce.am.command-opts</name>
+		<value>-Xmx102m</value>
+	</property>
+	<property>
+		<name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
+		<value>1</value>
+	</property>
+	<property>
+		<name>mapreduce.job.maps</name>
+		<value>4</value>
+	</property>
+	<property>
+		<name>mapreduce.job.reduces</name>
+		<value>4</value>
+	</property>
 </configuration>
 
 
@@ -840,6 +840,8 @@ node1
 node2 
 node3
 node4
+node5
+node6
 
 ````
 
