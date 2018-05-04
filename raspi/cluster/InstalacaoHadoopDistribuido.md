@@ -613,15 +613,15 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 ```xml
 <configuration>
 	<property>
-  	<name>fs.defaultFS</name>
-    <value>file:///master:9000</value>
+		<name>fs.defaultFS</name>
+		<value>file:///master:9000</value>
 		<description> The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation. The uri's scheme determines the config property (fs.SCHEME.impl) naming the FileSystem implementation class. The uri's authority is used to determine the host, port, etc. for a filesystem.</description>
 	</property>
-  <property>
-  	<name>hadoop.tmp.dir</name>
-  	<value>/opt/hadoop/hadoop_data/hdfs</value>
+	<property>
+		<name>hadoop.tmp.dir</name>
+  		<value>/opt/hadoop/hadoop_data/hdfs</value>
 		<description>A base for other temporary directories.</description>
-  </property>
+	</property>
 </configuration>
 ```
 
@@ -634,56 +634,55 @@ sudo nano hdfs-site.xml
 ```xml
 <configuration>
 	<property>
-  	<name>dfs.replication</name>
-    <value>3</value>
-		<description></description>
-  </property>
-  <property>
-  	<name>dfs.blocksize</name>
-    <value>10485760</value>
-		<description></description>
-  </property>
-  <property>
-  	<name>dfs.namenode.name.dir</name>
-    <value>file:///opt/hadoop/hadoop_data/hdfs/namenode</value>
-		<description></description>
-  </property>
-  <property>
-   	<name>dfs.datanode.data.dir</name>
-   	<value>file:///opt/hadoop/hadoop_data/hdfs/datanode</value>
-		<description></description>
-  </property>
-  <property>
-   	<name>dfs.permissions.enabled</name>
-   	<value>true</value>
-		<description></description>
-  </property>
-  <property>
-   	<name>dfs.datanode.use.datanode.hostname</name>
-   	<value>false</value>
+		<name>dfs.replication</name>
+		<value>3</value>
 		<description></description>
 	</property>
-  <property>
-   	<name>dfs.namenode.datanode.registration.ip-hostname-check</name>
-   	<value>false</value>
+	<property>
+		<name>dfs.blocksize</name>
+		<value>10485760</value>
 		<description></description>
-  </property>
-  <property>
-   	<name>dfs.namenode.http-address</name>
-   	<value>master:50070</value>
-   	<description>The address and the base port where the dfs namenode web ui will listen on. </description>
 	</property>
+	<property>
+ 		<name>dfs.namenode.name.dir</name>
+		<value>file:///opt/hadoop/hadoop_data/hdfs/namenode</value>
+		<description></description>
+  	</property>
  	<property>
-   	<name>dfs.namenode.secondary.http-address</name>
-   	<value>master:50090</value>
-   	<description>	The secondary namenode http server address and port. </description>
+		<name>dfs.datanode.data.dir</name>
+		<value>file:///opt/hadoop/hadoop_data/hdfs/datanode</value>
+		<description></description>
+	</property>
+	<property>
+		<name>dfs.permissions.enabled</name>
+		<value>true</value>
+		<description></description>
+	</property>
+	<property>
+		<name>dfs.datanode.use.datanode.hostname</name>
+		<value>false</value>
+		<description></description>
+	</property>
+	<property>
+		<name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+		<value>false</value>
+		<description></description>
+	</property>
+	<property>
+		<name>dfs.namenode.http-address</name>
+		<value>master:50070</value>
+		<description>The address and the base port where the dfs namenode web ui will listen on.</description>
+	</property>
+	<property>
+		<name>dfs.namenode.secondary.http-address</name>
+		<value>master:50090</value>
+		<description>The secondary namenode http server address and port.</description>
 	</property> 	
 	<property>
-   	<name>dfs.namenode.secondary.https-address</name>
-   	<value>master:50091</value>
-   	<description>The secondary namenode HTTPS server address and port.</description>
+		<name>dfs.namenode.secondary.https-address</name>
+		<value>master:50091</value>
+		<description>The secondary namenode HTTPS server address and port.</description>
 	</property>
-
 </configuration>
 
 ```
