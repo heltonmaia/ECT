@@ -615,7 +615,7 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 	<property>
 		<name>fs.defaultFS</name>
 		<value>file:///master:9000</value>
-		<description> The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation. The uri's scheme determines the config property (fs.SCHEME.impl) naming the FileSystem implementation class. The uri's authority is used to determine the host, port, etc. for a filesystem.</description>
+		<description> The name of the default file system. </description>
 	</property>
 	<property>
 		<name>hadoop.tmp.dir</name>
@@ -669,6 +669,11 @@ sudo nano hdfs-site.xml
 		<description></description>
 	</property>
 	<property>
+		<name>dfs.datanode.address</name>
+		<value>master:50010</value>
+		<description>The datanode server address and port for data transfer. </description>
+	</property>
+	<property>
 		<name>dfs.namenode.http-address</name>
 		<value>master:50070</value>
 		<description>The address and the base port where the dfs namenode web ui will listen on.</description>
@@ -693,72 +698,72 @@ sudo nano yarn-site.xml
 
 ```xml
 <configuration>
-    <property>
-        <name>yarn.nodemanager.aux-services</name>
-        <value>mapreduce_shuffle</value>
+	<property>
+	<name>yarn.nodemanager.aux-services</name>
+	<value>mapreduce_shuffle</value>
 	<description>Long running service which executes on Node Manager(s) and provides MapReduce Sort and Shuffle functionality.</description>	
-    </property>
-    <property>
+	</property>
+	<property>
 	<name>yarn.log-aggregation-enable</name>
 	<value>true</value>
 	<description>Enable log aggregation so application logs are moved onto hdfs and are viewable via web ui after the application completed. The default location on hdfs is '/log' and can be changed via yarn.nodemanager.remote-app-log-dir property</description>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.scheduler.address</name>
-        <value>master:8030</value>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.resource-tracker.address</name>
-        <value>master:8031</value>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.address</name>
-        <value>master:8032</value>
-    </property>
-    <property>
-	<name>yarn.resourcemanager.admin.address</name>
-	<value>master:8033</value>
-    </property>
-    <property>
-	<name>yarn.resourcemanager.webapp.address</name>
-	<value>master:8088</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.resource.cpu-vcores</name>
-        <value>4</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.resource.memory-mb</name>
-        <value>768</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.minimum-allocation-mb</name>
-        <value>64</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.maximum-allocation-mb</name>
-        <value>256</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.minimum-allocation-vcores</name>
-        <value>1</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.maximum-allocation-vcores</name>
-        <value>4</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.vmem-check-enabled</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.pmem-check-enabled</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.vmem-pmem-ratio</name>
-        <value>2.1</value>
-    </property>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.scheduler.address</name>
+		<value>master:8030</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.resource-tracker.address</name>
+		<value>master:8031</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.address</name>
+		<value>master:8032</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.admin.address</name>
+		<value>master:8033</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.webapp.address</name>
+		<value>master:8088</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.resource.cpu-vcores</name>
+		<value>4</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.resource.memory-mb</name>
+		<value>768</value>
+	</property>
+	<property>
+		<name>yarn.scheduler.minimum-allocation-mb</name>
+		<value>64</value>
+	</property>
+	<property>
+		<name>yarn.scheduler.maximum-allocation-mb</name>
+		<value>256</value>
+	</property>
+	<property>
+		<name>yarn.scheduler.minimum-allocation-vcores</name>
+		<value>1</value>
+	</property>
+	<property>
+		<name>yarn.scheduler.maximum-allocation-vcores</name>
+		<value>4</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.vmem-check-enabled</name>
+		<value>true</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.pmem-check-enabled</name>
+		<value>true</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.vmem-pmem-ratio</name>
+		<value>2.1</value>
+	</property>
 </configuration>
 ```
 
