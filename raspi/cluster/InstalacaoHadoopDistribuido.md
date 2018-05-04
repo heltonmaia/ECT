@@ -8,10 +8,10 @@ https://downloads.raspberrypi.org/raspbian/images/raspbian-2017-07-05/2017-07-05
 
 #### Link para baixar imagem do bone-ubuntu-16.04.3-console-armhf para beaglebone black:
 
-https://rcn-ee.net/rootfs/2018-02-09/microsd/
+https://rcn-ee.net/rootfs/2018-02-09/microsd/bone-ubuntu-16.04.3-console-armhf-2018-02-09-2gb.img.xz
 
 
-Para instalar imagem no cartão foi utilizado o etcher. 
+Para instalar imagem nos cartões foi utilizado o etcher. 
 
 #### Link para baixar o etcher
 
@@ -19,7 +19,7 @@ https://etcher.io/
 
 ## Configuração para o master e nos
 
-## Instalação das dependências
+## Instalação das dependências na Rapberry e Beaglebone
 
 sudo -i
 
@@ -39,9 +39,9 @@ apt-get install zip unzip
 
 Antes de iniciar  a instalação confira  se o java já veio instalado como de costume no Raspbian jessie mais recentes.
 
-### Instalar o java
+### Instalar o java na Rapberry e Beaglebone
 
-#### 1ª opção de instalação do java
+#### 1ª opção de instalação do java (Raspberry)
 
 sudo -i
 
@@ -65,7 +65,7 @@ Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 
 ```
 
-#### 2ª opção de instalação do java
+#### 2ª opção de instalação do java (Raspberry ou Beaglebone)
 
 #### Baixar, criar diretório e descompactar o java:
 
@@ -87,7 +87,7 @@ update-alternatives --install /usr/bin/java java  /opt/jdk/jdk1.8.0_171/bin/java
 
 update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_171/bin/javac 100
 
-## Instalação do protobuf 2.5.0
+## Instalação do protobuf 2.5.0 na Rapberry e Beaglebone
 
 ### 1ª opção de instalação do protobuf
 
@@ -165,7 +165,7 @@ libprotoc 2.5.0
 
 ```
 
-## Instalação do Apache Maven
+## Instalação do Apache Maven na Rapberry e Beaglebone
     
 #### Baixar e descompactar o apache maven: 
 sudo -i
@@ -186,12 +186,24 @@ nano /etc/profile.d/apache-maven.sh
 
 Adicione as variáveis abaixo ao arquivo apache-maven.sh
 
+Para 1ª opção de instalação java:
+
 ```
 export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 export M2_HOME=/usr/local/apache-maven
 export MAVEN_HOME=/usr/local/apache-maven
 export PATH=${M2_HOME}/bin:${PATH}
 ```
+
+Para 2ª opção de instalação java:
+
+```
+export JAVA_HOME=/opt/jdk/jdk1.8.0_171/
+export M2_HOME=/usr/local/apache-maven
+export MAVEN_HOME=/usr/local/apache-maven
+export PATH=${M2_HOME}/bin:${PATH}
+```
+
 Em seguida, saia e salve o arquivo com os comandos de tecla Ctrl + X, Y, enter.
 
 #### Atualize as alterações utilize o comando a seguir: 
@@ -212,7 +224,7 @@ Default locale: pt_BR, platform encoding: UTF-8
 OS name: "linux", version: "4.9.35-v7+", arch: "arm", family: "unix"
 
 ```
-## Configuração de rede na Raspberry
+## Configuração de rede na Rapberry e Beaglebone
 
 #### Desativar o ipv6:
 
@@ -260,17 +272,19 @@ nano /etc/hosts
 
 #### Adicione ao arquivo a linha abaixo e salve:
 ```
-10.6.1.228 master
-10.6.1.226 node1
-10.6.1.225 node2
-10.6.1.227 node3
-10.6.1.223 node4
+10.6.1.228	master
+10.6.1.226 	node1
+10.6.1.225 	node2
+10.6.1.227 	node3
+10.6.1.223 	node4
+10.6.1.229      node5
+10.6.1.230      node6
 ```
 #### Por fim abrir os arquivos hostname e substitua o nome Raspberry por master:
 
 nano /etc/hostname
 
-**Nota:** Hostname deve ser configurando de acordo com o de cada placa, neste caso foi utilizado master para master e para nos node1, node2, node3 e node4.
+**Nota:** Hostname deve ser configurando de acordo com o de cada placa, neste caso foi utilizado master para master e para nos node1, node2, node3, node4, node5 e node6.
 
 **Agora reset a Raspberry**
 
@@ -284,17 +298,17 @@ sudo adduser --ingroup hadoop hduser
 
 sudo adduser hduser sudo
 
-## Instalação do Hadoop-2.7.5
+## Instalação do Hadoop-2.7.6 Rapberry e Beaglebone
 
 #### Baixar e descompactar o hadoop:
 
 sudo -i
 
-wget http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-2.7.5/hadoop-2.7.5-src.tar.gz
+wget http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-2.7.6/hadoop-2.7.6-src.tar.gz
 
-tar -xvzf hadoop-2.7.5.tar.gz
+tar -xvzf hadoop-2.7.6-src.tar.gz
 
-cd hadoop-2.7.5-src
+cd hadoop-2.7.6-src
 
 #### Configuração para instruir o processo de compilação para arquitetura ARM:
 
@@ -310,9 +324,97 @@ Em seguida, pressione Ctrl+Shift + - (Ctrl+ _) Insira o número da linha igual a
 
 sudo -i
 
-cd hadoop-2.7.5-src/hadoop-common-project/hadoop-common/src
+cd hadoop-2.7.6-src/hadoop-common-project/hadoop-common/src
 
 wget https://issues.apache.org/jira/secure/attachment/12570212/HADOOP-9320.patch
+
+##### Se o link estiver inativo : 
+
+sudo nano HADOOP-9320.patch
+
+```
+diff --git a/hadoop-common-project/hadoop-common/src/JNIFlags.cmake b/hadoop-common-project/hadoop-common/src/JNIFlags.cmake
+index aba4c18..70a8d1c 100644
+--- a/hadoop-common-project/hadoop-common/src/JNIFlags.cmake
++++ b/hadoop-common-project/hadoop-common/src/JNIFlags.cmake
+@@ -34,37 +34,6 @@ if (JVM_ARCH_DATA_MODEL EQUAL 32)
+     endif ()
+ endif (JVM_ARCH_DATA_MODEL EQUAL 32)
+ 
+-# Determine float ABI of JVM on ARM Linux
+-if (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+-    find_program(READELF readelf)
+-    if (READELF MATCHES "NOTFOUND")
+-        message(WARNING "readelf not found; JVM float ABI detection disabled")
+-    else (READELF MATCHES "NOTFOUND")
+-        execute_process(
+-            COMMAND ${READELF} -A ${JAVA_JVM_LIBRARY}
+-            OUTPUT_VARIABLE JVM_ELF_ARCH
+-            ERROR_QUIET)
+-        if (NOT JVM_ELF_ARCH MATCHES "Tag_ABI_VFP_args: VFP registers")
+-            message("Soft-float JVM detected")
+-
+-            # Test compilation with -mfloat-abi=softfp using an arbitrary libc function
+-            # (typically fails with "fatal error: bits/predefs.h: No such file or directory"
+-            # if soft-float dev libraries are not installed)
+-            include(CMakePushCheckState)
+-            cmake_push_check_state()
+-            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mfloat-abi=softfp")
+-            include(CheckSymbolExists)
+-            check_symbol_exists(exit stdlib.h SOFTFP_AVAILABLE)
+-            if (NOT SOFTFP_AVAILABLE)
+-                message(FATAL_ERROR "Soft-float dev libraries required (e.g. 'apt-get install libc6-dev-armel' on Debian/Ubuntu)")
+-            endif (NOT SOFTFP_AVAILABLE)
+-            cmake_pop_check_state()
+-
+-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfloat-abi=softfp")
+-        endif ()
+-    endif (READELF MATCHES "NOTFOUND")
+-endif (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+-
+ IF("${CMAKE_SYSTEM}" MATCHES "Linux")
+     #
+     # Locate JNI_INCLUDE_DIRS and JNI_LIBRARIES.
+@@ -115,3 +84,37 @@ IF("${CMAKE_SYSTEM}" MATCHES "Linux")
+ ELSE()
+     find_package(JNI REQUIRED)
+ ENDIF()
++
++# Determine float ABI of JVM on ARM Linux
++if (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
++    find_program(READELF readelf)
++    if (READELF MATCHES "NOTFOUND")
++        message(WARNING "readelf not found; JVM float ABI detection disabled")
++    else (READELF MATCHES "NOTFOUND")
++        message(STATUS "Checking float ABI of ${JAVA_JVM_LIBRARY}")
++        execute_process(
++            COMMAND ${READELF} -A ${JAVA_JVM_LIBRARY}
++            OUTPUT_VARIABLE JVM_ELF_ARCH
++            ERROR_QUIET)
++        if (JVM_ELF_ARCH MATCHES "Tag_ABI_VFP_args: VFP registers")
++            message(STATUS "Hard-float JVM detected")
++        else ()
++            message(STATUS "Soft-float JVM detected")
++
++            # Test compilation with -mfloat-abi=softfp using an arbitrary libc function
++            # (typically fails with "fatal error: bits/predefs.h: No such file or directory"
++            # if soft-float dev libraries are not installed)
++            include(CMakePushCheckState)
++            cmake_push_check_state()
++            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mfloat-abi=softfp")
++            include(CheckSymbolExists)
++            check_symbol_exists(exit stdlib.h SOFTFP_AVAILABLE)
++            if (NOT SOFTFP_AVAILABLE)
++                message(FATAL_ERROR "Soft-float dev libraries required (e.g. 'apt-get install libc6-dev-armel' on Debian/Ubuntu)")
++            endif (NOT SOFTFP_AVAILABLE)
++            cmake_pop_check_state()
++
++            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfloat-abi=softfp")
++        endif ()
++    endif (READELF MATCHES "NOTFOUND")
++endif (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+
+```
 
 patch < HADOOP-9320.patch
 
@@ -321,100 +423,109 @@ patch < HADOOP-9320.patch
 
 sudo -i
 
-cd hadoop-2.7.5-src
+cd hadoop-2.7.6-src
+
+#### Sem o debug ativo:
 
 mvn package -Pdist,native -DskipTests -Dtar
 
+#### Com o debug ativo:
+
+mvn package -Pdist,native -DskipTests -Dtar -C
+
+**OBS:** Devido a placa Beaglebone Black trava muito durante o processo de compilação e prasentar erros não contidos. Foi utilizado o hadoop compilado na Raspberry.
+
 Ao final do processo espera-se obter sucesso em todos os pacotes.
+
 ```
 ...
 
 [INFO] Reactor Summary:
 [INFO] 
-[INFO] Apache Hadoop Main ................................. SUCCESS [  7.786 s]
-[INFO] Apache Hadoop Build Tools .......................... SUCCESS [  5.599 s]
-[INFO] Apache Hadoop Project POM .......................... SUCCESS [  8.169 s]
-[INFO] Apache Hadoop Annotations .......................... SUCCESS [ 12.486 s]
-[INFO] Apache Hadoop Assemblies ........................... SUCCESS [  1.004 s]
-[INFO] Apache Hadoop Project Dist POM ..................... SUCCESS [  5.103 s]
-[INFO] Apache Hadoop Maven Plugins ........................ SUCCESS [ 14.080 s]
-[INFO] Apache Hadoop MiniKDC .............................. SUCCESS [ 25.260 s]
-[INFO] Apache Hadoop Auth ................................. SUCCESS [ 19.645 s]
-[INFO] Apache Hadoop Auth Examples ........................ SUCCESS [ 12.382 s]
-[INFO] Apache Hadoop Common ............................... SUCCESS [08:43 min]
-[INFO] Apache Hadoop NFS .................................. SUCCESS [ 33.713 s]
-[INFO] Apache Hadoop KMS .................................. SUCCESS [01:43 min]
-[INFO] Apache Hadoop Common Project ....................... SUCCESS [  1.908 s]
-[INFO] Apache Hadoop HDFS ................................. SUCCESS [18:41 min]
-[INFO] Apache Hadoop HttpFS ............................... SUCCESS [02:14 min]
-[INFO] Apache Hadoop HDFS BookKeeper Journal .............. SUCCESS [ 34.151 s]
-[INFO] Apache Hadoop HDFS-NFS ............................. SUCCESS [ 18.870 s]
-[INFO] Apache Hadoop HDFS Project ......................... SUCCESS [  0.186 s]
-[INFO] hadoop-yarn ........................................ SUCCESS [  0.247 s]
-[INFO] hadoop-yarn-api .................................... SUCCESS [04:29 min]
-[INFO] hadoop-yarn-common ................................. SUCCESS [03:57 min]
-[INFO] hadoop-yarn-server ................................. SUCCESS [  1.549 s]
-[INFO] hadoop-yarn-server-common .......................... SUCCESS [01:04 min]
-[INFO] hadoop-yarn-server-nodemanager ..................... SUCCESS [01:55 min]
-[INFO] hadoop-yarn-server-web-proxy ....................... SUCCESS [ 20.086 s]
-[INFO] hadoop-yarn-server-applicationhistoryservice ....... SUCCESS [ 29.019 s]
-[INFO] hadoop-yarn-server-resourcemanager ................. SUCCESS [01:18 min]
-[INFO] hadoop-yarn-server-tests ........................... SUCCESS [ 17.978 s]
-[INFO] hadoop-yarn-client ................................. SUCCESS [ 22.427 s]
-[INFO] hadoop-yarn-server-sharedcachemanager .............. SUCCESS [ 24.147 s]
-[INFO] hadoop-yarn-applications ........................... SUCCESS [  0.359 s]
-[INFO] hadoop-yarn-applications-distributedshell .......... SUCCESS [ 15.424 s]
-[INFO] hadoop-yarn-applications-unmanaged-am-launcher ..... SUCCESS [ 12.780 s]
-[INFO] hadoop-yarn-site ................................... SUCCESS [  0.346 s]
-[INFO] hadoop-yarn-registry ............................... SUCCESS [ 29.259 s]
-[INFO] hadoop-yarn-project ................................ SUCCESS [ 42.047 s]
-[INFO] hadoop-mapreduce-client ............................ SUCCESS [  1.707 s]
-[INFO] hadoop-mapreduce-client-core ....................... SUCCESS [01:35 min]
-[INFO] hadoop-mapreduce-client-common ..................... SUCCESS [01:42 min]
-[INFO] hadoop-mapreduce-client-shuffle .................... SUCCESS [ 12.791 s]
-[INFO] hadoop-mapreduce-client-app ........................ SUCCESS [01:03 min]
-[INFO] hadoop-mapreduce-client-hs ......................... SUCCESS [ 41.184 s]
-[INFO] hadoop-mapreduce-client-jobclient .................. SUCCESS [ 52.799 s]
-[INFO] hadoop-mapreduce-client-hs-plugins ................. SUCCESS [ 13.776 s]
-[INFO] Apache Hadoop MapReduce Examples ................... SUCCESS [ 37.708 s]
-[INFO] hadoop-mapreduce ................................... SUCCESS [ 27.087 s]
-[INFO] Apache Hadoop MapReduce Streaming .................. SUCCESS [ 22.420 s]
-[INFO] Apache Hadoop Distributed Copy ..................... SUCCESS [01:04 min]
-[INFO] Apache Hadoop Archives ............................. SUCCESS [ 12.542 s]
-[INFO] Apache Hadoop Rumen ................................ SUCCESS [ 28.560 s]
-[INFO] Apache Hadoop Gridmix .............................. SUCCESS [ 18.383 s]
-[INFO] Apache Hadoop Data Join ............................ SUCCESS [  7.268 s]
-[INFO] Apache Hadoop Ant Tasks ............................ SUCCESS [  5.620 s]
-[INFO] Apache Hadoop Extras ............................... SUCCESS [  8.909 s]
-[INFO] Apache Hadoop Pipes ................................ SUCCESS [ 44.512 s]
-[INFO] Apache Hadoop OpenStack support .................... SUCCESS [ 14.286 s]
-[INFO] Apache Hadoop Amazon Web Services support .......... SUCCESS [05:11 min]
-[INFO] Apache Hadoop Azure support ........................ SUCCESS [01:50 min]
-[INFO] Apache Hadoop Client ............................... SUCCESS [01:26 min]
-[INFO] Apache Hadoop Mini-Cluster ......................... SUCCESS [ 14.930 s]
-[INFO] Apache Hadoop Scheduler Load Simulator ............. SUCCESS [ 37.110 s]
-[INFO] Apache Hadoop Tools Dist ........................... SUCCESS [01:21 min]
-[INFO] Apache Hadoop Tools ................................ SUCCESS [  0.343 s]
-[INFO] Apache Hadoop Distribution ......................... SUCCESS [07:41 min]
+[INFO] Apache Hadoop Main ................................. SUCCESS [  4.556 s]
+[INFO] Apache Hadoop Build Tools .......................... SUCCESS [  3.305 s]
+[INFO] Apache Hadoop Project POM .......................... SUCCESS [  4.577 s]
+[INFO] Apache Hadoop Annotations .......................... SUCCESS [  9.350 s]
+[INFO] Apache Hadoop Assemblies ........................... SUCCESS [  0.605 s]
+[INFO] Apache Hadoop Project Dist POM ..................... SUCCESS [  3.970 s]
+[INFO] Apache Hadoop Maven Plugins ........................ SUCCESS [ 11.488 s]
+[INFO] Apache Hadoop MiniKDC .............................. SUCCESS [ 25.797 s]
+[INFO] Apache Hadoop Auth ................................. SUCCESS [ 23.513 s]
+[INFO] Apache Hadoop Auth Examples ........................ SUCCESS [ 12.303 s]
+[INFO] Apache Hadoop Common ............................... SUCCESS [07:45 min]
+[INFO] Apache Hadoop NFS .................................. SUCCESS [ 22.117 s]
+[INFO] Apache Hadoop KMS .................................. SUCCESS [ 59.410 s]
+[INFO] Apache Hadoop Common Project ....................... SUCCESS [  0.243 s]
+[INFO] Apache Hadoop HDFS ................................. SUCCESS [18:21 min]
+[INFO] Apache Hadoop HttpFS ............................... SUCCESS [01:28 min]
+[INFO] Apache Hadoop HDFS BookKeeper Journal .............. SUCCESS [ 18.934 s]
+[INFO] Apache Hadoop HDFS-NFS ............................. SUCCESS [ 12.570 s]
+[INFO] Apache Hadoop HDFS Project ......................... SUCCESS [  0.326 s]
+[INFO] hadoop-yarn ........................................ SUCCESS [  0.267 s]
+[INFO] hadoop-yarn-api .................................... SUCCESS [03:25 min]
+[INFO] hadoop-yarn-common ................................. SUCCESS [02:07 min]
+[INFO] hadoop-yarn-server ................................. SUCCESS [  1.810 s]
+[INFO] hadoop-yarn-server-common .......................... SUCCESS [ 36.513 s]
+[INFO] hadoop-yarn-server-nodemanager ..................... SUCCESS [01:05 min]
+[INFO] hadoop-yarn-server-web-proxy ....................... SUCCESS [ 10.687 s]
+[INFO] hadoop-yarn-server-applicationhistoryservice ....... SUCCESS [ 23.032 s]
+[INFO] hadoop-yarn-server-resourcemanager ................. SUCCESS [01:17 min]
+[INFO] hadoop-yarn-server-tests ........................... SUCCESS [ 18.416 s]
+[INFO] hadoop-yarn-client ................................. SUCCESS [ 19.259 s]
+[INFO] hadoop-yarn-server-sharedcachemanager .............. SUCCESS [ 12.614 s]
+[INFO] hadoop-yarn-applications ........................... SUCCESS [  0.401 s]
+[INFO] hadoop-yarn-applications-distributedshell .......... SUCCESS [  9.533 s]
+[INFO] hadoop-yarn-applications-unmanaged-am-launcher ..... SUCCESS [  6.555 s]
+[INFO] hadoop-yarn-site ................................... SUCCESS [  0.320 s]
+[INFO] hadoop-yarn-registry ............................... SUCCESS [ 15.895 s]
+[INFO] hadoop-yarn-project ................................ SUCCESS [ 21.087 s]
+[INFO] hadoop-mapreduce-client ............................ SUCCESS [  0.904 s]
+[INFO] hadoop-mapreduce-client-core ....................... SUCCESS [01:10 min]
+[INFO] hadoop-mapreduce-client-common ..................... SUCCESS [01:07 min]
+[INFO] hadoop-mapreduce-client-shuffle .................... SUCCESS [ 11.664 s]
+[INFO] hadoop-mapreduce-client-app ........................ SUCCESS [ 32.561 s]
+[INFO] hadoop-mapreduce-client-hs ......................... SUCCESS [ 21.120 s]
+[INFO] hadoop-mapreduce-client-jobclient .................. SUCCESS [ 29.503 s]
+[INFO] hadoop-mapreduce-client-hs-plugins ................. SUCCESS [  7.440 s]
+[INFO] Apache Hadoop MapReduce Examples ................... SUCCESS [ 19.081 s]
+[INFO] hadoop-mapreduce ................................... SUCCESS [ 13.507 s]
+[INFO] Apache Hadoop MapReduce Streaming .................. SUCCESS [ 12.883 s]
+[INFO] Apache Hadoop Distributed Copy ..................... SUCCESS [ 38.020 s]
+[INFO] Apache Hadoop Archives ............................. SUCCESS [  7.752 s]
+[INFO] Apache Hadoop Rumen ................................ SUCCESS [ 14.757 s]
+[INFO] Apache Hadoop Gridmix .............................. SUCCESS [ 12.597 s]
+[INFO] Apache Hadoop Data Join ............................ SUCCESS [  6.833 s]
+[INFO] Apache Hadoop Ant Tasks ............................ SUCCESS [  5.518 s]
+[INFO] Apache Hadoop Extras ............................... SUCCESS [  8.335 s]
+[INFO] Apache Hadoop Pipes ................................ SUCCESS [ 37.754 s]
+[INFO] Apache Hadoop OpenStack support .................... SUCCESS [ 14.012 s]
+[INFO] Apache Hadoop Amazon Web Services support .......... SUCCESS [ 16.093 s]
+[INFO] Apache Hadoop Azure support ........................ SUCCESS [ 15.936 s]
+[INFO] Apache Hadoop Client ............................... SUCCESS [ 43.220 s]
+[INFO] Apache Hadoop Mini-Cluster ......................... SUCCESS [  9.258 s]
+[INFO] Apache Hadoop Scheduler Load Simulator ............. SUCCESS [ 19.958 s]
+[INFO] Apache Hadoop Tools Dist ........................... SUCCESS [ 48.610 s]
+[INFO] Apache Hadoop Tools ................................ SUCCESS [  0.241 s]
+[INFO] Apache Hadoop Distribution ......................... SUCCESS [04:20 min]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 01:20 h
-[INFO] Finished at: 2018-01-06T00:14:08Z
-[INFO] Final Memory: 85M/224M
+[INFO] Total time: 56:16 min
+[INFO] Finished at: 2018-05-02T16:00:03-03:00
+[INFO] Final Memory: 83M/224M
 [INFO] ------------------------------------------------------------------------
 
 ```
 
-cd hadoop-2.7.5-src/hadoop-dist/target/
+cd hadoop-2.7.6-src/hadoop-dist/target/
 
-cp -R hadoop-2.7.5 /opt/hadoop
+cp -R hadoop-2.7.6 /opt/hadoop
 
 cd /opt
 
 chown -R hduser:hadoop hadoop
 
-tar -zcvf /root/hadoop-2.7.5.armf.tar.gz hadoop 
+tar -zcvf /root/hadoop-2.7.6.armf.tar.gz hadoop 
 
 (Para possíveis backup)
 
@@ -461,8 +572,8 @@ hadoop checknative -a
 
 ```
 hduser@node1:~ $ hadoop checknative -a
-18/01/07 17:50:09 INFO bzip2.Bzip2Factory: Successfully loaded & initialized native-bzip2 library system-native
-18/01/07 17:50:09 INFO zlib.ZlibFactory: Successfully loaded & initialized native-zlib library
+18/05/04 13:03:23 INFO bzip2.Bzip2Factory: Successfully loaded & initialized native-bzip2 library system-native
+18/05/04 13:03:23 INFO zlib.ZlibFactory: Successfully loaded & initialized native-zlib library
 Native library checking:
 hadoop:  true /opt/hadoop/lib/native/libhadoop.so.1.0.0
 zlib:    true /lib/arm-linux-gnueabihf/libz.so.1
@@ -479,13 +590,12 @@ hadoop version
 
 ```
 hduser@node1:~ $ hadoop version
-Hadoop 2.7.5
+Hadoop 2.7.6
 Subversion Unknown -r Unknown
-Compiled by root on 2018-01-05T22:55Z
+Compiled by root on 2018-05-02T18:05Z
 Compiled with protoc 2.5.0
-From source with checksum 9f118f95f47043332d51891e37f736e9
-This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.7.5.jar
-
+From source with checksum 71e2695531cb3360ab74598755d036
+This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.7.6.jar
 ```
 
 ## Definir os arquivos de configuração para modo distribuído do hadoop
@@ -502,15 +612,17 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 
 ```xml
 <configuration>
-  <property>
-    <name>fs.defaultFS</name>
-    <value>file:///master:9000</value>
-  </property>
-  <property>
-    <name>dfs.permissions</name>
-    <value>false</value>
-  </property>
- </configuration>
+	<property>
+		<name>fs.defaultFS</name>
+		<value>file:///master:9000</value>
+		<description> The name of the default file system. </description>
+	</property>
+	<property>
+		<name>hadoop.tmp.dir</name>
+  		<value>/opt/hadoop/hadoop_data/hdfs</value>
+		<description>A base for other temporary directories.</description>
+	</property>
+</configuration>
 ```
 
 Da mesma maneira com os demais:
@@ -521,44 +633,61 @@ sudo nano hdfs-site.xml
 
 ```xml
 <configuration>
-  <property>
-    <name>dfs.replication</name>
-    <value>3</value>
-  </property>
-  <property>
-    <name>dfs.blocksize</name>
-    <value>10485760</value>
-  </property>
-  <property>
-    <name>dfs.namenode.name.dir</name>
-    <value>file:///opt/hadoop/hadoop_data/hdfs/namenode</value>
-  </property>
-  <property>
-    <name>dfs.datanode.data.dir</name>
-    <value>file:///opt/hadoop/hadoop_data/hdfs/datanode</value>
-  </property>
-  <property>
-    <name>dfs.permissions.enabled</name>
-    <value>false</value>
-  </property>
-  <property>
-    <name>dfs.datanode.use.datanode.hostname</name>
-    <value>false</value>
-  </property>
-  <property>
-    <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
-    <value>false</value>
-  </property>
-  <property>
-    <name>dfs.namenode.http-address</name>
-    <value>master:50070</value>
-    <description>Your NameNode hostname for http access.</description>
-  </property>
-  <property>
-    <name>dfs.namenode.secondary.http-address</name>
-    <value>master:50090</value>
-    <description>Your Secondary NameNode hostname for http access.</description>
-  </property>
+	<property>
+		<name>dfs.replication</name>
+		<value>3</value>
+		<description></description>
+	</property>
+	<property>
+		<name>dfs.blocksize</name>
+		<value>10485760</value>
+		<description></description>
+	</property>
+	<property>
+ 		<name>dfs.namenode.name.dir</name>
+		<value>file:///opt/hadoop/hadoop_data/hdfs/namenode</value>
+		<description></description>
+  	</property>
+ 	<property>
+		<name>dfs.datanode.data.dir</name>
+		<value>file:///opt/hadoop/hadoop_data/hdfs/datanode</value>
+		<description></description>
+	</property>
+	<property>
+		<name>dfs.permissions.enabled</name>
+		<value>true</value>
+		<description></description>
+	</property>
+	<property>
+		<name>dfs.datanode.use.datanode.hostname</name>
+		<value>false</value>
+		<description></description>
+	</property>
+	<property>
+		<name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+		<value>false</value>
+		<description></description>
+	</property>
+	<property>
+		<name>dfs.datanode.address</name>
+		<value>master:50010</value>
+		<description>The datanode server address and port for data transfer. </description>
+	</property>
+	<property>
+		<name>dfs.namenode.http-address</name>
+		<value>master:50070</value>
+		<description>The address and the base port where the dfs namenode web ui will listen on.</description>
+	</property>
+	<property>
+		<name>dfs.namenode.secondary.http-address</name>
+		<value>master:50090</value>
+		<description>The secondary namenode http server address and port.</description>
+	</property> 	
+	<property>
+		<name>dfs.namenode.secondary.https-address</name>
+		<value>master:50091</value>
+		<description>The secondary namenode HTTPS server address and port.</description>
+	</property>
 </configuration>
 
 ```
@@ -569,72 +698,80 @@ sudo nano yarn-site.xml
 
 ```xml
 <configuration>
-    <property>
-        <name>yarn.nodemanager.aux-services</name>
-        <value>mapreduce_shuffle</value>
-	<description>Long running service which executes on Node Manager(s) and provides MapReduce Sort and Shuffle functionality.</description>	
-    </property>
-    <property>
-	<name>yarn.log-aggregation-enable</name>
-	<value>true</value>
-	<description>Enable log aggregation so application logs are moved onto hdfs and are viewable via web ui after the application completed. The default location on hdfs is '/log' and can be changed via yarn.nodemanager.remote-app-log-dir property</description>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.scheduler.address</name>
-        <value>master:8030</value>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.resource-tracker.address</name>
-        <value>master:8031</value>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.address</name>
-        <value>master:8032</value>
-    </property>
-    <property>
-	<name>yarn.resourcemanager.admin.address</name>
-	<value>master:8033</value>
-    </property>
-    <property>
-	<name>yarn.resourcemanager.webapp.address</name>
-	<value>master:8088</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.resource.cpu-vcores</name>
-        <value>4</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.resource.memory-mb</name>
-        <value>768</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.minimum-allocation-mb</name>
-        <value>64</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.maximum-allocation-mb</name>
-        <value>256</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.minimum-allocation-vcores</name>
-        <value>1</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.maximum-allocation-vcores</name>
-        <value>4</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.vmem-check-enabled</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.pmem-check-enabled</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.vmem-pmem-ratio</name>
-        <value>2.1</value>
-    </property>
+	<property>
+		<name>yarn.nodemanager.aux-services</name>
+		<value>mapreduce_shuffle</value>
+		<description>Long running service which executes on Node Manager(s) and provides MapReduce Sort and Shuffle functionality.</description>	
+	</property>
+	<property>
+		<name>yarn.log-aggregation-enable</name>
+		<value>true</value>
+		<description>Enable log aggregation so application logs are moved onto hdfs and are viewable via web ui after the application completed. The default location on hdfs is '/log' and can be changed via yarn.nodemanager.remote-app-log-dir property</description>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.hostname</name>
+		<value>master</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.scheduler.address</name>
+		<value>master:8030</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.resource-tracker.address</name>
+		<value>master:8031</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.address</name>
+		<value>master:8032</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.admin.address</name>
+		<value>master:8033</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.webapp.address</name>
+		<value>master:8088</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.webapp.https.address</name>
+		<value>master:8090</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.resource.cpu-vcores</name>
+		<value>4</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.resource.memory-mb</name>
+		<value>768</value>
+	</property>
+	<property>
+		<name>yarn.scheduler.minimum-allocation-mb</name>
+		<value>64</value>
+	</property>
+	<property>
+		<name>yarn.scheduler.maximum-allocation-mb</name>
+		<value>256</value>
+	</property>
+	<property>
+		<name>yarn.scheduler.minimum-allocation-vcores</name>
+		<value>1</value>
+	</property>
+	<property>
+		<name>yarn.scheduler.maximum-allocation-vcores</name>
+		<value>4</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.vmem-check-enabled</name>
+		<value>true</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.pmem-check-enabled</name>
+		<value>true</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.vmem-pmem-ratio</name>
+		<value>2.1</value>
+	</property>
 </configuration>
 ```
 
@@ -646,58 +783,58 @@ sudo nano mapred-site.xml
 
 ```xml
 <configuration>
-    <property>
-      <name>mapred.job.tracker</name>
-      <value>master:9001</value>
-    </property>
-    <property>
-        <name>mapreduce.framework.name</name>
-        <value>yarn</value>
-    </property>
-    <property>
-        <name>mapreduce.map.memory.mb</name>
-        <value>256</value>
-    </property>
-    <property>
-        <name>mapreduce.map.java.opts</name>
-        <value>-Xmx204m</value>
-    </property>
-    <property>
-        <name>mapreduce.map.cpu.vcores</name>
-        <value>2</value>
-    </property>
-    <property>
-        <name>mapreduce.reduce.memory.mb</name>
-        <value>128</value>
-    </property>
-    <property>
-        <name>mapreduce.reduce.java.opts</name>
-        <value>-Xmx102m</value>
-    </property>
-    <property>
-        <name>mapreduce.reduce.cpu.vcores</name>
-        <value>2</value>
-    </property>
-    <property>
-        <name>yarn.app.mapreduce.am.resource.mb</name>
-        <value>128</value>
-    </property>
-    <property>
-        <name>yarn.app.mapreduce.am.command-opts</name>
-        <value>-Xmx102m</value>
-    </property>
-    <property>
-        <name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
-        <value>1</value>
-    </property>
-    <property>
-        <name>mapreduce.job.maps</name>
-        <value>4</value>
-    </property>
-    <property>
-        <name>mapreduce.job.reduces</name>
-        <value>4</value>
-    </property>
+	<property>
+		<name>mapred.job.tracker</name>
+		<value>master:9001</value>
+	</property>
+	<property>
+		<name>mapreduce.framework.name</name>
+		<value>yarn</value>
+	</property>
+	<property>
+		<name>mapreduce.map.memory.mb</name>
+		<value>256</value>
+	</property>
+	<property>
+		<name>mapreduce.map.java.opts</name>
+		<value>-Xmx204m</value>
+	</property>
+	<property>
+		<name>mapreduce.map.cpu.vcores</name>
+		<value>2</value>
+	</property>
+	<property>
+		<name>mapreduce.reduce.memory.mb</name>
+		<value>128</value>
+	</property>
+	<property>
+		<name>mapreduce.reduce.java.opts</name>
+		<value>-Xmx102m</value>
+	</property>
+	<property>
+		<name>mapreduce.reduce.cpu.vcores</name>
+		<value>2</value>
+	</property>
+	<property>
+		<name>yarn.app.mapreduce.am.resource.mb</name>
+		<value>128</value>
+	</property>
+	<property>
+		<name>yarn.app.mapreduce.am.command-opts</name>
+		<value>-Xmx102m</value>
+	</property>
+	<property>
+		<name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
+		<value>1</value>
+	</property>
+	<property>
+		<name>mapreduce.job.maps</name>
+		<value>4</value>
+	</property>
+	<property>
+		<name>mapreduce.job.reduces</name>
+		<value>4</value>
+	</property>
 </configuration>
 
 
@@ -711,6 +848,8 @@ node1
 node2 
 node3
 node4
+node5
+node6
 
 ````
 
