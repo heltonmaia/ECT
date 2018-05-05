@@ -741,6 +741,10 @@ sudo nano yarn-site.xml
 		<value>4</value>
 	</property>
 	<property>
+		<name>yarn.nodemanager.resource.percentage-physical-cpu-limit</name>
+		<value>90</value>
+	</property>
+	<property>
 		<name>yarn.nodemanager.resource.memory-mb</name>
 		<value>768</value>
 	</property>
@@ -784,7 +788,7 @@ sudo nano mapred-site.xml
 ```xml
 <configuration>
 	<property>
-		<name>mapred.job.tracker</name>
+		<name>mapreduce.jobtracker.address</name>
 		<value>master:9001</value>
 	</property>
 	<property>
@@ -833,7 +837,7 @@ sudo nano mapred-site.xml
 	</property>
 	<property>
 		<name>mapreduce.job.reduces</name>
-		<value>4</value>
+		<value>2</value>
 	</property>
 </configuration>
 
