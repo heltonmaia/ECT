@@ -1377,6 +1377,10 @@ http://10.6.1.228:8088
 
 ## Referências:
 
+http://hadoop.apache.org/
+
+http://maven.apache.org/
+
 http://data.andyburgin.co.uk/post/157450047463/running-hue-on-a-raspberry-pi-hadoop-cluster
 
 http://www.widriksson.com/raspberry-pi-2-hadoop-2-cluster/
@@ -1386,4 +1390,6 @@ https://medium.com/@jasonicarter/how-to-hadoop-at-home-with-raspberry-pi-part-1-
 https://www.tutorialspoint.com/hadoop/
 
 http://hadoop.praveendeshmane.co.in/hadoop/hadoop-2-6-4-fully-distributed-mode-installation-on-ubuntu-14-04.jsp
+
+https://github.com/google/protobuf
 
