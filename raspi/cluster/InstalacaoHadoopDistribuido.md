@@ -865,8 +865,15 @@ sudo chown hduser:hadoop /opt/hadoop/logs -R
 sudo chmod 750 /opt/hadoop/logs
 
 **OBS1.:** para diminuir o trabalho e ganhar tempo o ideal é criar uma imagem do sistema do master para gravar nós. Outra opção é cópiar por meio de SCP.
+
 su hduser
-sudo scp -r /opt/hadoop/* hduser@10.6.1.225:/opt/hadoop
+
+sudo scp -r /opt/hadoop hduser@10.6.1.225:/home/hduser
+
+sudo cd /home/hduser
+
+sudo mv hadoop /opt
+
 
 # Etapas apenas para o master
 
