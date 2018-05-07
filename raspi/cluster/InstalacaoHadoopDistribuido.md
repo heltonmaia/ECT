@@ -856,6 +856,13 @@ node5
 node6
 
 ````
+#### Crie pastas e permissões para o Logs
+
+sudo mkdir -p /opt/hadoop/logs
+
+sudo chown hduser:hadoop /opt/hadoop/logs -R
+
+sudo chmod 750 /opt/hadoop/logs
 
 **OBS1.:** para diminuir o trabalho e ganhar tempo o ideal é criar uma imagem do sistema do master para gravar nós. Outra opção é cópiar por meio de SCP.
 su hduser
@@ -926,6 +933,7 @@ Testar conexão ssh:
 ssh 10.6.1.223 ou ssh node4
 
 exit
+
 #### Crie pastas e permissões para o HDFS
 
 sudo mkdir -p /opt/hadoop/hadoop_data/hdfs/namenode
@@ -941,27 +949,30 @@ sudo chmod 750 /opt/hadoop/hadoop_data/hdfs
 cd $HADOOP_INSTALL
 
 hdfs namenode -format
+
 ```
 hduser@node1:/opt/hadoop $ hdfs namenode -format
-18/01/07 18:05:11 INFO namenode.NameNode: STARTUP_MSG: 
+18/05/07 13:00:06 INFO namenode.NameNode: STARTUP_MSG: 
 /************************************************************
 STARTUP_MSG: Starting NameNode
-STARTUP_MSG:   host = node1/192.168.1.104
+STARTUP_MSG:   host = master/10.6.1.228
 STARTUP_MSG:   args = [-format]
-STARTUP_MSG:   version = 2.7.5
-STARTUP_MSG:   classpath = /opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/jackson-jaxrs-
+STARTUP_MSG:   version = 2.7.6
+STARTUP_MSG:   classpath = /opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/log4j-1.2.17.jar:/opt/hadoop/share/hadoop/common/lib/jetty-util-6.1.26.jar
 ...
 
-STARTUP_MSG:   build = Unknown -r Unknown; compiled by 'root' on 2018-01-05T22:55Z
-STARTUP_MSG:   java = 1.8.0_65
+STARTUP_MSG:   build = Unknown -r Unknown; compiled by 'root' on 2018-05-02T18:07Z
+STARTUP_MSG:   java = 1.8.0_171
 ************************************************************/
+
 ...
 
-18/01/07 18:05:19 INFO util.ExitUtil: Exiting with status 0
-18/01/07 18:05:19 INFO namenode.NameNode: SHUTDOWN_MSG: 
+18/05/07 13:00:08 INFO util.ExitUtil: Exiting with status 0
+18/05/07 13:00:08 INFO namenode.NameNode: SHUTDOWN_MSG: 
 /************************************************************
-SHUTDOWN_MSG: Shutting down NameNode at node1/192.168.1.104
+SHUTDOWN_MSG: Shutting down NameNode at master/10.6.1.228
 ************************************************************/
+
 
 ```
 
