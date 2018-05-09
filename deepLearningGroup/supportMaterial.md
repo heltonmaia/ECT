@@ -13,6 +13,7 @@ https://machinelearningmastery.com/start-here/
 https://adeshpande3.github.io/adeshpande3.github.io/A-Beginner's-Guide-To-Understanding-Convolutional-Neural-Networks/
 
 ### Tutorials
+ * Tutorials(pt): https://matheusfacure.github.io/tutoriais/ 
  * Gradient Descent: https://towardsdatascience.com/gradient-descent-in-a-nutshell-eaf8c18212f0
  * Python Brasil - http://wiki.python.org.br/DocumentacaoPython 
  * Create virtual environments for python with conda
