@@ -1063,31 +1063,52 @@ cd $HADOOP_HOME/sbin
 ./start-dfs.sh
 
 ```
-hduser@node1:/opt/hadoop $ cd $HADOOP_HOME/sbin
-hduser@node1:/opt/hadoop/sbin $ ./start-dfs.sh
-Starting namenodes on [node1]
-node1: starting namenode, logging to /opt/hadoop/logs/hadoop-hduser-namenode-node1.out
-The authenticity of host 'localhost (127.0.0.1)' can't be established.
-ECDSA key fingerprint is f9:eb:95:56:22:12:6e:2e:28:03:e9:ec:ec:83:dd:d5.
-Are you sure you want to continue connecting (yes/no)? yes
-localhost: Warning: Permanently added 'localhost' (ECDSA) to the list of known hosts.
-localhost: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node1.out
-Starting secondary namenodes [0.0.0.0]
-The authenticity of host '0.0.0.0 (0.0.0.0)' can't be established.
-ECDSA key fingerprint is f9:eb:95:56:22:12:6e:2e:28:03:e9:ec:ec:83:dd:d5.
-Are you sure you want to continue connecting (yes/no)? yes
-0.0.0.0: Warning: Permanently added '0.0.0.0' (ECDSA) to the list of known hosts.
-0.0.0.0: starting secondarynamenode, logging to /opt/hadoop/logs/hadoop-hduser-secondarynamenode-node1.out
+Starting namenodes on [master]
+master: starting namenode, logging to /opt/hadoop/logs/hadoop-hduser-namenode-master.out
+node6: Ubuntu 16.04.3 LTS
+node6: 
+node6: rcn-ee.net console Ubuntu Image 2018-02-09
+node6: 
+node6: Support/FAQ: http://elinux.org/BeagleBoardUbuntu
+node6: 
+node6: default username:password is [ubuntu:temppwd]
+node6: 
+localhost: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-master.out
+node5: Ubuntu 16.04.4 LTS
+node3: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node3.out
+node2: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node2.out
+node1: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node1.out
+node6: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node6.out
+node4: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node4.out
+node5: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node5.out
+Starting secondary namenodes [master]
+master: starting secondarynamenode, logging to /opt/hadoop/logs/hadoop-hduser-secondarynamenode-master.out
+
 
 ```
 
 ./start-yarn.sh
 
 ```
-hduser@node1:/opt/hadoop/sbin $ ./start-yarn.sh
 starting yarn daemons
-starting resourcemanager, logging to /opt/hadoop/logs/yarn-hduser-resourcemanager-node1.out
-localhost: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node1.out
+starting resourcemanager, logging to /opt/hadoop/logs/yarn-hduser-resourcemanager-master.out
+node6: Ubuntu 16.04.3 LTS
+node6: 
+node6: rcn-ee.net console Ubuntu Image 2018-02-09
+node6: 
+node6: Support/FAQ: http://elinux.org/BeagleBoardUbuntu
+node6: 
+node6: default username:password is [ubuntu:temppwd]
+node6: 
+node2: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node2.out
+localhost: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-master.out
+node5: Ubuntu 16.04.4 LTS
+node3: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node3.out
+node4: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node4.out
+node6: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node6.out
+node1: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node1.out
+node5: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node5.out
+
 
 ```
 
