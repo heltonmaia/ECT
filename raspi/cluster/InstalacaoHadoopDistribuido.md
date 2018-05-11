@@ -614,7 +614,7 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 <configuration>
 	<property>
 		<name>fs.defaultFS</name>
-		<value>file:///master:9000</value>
+		<value>hdfs://master:9000</value>
 		<description> The name of the default file system. </description>
 	</property>
 	<property>
@@ -856,6 +856,7 @@ node5
 node6
 
 ````
+
 #### Crie pastas e permissões para o Logs
 
 sudo mkdir -p /opt/hadoop/logs
@@ -866,6 +867,19 @@ sudo chmod 750 /opt/hadoop/logs
 
 **OBS1.:** para diminuir o trabalho e ganhar tempo o ideal é criar uma imagem do sistema do master para gravar nós. Outra opção é cópiar por meio de SCP.
 
+
+#### Cópia hadoop do master para node1
+
+su hduser
+
+sudo scp -r /opt/hadoop hduser@10.6.1.226:/home/hduser
+
+sudo cd /home/hduser
+
+sudo mv hadoop /opt
+
+#### Cópia hadoop do master para node2
+
 su hduser
 
 sudo scp -r /opt/hadoop hduser@10.6.1.225:/home/hduser
@@ -874,6 +888,45 @@ sudo cd /home/hduser
 
 sudo mv hadoop /opt
 
+#### Cópia hadoop do master para node3
+
+su hduser
+
+sudo scp -r /opt/hadoop hduser@10.6.1.227:/home/hduser
+
+sudo cd /home/hduser
+
+sudo mv hadoop /opt
+
+#### Cópia hadoop do master para node4
+
+su hduser
+
+sudo scp -r /opt/hadoop hduser@10.6.1.223:/home/hduser
+
+sudo cd /home/hduser
+
+sudo mv hadoop /opt
+
+#### Cópia hadoop do master para node5
+
+su hduser
+
+sudo scp -r /opt/hadoop hduser@10.6.1.229:/home/hduser
+
+sudo cd /home/hduser
+
+sudo mv hadoop /opt
+
+#### Cópia hadoop do master para node6
+
+su hduser
+
+sudo scp -r /opt/hadoop hduser@10.6.1.230:/home/hduser
+
+sudo cd /home/hduser
+
+sudo mv hadoop /opt
 
 # Etapas apenas para o master
 
@@ -938,6 +991,26 @@ ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.223
 Testar conexão ssh:
 
 ssh 10.6.1.223 ou ssh node4
+
+exit
+
+#### Utilize  o comando para cópia o chave do master para node5:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.229
+
+Testar conexão ssh:
+
+ssh 10.6.1.229 ou ssh node5
+
+exit
+
+#### Utilize  o comando para cópia o chave do master para node6:
+
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@10.6.1.230
+
+Testar conexão ssh:
+
+ssh 10.6.1.230 ou ssh node6
 
 exit
 
