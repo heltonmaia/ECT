@@ -304,7 +304,13 @@ sudo adduser hduser sudo
 
 sudo -i
 
+Link nacional para download:
+
 wget http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-2.7.6/hadoop-2.7.6-src.tar.gz
+
+Link internacional para download:
+
+wget http://www-eu.apache.org/dist/hadoop/common/hadoop-2.7.6/hadoop-2.7.6-src.tar.gz
 
 tar -xvzf hadoop-2.7.6-src.tar.gz
 
