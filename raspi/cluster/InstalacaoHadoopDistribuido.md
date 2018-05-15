@@ -1,4 +1,4 @@
-# Instalação do Hadoop de forma Distribuída
+# Instalação do Hadoop completamente distribuído
 
 ## Instalação do Hadoop na Raspberry PI 3 modelo B ou BeagleBone Black
 
