@@ -621,12 +621,6 @@ Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 	<property>
 		<name>fs.defaultFS</name>
 		<value>hdfs://master:9000</value>
-		<description> The name of the default file system. </description>
-	</property>
-	<property>
-		<name>hadoop.tmp.dir</name>
-  		<value>/opt/hadoop/hadoop_data/hdfs</value>
-		<description>A base for other temporary directories.</description>
 	</property>
 </configuration>
 ```
@@ -642,58 +636,40 @@ sudo nano hdfs-site.xml
 	<property>
 		<name>dfs.replication</name>
 		<value>3</value>
-		<description></description>
 	</property>
 	<property>
 		<name>dfs.blocksize</name>
 		<value>10485760</value>
-		<description></description>
 	</property>
 	<property>
  		<name>dfs.namenode.name.dir</name>
 		<value>/opt/hadoop/hadoop_data/hdfs/namenode</value>
-		<description></description>
   	</property>
  	<property>
 		<name>dfs.datanode.data.dir</name>
 		<value>/opt/hadoop/hadoop_data/hdfs/datanode</value>
-		<description></description>
 	</property>
 	<property>
 		<name>dfs.permissions.enabled</name>
 		<value>false</value>
-		<description></description>
 	</property>
 	<property>
 		<name>dfs.datanode.use.datanode.hostname</name>
 		<value>false</value>
-		<description></description>
 	</property>
 	<property>
 		<name>dfs.namenode.datanode.registration.ip-hostname-check</name>
 		<value>false</value>
-		<description></description>
-	</property>
-	<property>
-		<name>dfs.datanode.address</name>
-		<value>master:50010</value>
-		<description>The datanode server address and port for data transfer. </description>
 	</property>
 	<property>
 		<name>dfs.namenode.http-address</name>
 		<value>master:50070</value>
-		<description>The address and the base port where the dfs namenode web ui will listen on.</description>
 	</property>
 	<property>
 		<name>dfs.namenode.secondary.http-address</name>
 		<value>master:50090</value>
-		<description>The secondary namenode http server address and port.</description>
 	</property> 	
-	<property>
-		<name>dfs.namenode.secondary.https-address</name>
-		<value>master:50091</value>
-		<description>The secondary namenode HTTPS server address and port.</description>
-	</property>
+	
 </configuration>
 
 ```
@@ -1163,7 +1139,7 @@ no proxyserver to stop
 
 cd $HADOOP_INSTALL/bin
 
-./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar pi 4 2 
+./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.6.jar pi 4 2 
 
 ```
 hduser@node1:cd $HADOOP_INSTALL/bin
@@ -1267,7 +1243,7 @@ hdfs dfs -ls /
 
 cd /opt/hadoop/bin
 
-./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar wordcount /license.txt /license-out.txt
+./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.6.jar wordcount /license.txt /license-out.txt
 
 ```
 
@@ -1347,6 +1323,7 @@ hduser@node1:/opt/hadoop/bin $ ./hadoop jar /opt/hadoop/share/hadoop/mapreduce/h
 hdfs dfs -copyToLocal /license-out.txt ~/
 
 cat ~/license-out.txt/part-r-00000
+
 ```
 hduser@node1:/opt/hadoop/bin $ cat  ~/license-out.txt/part-r-00000
 "Contributor"	2
