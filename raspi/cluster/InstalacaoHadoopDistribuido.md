@@ -643,11 +643,11 @@ sudo nano hdfs-site.xml
 	</property>
 	<property>
  		<name>dfs.namenode.name.dir</name>
-		<value>/opt/hadoop/hadoop_data/hdfs/namenode</value>
+		<value>file:///opt/hadoop/hadoop_data/hdfs/namenode</value>
   	</property>
  	<property>
 		<name>dfs.datanode.data.dir</name>
-		<value>/opt/hadoop/hadoop_data/hdfs/datanode</value>
+		<value>file:///opt/hadoop/hadoop_data/hdfs/datanode</value>
 	</property>
 	<property>
 		<name>dfs.permissions.enabled</name>
@@ -669,7 +669,6 @@ sudo nano hdfs-site.xml
 		<name>dfs.namenode.secondary.http-address</name>
 		<value>master:50090</value>
 	</property> 	
-	
 </configuration>
 
 ```
@@ -687,10 +686,6 @@ sudo nano yarn-site.xml
 	<property>
 		<name>yarn.log-aggregation-enable</name>
 		<value>true</value>
-	</property>
-	<property>
-		<name>yarn.resourcemanager.hostname</name>
-		<value>master</value>
 	</property>
 	<property>
 		<name>yarn.resourcemanager.scheduler.address</name>
@@ -711,10 +706,6 @@ sudo nano yarn-site.xml
 	<property>
 		<name>yarn.resourcemanager.webapp.address</name>
 		<value>master:8088</value>
-	</property>
-	<property>
-		<name>yarn.resourcemanager.webapp.https.address</name>
-		<value>master:8090</value>
 	</property>
 	<property>
 		<name>yarn.nodemanager.resource.cpu-vcores</name>
@@ -817,7 +808,7 @@ sudo nano mapred-site.xml
 	</property>
 	<property>
 		<name>mapreduce.job.reduces</name>
-		<value>2</value>
+		<value>4</value>
 	</property>
 </configuration>
 
@@ -829,7 +820,7 @@ sudo nano /opt/hadoop/etc/hadoop/slaves
 
 ````
 node1
-node2 
+node2
 node3
 node4
 node5
@@ -1007,8 +998,6 @@ sudo chmod 750 /opt/hadoop/hadoop_data/hdfs
 #### Formatar o HDFS
 
 cd $HADOOP_INSTALL
-
-hdfs namenode -format
 
 ```
 hduser@node1:/opt/hadoop $ hdfs namenode -format
@@ -1460,11 +1449,16 @@ Localmente na placa:
 
 http://master:50070
 
+http://master:50090
+
 http://master:8088
+
 
 Externamente a placa, mas na mesma rede:
 
 http://10.6.1.228:50070
+
+http://10.6.1.228:50090
 
 http://10.6.1.228:8088
 
