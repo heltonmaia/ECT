@@ -170,7 +170,7 @@ libprotoc 2.5.0
 #### Baixar e descompactar o apache maven: 
 sudo -i
 
-apt-get update  
+apt-get update 
 
 cd /usr/local
 
@@ -306,15 +306,15 @@ sudo -i
 
 Link nacional para download:
 
-wget http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-2.7.6/hadoop-2.7.6-src.tar.gz
+http://ftp.unicamp.br/pub/apache/hadoop/common/
 
 Link internacional para download:
 
-wget http://www-eu.apache.org/dist/hadoop/common/hadoop-2.7.6/hadoop-2.7.6-src.tar.gz
+http://www-eu.apache.org/dist/hadoop/common/
 
-tar -xvzf hadoop-2.7.6-src.tar.gz
+tar -xvzf hadoop-2.7.5-src.tar.gz
 
-cd hadoop-2.7.6-src
+cd hadoop-2.7.5-src
 
 #### Configuração para instruir o processo de compilação para arquitetura ARM:
 
@@ -330,7 +330,7 @@ Em seguida, pressione Ctrl+Shift + - (Ctrl+ _) Insira o número da linha igual a
 
 sudo -i
 
-cd hadoop-2.7.6-src/hadoop-common-project/hadoop-common/src
+cd hadoop-2.7.5-src/hadoop-common-project/hadoop-common/src
 
 wget https://issues.apache.org/jira/secure/attachment/12570212/HADOOP-9320.patch
 
@@ -523,15 +523,15 @@ Ao final do processo espera-se obter sucesso em todos os pacotes.
 
 ```
 
-cd hadoop-2.7.6-src/hadoop-dist/target/
+cd hadoop-2.7.5-src/hadoop-dist/target/
 
-cp -R hadoop-2.7.6 /opt/hadoop
+cp -R hadoop-2.7.5 /opt/hadoop
 
 cd /opt
 
 chown -R hduser:hadoop hadoop
 
-tar -zcvf /root/hadoop-2.7.6.armf.tar.gz hadoop 
+tar -zcvf /root/hadoop-2.7.5.armf.tar.gz hadoop 
 
 (Para possíveis backup)
 
@@ -596,12 +596,12 @@ hadoop version
 
 ```
 hduser@node1:~ $ hadoop version
-Hadoop 2.7.6
+Hadoop 2.7.5
 Subversion Unknown -r Unknown
 Compiled by root on 2018-05-02T18:05Z
 Compiled with protoc 2.5.0
 From source with checksum 71e2695531cb3360ab74598755d036
-This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.7.6.jar
+This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.7.5.jar
 ```
 
 ## Definir os arquivos de configuração para modo distribuído do hadoop
@@ -617,12 +617,18 @@ sudo nano core-site.xml
 Em seguida, substitua a tags <configuration></configuration> pelas abaixos:
 
 ```xml
+
 <configuration>
-	<property>
-		<name>fs.defaultFS</name>
-		<value>hdfs://master:9000</value>
-	</property>
+  <property>
+    <name>fs.default.name</name>
+    <value>hdfs://master:9000</value>
+  </property>
+  <property>
+    <name>dfs.permissions</name>
+    <value>false</value>
+  </property>
 </configuration>
+
 ```
 
 Da mesma maneira com os demais:
@@ -633,42 +639,42 @@ sudo nano hdfs-site.xml
 
 ```xml
 <configuration>
-	<property>
-		<name>dfs.replication</name>
-		<value>3</value>
-	</property>
-	<property>
-		<name>dfs.blocksize</name>
-		<value>10485760</value>
-	</property>
-	<property>
- 		<name>dfs.namenode.name.dir</name>
-		<value>file:///opt/hadoop/hadoop_data/hdfs/namenode</value>
-  	</property>
- 	<property>
-		<name>dfs.datanode.data.dir</name>
-		<value>file:///opt/hadoop/hadoop_data/hdfs/datanode</value>
-	</property>
-	<property>
-		<name>dfs.permissions.enabled</name>
-		<value>false</value>
-	</property>
-	<property>
-		<name>dfs.datanode.use.datanode.hostname</name>
-		<value>false</value>
-	</property>
-	<property>
-		<name>dfs.namenode.datanode.registration.ip-hostname-check</name>
-		<value>false</value>
-	</property>
-	<property>
-		<name>dfs.namenode.http-address</name>
-		<value>master:50070</value>
-	</property>
-	<property>
-		<name>dfs.namenode.secondary.http-address</name>
-		<value>master:50090</value>
-	</property> 	
+  <property>
+    <name>dfs.replication</name>
+    <value>3</value>
+  </property>
+  <property>
+    <name>dfs.blocksize</name>
+    <value>5242880</value>
+  </property>
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:/opt/hadoop/hadoop_data/hdfs/namenode</value>
+  </property>
+  <property>
+    <name>dfs.datanode.name.dir</name>
+    <value>file:/opt/hadoop/hadoop_data/hdfs/datanode</value>
+  </property>
+  <property>
+    <name>dfs.permissions</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>dfs.datanode.use.datanode.hostname</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>dfs.namenode.http-address</name>
+    <value>master:50070</value>
+  </property>
+  <property>
+    <name>dfs.namenode.secondary.http-address</name>
+    <value>master:50090</value>
+  </property>
 </configuration>
 
 ```
@@ -679,74 +685,58 @@ sudo nano yarn-site.xml
 
 ```xml
 <configuration>
-	<property>
-		<name>yarn.nodemanager.aux-services</name>
-		<value>mapreduce_shuffle</value>	
-	</property>
-	<property>
-		<name>yarn.log-aggregation-enable</name>
-		<value>true</value>
-	</property>
-	<property>
-		<name>yarn.resourcemanager.scheduler.address</name>
-		<value>master:8030</value>
-	</property>
-	<property>
-		<name>yarn.resourcemanager.resource-tracker.address</name>
-		<value>master:8031</value>
-	</property>
-	<property>
-		<name>yarn.resourcemanager.address</name>
-		<value>master:8032</value>
-	</property>
-	<property>
-		<name>yarn.resourcemanager.admin.address</name>
-		<value>master:8033</value>
-	</property>
-	<property>
-		<name>yarn.resourcemanager.webapp.address</name>
-		<value>master:8088</value>
-	</property>
-	<property>
-		<name>yarn.nodemanager.resource.cpu-vcores</name>
-		<value>4</value>
-	</property>
-	<property>
-		<name>yarn.nodemanager.resource.percentage-physical-cpu-limit</name>
-		<value>90</value>
-	</property>
-	<property>
-		<name>yarn.nodemanager.resource.memory-mb</name>
-		<value>768</value>
-	</property>
-	<property>
-		<name>yarn.scheduler.minimum-allocation-mb</name>
-		<value>64</value>
-	</property>
-	<property>
-		<name>yarn.scheduler.maximum-allocation-mb</name>
-		<value>256</value>
-	</property>
-	<property>
-		<name>yarn.scheduler.minimum-allocation-vcores</name>
-		<value>1</value>
-	</property>
-	<property>
-		<name>yarn.scheduler.maximum-allocation-vcores</name>
-		<value>4</value>
-	</property>
-	<property>
-		<name>yarn.nodemanager.vmem-check-enabled</name>
-		<value>true</value>
-	</property>
-	<property>
-		<name>yarn.nodemanager.pmem-check-enabled</name>
-		<value>true</value>
-	</property>
-	<property>
-		<name>yarn.nodemanager.vmem-pmem-ratio</name>
-		<value>2.1</value>
-	</property>
+    <property>
+        <name>yarn.resourcemanager.resource-tracker.address</name>
+        <value>master:8031</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.scheduler.address</name>
+        <value>master:8030</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.address</name>
+        <value>master:8032</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.resource.cpu-vcores</name>
+        <value>4</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.resource.memory-mb</name>
+        <value>768</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>64</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>256</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-vcores</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-vcores</name>
+        <value>4</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.vmem-check-enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.pmem-check-enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.vmem-pmem-ratio</name>
+        <value>2.1</value>
+    </property>
 </configuration>
 ```
 
@@ -758,60 +748,59 @@ sudo nano mapred-site.xml
 
 ```xml
 <configuration>
-	<property>
-		<name>mapreduce.jobtracker.address</name>
-		<value>master:9001</value>
-	</property>
-	<property>
-		<name>mapreduce.framework.name</name>
-		<value>yarn</value>
-	</property>
-	<property>
-		<name>mapreduce.map.memory.mb</name>
-		<value>256</value>
-	</property>
-	<property>
-		<name>mapreduce.map.java.opts</name>
-		<value>-Xmx204m</value>
-	</property>
-	<property>
-		<name>mapreduce.map.cpu.vcores</name>
-		<value>2</value>
-	</property>
-	<property>
-		<name>mapreduce.reduce.memory.mb</name>
-		<value>128</value>
-	</property>
-	<property>
-		<name>mapreduce.reduce.java.opts</name>
-		<value>-Xmx102m</value>
-	</property>
-	<property>
-		<name>mapreduce.reduce.cpu.vcores</name>
-		<value>2</value>
-	</property>
-	<property>
-		<name>yarn.app.mapreduce.am.resource.mb</name>
-		<value>128</value>
-	</property>
-	<property>
-		<name>yarn.app.mapreduce.am.command-opts</name>
-		<value>-Xmx102m</value>
-	</property>
-	<property>
-		<name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
-		<value>1</value>
-	</property>
-	<property>
-		<name>mapreduce.job.maps</name>
-		<value>4</value>
-	</property>
-	<property>
-		<name>mapreduce.job.reduces</name>
-		<value>4</value>
-	</property>
+    <property>
+      <name>mapred.job.tracker</name>
+      <value>master:9001</value>
+    </property>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+        <name>mapreduce.map.memory.mb</name>
+        <value>256</value>
+    </property>
+    <property>
+        <name>mapreduce.map.java.opts</name>
+        <value>-Xmx204m</value>
+    </property>
+    <property>
+        <name>mapreduce.map.cpu.vcores</name>
+        <value>2</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.memory.mb</name>
+        <value>128</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.java.opts</name>
+        <value>-Xmx102m</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.cpu.vcores</name>
+        <value>2</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.resource.mb</name>
+        <value>128</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.command-opts</name>
+        <value>-Xmx102m</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.resource.cpu-vcores</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>mapreduce.job.maps</name>
+        <value>4</value>
+    </property>
+    <property>
+        <name>mapreduce.job.reduces</name>
+        <value>4</value>
+    </property>
 </configuration>
-
 
 ```
 #### Adicione todos hostname dos slaves. salvar e fechar.
@@ -1006,7 +995,7 @@ hduser@node1:/opt/hadoop $ hdfs namenode -format
 STARTUP_MSG: Starting NameNode
 STARTUP_MSG:   host = master/10.6.1.228
 STARTUP_MSG:   args = [-format]
-STARTUP_MSG:   version = 2.7.6
+STARTUP_MSG:   version = 2.7.5
 STARTUP_MSG:   classpath = /opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/log4j-1.2.17.jar:/opt/hadoop/share/hadoop/common/lib/jetty-util-6.1.26.jar
 ...
 
@@ -1032,52 +1021,32 @@ cd $HADOOP_HOME/sbin
 ./start-dfs.sh
 
 ```
+hduser@master:~$ start-dfs.sh
 Starting namenodes on [master]
 master: starting namenode, logging to /opt/hadoop/logs/hadoop-hduser-namenode-master.out
-node6: Ubuntu 16.04.3 LTS
-node6: 
-node6: rcn-ee.net console Ubuntu Image 2018-02-09
-node6: 
-node6: Support/FAQ: http://elinux.org/BeagleBoardUbuntu
-node6: 
-node6: default username:password is [ubuntu:temppwd]
-node6: 
-localhost: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-master.out
-node5: Ubuntu 16.04.4 LTS
 node3: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node3.out
 node2: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node2.out
+node4: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node4.out
 node1: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node1.out
 node6: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node6.out
-node4: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node4.out
 node5: starting datanode, logging to /opt/hadoop/logs/hadoop-hduser-datanode-node5.out
 Starting secondary namenodes [master]
 master: starting secondarynamenode, logging to /opt/hadoop/logs/hadoop-hduser-secondarynamenode-master.out
-
 
 ```
 
 ./start-yarn.sh
 
 ```
+hduser@master:~$ start-yarn.sh
 starting yarn daemons
 starting resourcemanager, logging to /opt/hadoop/logs/yarn-hduser-resourcemanager-master.out
-node6: Ubuntu 16.04.3 LTS
-node6: 
-node6: rcn-ee.net console Ubuntu Image 2018-02-09
-node6: 
-node6: Support/FAQ: http://elinux.org/BeagleBoardUbuntu
-node6: 
-node6: default username:password is [ubuntu:temppwd]
-node6: 
-node2: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node2.out
-localhost: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-master.out
-node5: Ubuntu 16.04.4 LTS
 node3: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node3.out
-node4: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node4.out
-node6: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node6.out
 node1: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node1.out
+node4: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node4.out
+node2: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node2.out
+node6: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node6.out
 node5: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager-node5.out
-
 
 ```
 
@@ -1086,13 +1055,19 @@ node5: starting nodemanager, logging to /opt/hadoop/logs/yarn-hduser-nodemanager
 jps 
 
 ```
-hduser@node1:/opt/hadoop/sbin $ jps
-2209 Jps
-2082 NodeManager
-1992 ResourceManager
-1819 SecondaryNameNode
-1661 DataNode
-1567 NameNode
+hduser@master:~$ jps
+30400 NameNode
+13724 Jps
+30638 SecondaryNameNode
+30799 ResourceManager
+
+
+```
+```
+hduser@node1:~ $ jps
+23862 NodeManager
+2235 Jps
+23725 DataNode
 
 ```
 
@@ -1103,22 +1078,38 @@ cd $HADOOP_INSTALL/sbin
 ./stop-dfs.sh 
 
 ```
-hduser@node1:/opt/hadoop/sbin $ ./stop-dfs.sh
-Stopping namenodes on [node1]
-node1: stopping namenode
-localhost: stopping datanode
-Stopping secondary namenodes [0.0.0.0]
-0.0.0.0: stopping secondarynamenode
+hduser@master:~$ stop-dfs.sh
+Stopping namenodes on [master]
+master: stopping namenode
+node2: stopping datanode
+node1: stopping datanode
+node4: stopping datanode
+node5: stopping datanode
+node6: stopping datanode
+node3: stopping datanode
+Stopping secondary namenodes [master]
+master: stopping secondarynamenode
+
 
 ```
 
 ./stop-yarn.sh
 ```
-hduser@node1:/opt/hadoop/sbin $ ./stop-yarn.sh
+hduser@master:~$ stop-yarn.sh
 stopping yarn daemons
 stopping resourcemanager
-localhost: stopping nodemanager
+node1: stopping nodemanager
+node3: stopping nodemanager
+node2: stopping nodemanager
+node4: stopping nodemanager
+node5: stopping nodemanager
+node6: stopping nodemanager
+node2: stopping  nodemanager 
+node4: stopping  nodemanager
+node6: stopping  nodemanager
+node5: stopping  nodemanager
 no proxyserver to stop
+
 
 ```
 
@@ -1128,11 +1119,10 @@ no proxyserver to stop
 
 cd $HADOOP_INSTALL/bin
 
-./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.6.jar pi 4 2 
+./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar pi 4 2 
 
 ```
-hduser@node1:cd $HADOOP_INSTALL/bin
-hduser@node1:/opt/hadoop/bin $ ./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar pi 4 2
+hduser@master:~$ hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar pi 4 2 
 Number of Maps  = 4
 Samples per Map = 2
 Wrote input for Map #0
@@ -1140,29 +1130,23 @@ Wrote input for Map #1
 Wrote input for Map #2
 Wrote input for Map #3
 Starting Job
-18/01/08 22:00:49 INFO client.RMProxy: Connecting to ResourceManager at node1/192.168.1.104:8050
-18/01/08 22:00:53 INFO input.FileInputFormat: Total input paths to process : 4
-18/01/08 22:00:54 INFO mapreduce.JobSubmitter: number of splits:4
-18/01/08 22:00:55 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1515459417185_0001
-18/01/08 22:00:58 INFO impl.YarnClientImpl: Submitted application application_1515459417185_0001
-18/01/08 22:00:59 INFO mapreduce.Job: The url to track the job: http://node1:8088/proxy/application_1515459417185_0001/
-18/01/08 22:00:59 INFO mapreduce.Job: Running job: job_1515459417185_0001
-18/01/08 22:01:58 INFO mapreduce.Job: Job job_1515459417185_0001 running in uber mode : false
-18/01/08 22:01:58 INFO mapreduce.Job:  map 0% reduce 0%
-18/01/08 22:02:44 INFO mapreduce.Job:  map 25% reduce 0%
-18/01/08 22:02:44 INFO mapreduce.Job: Task Id : attempt_1515459417185_0001_m_000001_0, Status : FAILED
-Container killed on request. Exit code is 137
-Container exited with a non-zero exit code 137
-Killed by external signal
-
-18/01/08 22:03:11 INFO mapreduce.Job:  map 75% reduce 0%
-18/01/08 22:03:28 INFO mapreduce.Job:  map 100% reduce 0%
-18/01/08 22:03:30 INFO mapreduce.Job:  map 100% reduce 100%
-18/01/08 22:03:31 INFO mapreduce.Job: Job job_1515459417185_0001 completed successfully
-18/01/08 22:03:32 INFO mapreduce.Job: Counters: 51
+18/05/17 17:39:57 INFO client.RMProxy: Connecting to ResourceManager at master/10.6.1.228:8032
+18/05/17 17:39:58 INFO input.FileInputFormat: Total input paths to process : 4
+18/05/17 17:39:58 INFO mapreduce.JobSubmitter: number of splits:4
+18/05/17 17:39:58 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1526583257838_0003
+18/05/17 17:39:59 INFO impl.YarnClientImpl: Submitted application application_1526583257838_0003
+18/05/17 17:39:59 INFO mapreduce.Job: The url to track the job: http://master:8088/proxy/application_1526583257838_0003/
+18/05/17 17:39:59 INFO mapreduce.Job: Running job: job_1526583257838_0003
+18/05/17 17:40:29 INFO mapreduce.Job: Job job_1526583257838_0003 running in uber mode : false
+18/05/17 17:40:29 INFO mapreduce.Job:  map 0% reduce 0%
+18/05/17 17:40:44 INFO mapreduce.Job:  map 50% reduce 0%
+18/05/17 17:40:51 INFO mapreduce.Job:  map 100% reduce 0%
+18/05/17 17:41:00 INFO mapreduce.Job:  map 100% reduce 100%
+18/05/17 17:41:01 INFO mapreduce.Job: Job job_1526583257838_0003 completed successfully
+18/05/17 17:41:01 INFO mapreduce.Job: Counters: 50
 	File System Counters
 		FILE: Number of bytes read=94
-		FILE: Number of bytes written=611857
+		FILE: Number of bytes written=611486
 		FILE: Number of read operations=0
 		FILE: Number of large read operations=0
 		FILE: Number of write operations=0
@@ -1172,19 +1156,18 @@ Killed by external signal
 		HDFS: Number of large read operations=0
 		HDFS: Number of write operations=3
 	Job Counters 
-		Failed map tasks=1
-		Launched map tasks=5
+		Launched map tasks=4
 		Launched reduce tasks=1
-		Other local map tasks=1
-		Data-local map tasks=4
-		Total time spent by all maps in occupied slots (ms)=607748
-		Total time spent by all reduces in occupied slots (ms)=33332
-		Total time spent by all map tasks (ms)=151937
-		Total time spent by all reduce tasks (ms)=16666
-		Total vcore-milliseconds taken by all map tasks=303874
-		Total vcore-milliseconds taken by all reduce tasks=33332
-		Total megabyte-milliseconds taken by all map tasks=38895872
-		Total megabyte-milliseconds taken by all reduce tasks=2133248
+		Data-local map tasks=3
+		Rack-local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=252176
+		Total time spent by all reduces in occupied slots (ms)=23762
+		Total time spent by all map tasks (ms)=63044
+		Total time spent by all reduce tasks (ms)=11881
+		Total vcore-milliseconds taken by all map tasks=126088
+		Total vcore-milliseconds taken by all reduce tasks=23762
+		Total megabyte-milliseconds taken by all map tasks=16139264
+		Total megabyte-milliseconds taken by all reduce tasks=1520768
 	Map-Reduce Framework
 		Map input records=4
 		Map output records=8
@@ -1201,10 +1184,10 @@ Killed by external signal
 		Shuffled Maps =4
 		Failed Shuffles=0
 		Merged Map outputs=4
-		GC time elapsed (ms)=2807
-		CPU time spent (ms)=9550
-		Physical memory (bytes) snapshot=719986688
-		Virtual memory (bytes) snapshot=1523646464
+		GC time elapsed (ms)=2578
+		CPU time spent (ms)=9530
+		Physical memory (bytes) snapshot=744419328
+		Virtual memory (bytes) snapshot=1524695040
 		Total committed heap usage (bytes)=502022144
 	Shuffle Errors
 		BAD_ID=0
@@ -1217,8 +1200,9 @@ Killed by external signal
 		Bytes Read=472
 	File Output Format Counters 
 		Bytes Written=97
-Job Finished in 164.174 seconds
+Job Finished in 64.386 seconds
 Estimated value of Pi is 3.50000000000000000000
+
 
 ```
 
@@ -1314,7 +1298,7 @@ hdfs dfs -copyToLocal /license-out.txt ~/
 cat ~/license-out.txt/part-r-00000
 
 ```
-hduser@node1:/opt/hadoop/bin $ cat  ~/license-out.txt/part-r-00000
+hduser@master:/opt/hadoop/bin $ cat  ~/license-out.txt/part-r-00000
 "Contributor"	2
 "Derivative	1
 "Legal	1
@@ -1479,4 +1463,3 @@ https://www.tutorialspoint.com/hadoop/
 http://hadoop.praveendeshmane.co.in/hadoop/hadoop-2-6-4-fully-distributed-mode-installation-on-ubuntu-14-04.jsp
 
 https://github.com/google/protobuf
-
