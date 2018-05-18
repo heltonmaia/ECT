@@ -429,7 +429,7 @@ patch < HADOOP-9320.patch
 
 sudo -i
 
-cd hadoop-2.7.6-src
+cd hadoop-2.7.5-src
 
 #### Sem o debug ativo:
 
@@ -817,14 +817,6 @@ node6
 
 ````
 
-#### Crie pastas e permissões para o Logs
-
-sudo mkdir -p /opt/hadoop/logs
-
-sudo chown hduser:hadoop /opt/hadoop/logs -R
-
-sudo chmod 750 /opt/hadoop/logs
-
 **OBS1.:** para diminuir o trabalho e ganhar tempo o ideal é criar uma imagem do sistema do master para gravar nós. Outra opção é cópiar por meio de SCP.
 
 
@@ -1104,10 +1096,6 @@ node2: stopping nodemanager
 node4: stopping nodemanager
 node5: stopping nodemanager
 node6: stopping nodemanager
-node2: stopping  nodemanager 
-node4: stopping  nodemanager
-node6: stopping  nodemanager
-node5: stopping  nodemanager
 no proxyserver to stop
 
 
