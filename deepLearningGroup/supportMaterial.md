@@ -6,11 +6,9 @@
 * Starter Bundle, “Deep Learning for Computer Vision with Python”
 
 ### Introduction
-* Linear Algebra: https://towardsdatascience.com/linear-algebra-for-deep-learning-506c19c0d6fa
- 
+* Linear Algebra: https://towardsdatascience.com/linear-algebra-for-deep-learning-506c19c0d6fa 
 * Do You Need Help Getting Started with Applied Machine Learning?
 https://machinelearningmastery.com/start-here/
-
 * A Beginner's Guide To Understanding Convolutional Neural Networks
 https://adeshpande3.github.io/adeshpande3.github.io/A-Beginner's-Guide-To-Understanding-Convolutional-Neural-Networks/
 
