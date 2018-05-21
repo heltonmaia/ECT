@@ -13,6 +13,7 @@ https://machinelearningmastery.com/start-here/
 https://adeshpande3.github.io/adeshpande3.github.io/A-Beginner's-Guide-To-Understanding-Convolutional-Neural-Networks/
 
 ### Tutorials
+ * Linear Algebra: https://towardsdatascience.com/linear-algebra-for-deep-learning-506c19c0d6fa
  * Tutorials(pt): https://matheusfacure.github.io/tutoriais/ 
  * Gradient Descent: https://towardsdatascience.com/gradient-descent-in-a-nutshell-eaf8c18212f0
  * Python Brasil - http://wiki.python.org.br/DocumentacaoPython 
