@@ -1,7 +1,7 @@
 # Instalação do HIPI - Hadoop Image Processing Interface
 
 
-#### 1. Verificar se o Java, gradle e hadoop estão instalados
+### 1. Verificar se o Java, gradle e hadoop estão instalados
 
 O HIPI é escrito em Java e foi testado com o Java 7 e 8. Verifique sua versão do Java com o seguinte comando:
 
@@ -34,7 +34,7 @@ hduser@master:~$ which gradle
 
 ```
 
-##### 2. Instalar o Gradle
+##### Instalar o Gradle
 
 sudo -i
 
@@ -51,8 +51,14 @@ hduser@master:~$ ls /opt/gradle/gradle-4.7
 bin  getting-started.html  init.d  lib  LICENSE  media  NOTICE
 
 ```
+Adicionar a variável ao path:
+
+sudo nano /etc/bash.bashrc 
+
+``` 
 export PATH=$PATH:/opt/gradle/gradle-4.7/bin
 
+```
 gradle -v
 
 ```
@@ -69,6 +75,49 @@ Groovy:       2.4.12
 Ant:          Apache Ant(TM) version 1.9.9 compiled on February 2 2017
 JVM:          1.8.0_171 (Oracle Corporation 25.171-b11)
 OS:           Linux 4.13.0-41-generic amd64
-```
 
+```
+### 2. Instalar HIPI 
+
+Baixar o repositório do HIPI:
+
+su hduser
+
+cd /opt
+
+sudo git clone https://github.com/uvagfx/hipi.git
+
+
+
+
+sudo mkdir -p examples/helloWorld/src/main/java/org/hipi/examples
+
+cd examples/helloWorld/src/main/java/org/hipi/examples
+
+sudo nano HelloWorld.java
+
+```
+package org.hipi.examples;
+
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+
+public class HelloWorld extends Configured implements Tool{
+
+        public int run(String[] args) throws Exception{
+                System.out.println("Hello HIPI!");
+                return 0;
+
+        }
+
+        public static void main(String[] args) throws Exception {
+                ToolRunner.run(new HelloWorld(), args);
+                System.exit(0);
+
+        }
+
+}
+
+```
 
