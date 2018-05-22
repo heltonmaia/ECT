@@ -81,18 +81,64 @@ OS:           Linux 4.13.0-41-generic amd64
 
 Baixar o repositório do HIPI:
 
-su hduser
+sudo su
 
 cd /opt
 
-sudo git clone https://github.com/uvagfx/hipi.git
+git clone https://github.com/uvagfx/hipi.git
 
+cd /opt/hipi
 
+gradle
 
+```
+root@master:/opt/hipi# gradle
+Starting a Gradle Daemon (subsequent builds will be faster)
 
-sudo mkdir -p examples/helloWorld/src/main/java/org/hipi/examples
+> Task :core:compileJava
+Note: /opt/hipi/core/src/main/java/org/hipi/imagebundle/mapreduce/HibRecordReader.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
 
-cd examples/helloWorld/src/main/java/org/hipi/examples
+> Task :install
+
+Finished building the HIPI library along with all tools and examples.
+
+BUILD SUCCESSFUL in 21s
+15 actionable tasks: 15 executed
+
+```
+
+gradle clean tools:hibImport:jar
+
+```
+root@master:/opt/hipi# gradle clean tools:hibImport:jar
+
+> Task :core:compileJava
+Note: /opt/hipi/core/src/main/java/org/hipi/imagebundle/mapreduce/HibRecordReader.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+BUILD SUCCESSFUL in 2s
+13 actionable tasks: 11 executed, 2 up-to-date
+
+```
+
+sudo mkdir -p /opt/hipi/examples/helloWorld/src/main/java/org/hipi/examples
+
+cd /opt/hipi/examples/helloWorld
+
+sudo nano build.gradle
+
+```
+jar{
+        manifest{
+                attributes("Main-Class":"org.hipi.examples.HelloWorld")
+                }
+
+}
+
+```
+
+cd /opt/hipi/examples/helloWorld/src/main/java/org/hipi/examples
 
 sudo nano HelloWorld.java
 
@@ -120,4 +166,33 @@ public class HelloWorld extends Configured implements Tool{
 }
 
 ```
+sudo nano /opt/hipi/settings.gradle 
+
+```
+, ':examples:helloWorld'
+
+```
+
+cd /opt/hipi/examples/helloWorld
+
+gradle jar
+
+```
+root@master:/opt/hipi/examples/helloWorld# gradle jar
+
+BUILD SUCCESSFUL in 1s
+2 actionable tasks: 2 executed
+
+```
+su  hduser
+
+hadoop jar /opt/hipi/examples/helloWorld/build/libs/helloWorld.jar
+
+
+```
+hduser@master:~$ hadoop jar /opt/hipi/examples/helloWorld/build/libs/helloWorld.jar
+Hello HIPI!
+
+```
+
 
