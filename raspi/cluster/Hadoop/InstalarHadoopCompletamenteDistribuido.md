@@ -19,7 +19,7 @@ https://etcher.io/
 
 ## Configuração para o master e nos
 
-## Instalação das dependências na Rapberry e Beaglebone
+## Instalação das dependências na Raspberry e Beaglebone
 
 sudo -i
 
@@ -224,7 +224,7 @@ Default locale: pt_BR, platform encoding: UTF-8
 OS name: "linux", version: "4.9.35-v7+", arch: "arm", family: "unix"
 
 ```
-## Configuração de rede na Rapberry e Beaglebone
+## Configuração de rede na Raspberry e Beaglebone
 
 #### Desativar o ipv6:
 
@@ -298,7 +298,7 @@ sudo adduser --ingroup hadoop hduser
 
 sudo adduser hduser sudo
 
-## Instalação do Hadoop-2.7.6 Rapberry e Beaglebone
+## Instalação do Hadoop-2.7.6 Raspberry e Beaglebone
 
 #### Baixar e descompactar o hadoop:
 
