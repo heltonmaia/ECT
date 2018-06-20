@@ -21,6 +21,10 @@ https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
  * Image Processing in OpenCV: http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_tutorials.html 
  * Google Course: https://developers.google.com/machine-learning/crash-course/
 
+### Math
+"How to Learn Mathematics Fast" 
+https://github.com/llSourcell/learn_math_fast#books
+
 ### Examples
 * Using neural nets to recognize handwritten digits
 http://neuralnetworksanddeeplearning.com/chap1.html
