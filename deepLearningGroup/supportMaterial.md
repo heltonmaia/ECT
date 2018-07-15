@@ -36,3 +36,4 @@ https://youtu.be/IHZwWFHWa-w
 https://youtu.be/IHZwWFHWa-w
 * Machine Learning - Supervised VS Unsupervised Learning
 https://youtu.be/cfj6yaYE86U
+* Convolutional Neural Networks (CNNs) by Andrew Ng [full course]: https://goo.gl/C5y1Cj 
