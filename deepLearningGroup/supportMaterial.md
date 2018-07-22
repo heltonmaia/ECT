@@ -25,6 +25,9 @@ https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
 "How to Learn Mathematics Fast" 
 https://github.com/llSourcell/learn_math_fast/blob/master/README.md
 
+### Dataset
+https://archive.ics.uci.edu/ml/index.php
+
 ### Examples
 * Using neural nets to recognize handwritten digits
 http://neuralnetworksanddeeplearning.com/chap1.html
