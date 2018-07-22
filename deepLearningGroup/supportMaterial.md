@@ -26,7 +26,7 @@ https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
 https://github.com/llSourcell/learn_math_fast/blob/master/README.md
 
 ### Dataset
-https://archive.ics.uci.edu/ml/index.php
+* UC Irvine Machine Learning Repository: https://archive.ics.uci.edu/ml/index.php
 
 ### Examples
 * Using neural nets to recognize handwritten digits
