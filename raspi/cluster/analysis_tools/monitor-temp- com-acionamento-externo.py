@@ -9,7 +9,7 @@ num = open('numeroTeste.txt','w')
 num.writelines(str(teste+1))
 num.close()
 
-PIN = 23
+PIN = 18
 
 gpio.setmode(gpio.BCM)
 gpio.setup(PIN, gpio.IN, pull_up_down = gpio.PUD_DOWN)
@@ -21,7 +21,7 @@ arquivo = open(nome_Arquivo,'w')
 
 
 def measure_temp():
-    temp = os.popen("vcgencmd measure_temp").readline()
+    temp = os.popen("sudo vcgencmd measure_temp").readline()
     return (temp.replace("temp=",""))
 def temp_cpu():
         
