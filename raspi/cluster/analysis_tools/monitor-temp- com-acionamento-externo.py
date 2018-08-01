@@ -9,7 +9,7 @@ num = open('numeroTeste.txt','w')
 num.writelines(str(teste+1))
 num.close()
 
-PIN = 23
+PIN = 18
 
 gpio.setmode(gpio.BCM)
 gpio.setup(PIN, gpio.IN, pull_up_down = gpio.PUD_DOWN)
