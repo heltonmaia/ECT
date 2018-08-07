@@ -980,6 +980,8 @@ sudo chmod 750 /opt/hadoop/hadoop_data/hdfs
 
 cd $HADOOP_INSTALL
 
+hdfs namenode -format
+
 ```
 hduser@node1:/opt/hadoop $ hdfs namenode -format
 18/05/07 13:00:06 INFO namenode.NameNode: STARTUP_MSG: 
