@@ -17,13 +17,12 @@ This repository contains general information about projects under development at
 
 ## Projects
 
-* Distributed Processing Using Raspberry Pi Cluster and Apache Hadoop
+* (2017-2018) Distributed Processing Using Raspberry Pi Cluster and Apache Hadoop
 
-* Image Classification Using Support Vector Machines
+* (2018-2019)
 
-* Object Tracking with OpenCV
+* (2018-2019)
 
-* Deep Learning Group
 
 
  
