@@ -7,9 +7,9 @@ This repository contains general information about projects under development.
 
 ## Professor
 
-Helton Maia - helton.maia@ect.ufrn.br
+Member of Robotics Automation Laboratory (UFRN/ECT/LAR)
 
-Member of Robotics Automation Laboratory (UFRN/LAR)
+Helton Maia - helton.maia@ect.ufrn.br
 
 ## Projects
 
