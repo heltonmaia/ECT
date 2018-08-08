@@ -1,4 +1,4 @@
-# General information 
+## General information 
 Federal university of Rio Grande do Norte - UFRN
 This repository contains general information about projects under development at School of Science and Technology ECT/UFRN.
 
