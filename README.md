@@ -18,6 +18,4 @@ Helton Maia - helton.maia@ect.ufrn.br
 * (2018-2019) Deep Learning for Behavioral Classification of Mice During Behavioral Neuroscience Experiments
 
 * (2017-2018) Distributed Processing Using Raspberry Pi Cluster and Apache Hadoop
-
-## Folders
  
