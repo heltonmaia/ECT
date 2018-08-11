@@ -298,7 +298,7 @@ sudo adduser --ingroup hadoop hduser
 
 sudo adduser hduser sudo
 
-## Instalação do Hadoop-2.7.6 Raspberry e Beaglebone
+## Instalação do Hadoop-2.7.5 Raspberry e Beaglebone
 
 #### Baixar e descompactar o hadoop:
 
@@ -1206,7 +1206,7 @@ hdfs dfs -ls /
 
 cd /opt/hadoop/bin
 
-./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.6.jar wordcount /license.txt /license-out.txt
+./hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar wordcount /license.txt /license-out.txt
 
 ```
 
