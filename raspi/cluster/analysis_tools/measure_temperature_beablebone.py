@@ -8,6 +8,7 @@ Created on Wed Aug  8 11:34:46 2018
 import Adafruit_BBIO.GPIO as GPIO
 import time
 import os
+import subprocess
 
 #initialize the pin as an INPUT
 
@@ -26,7 +27,11 @@ def main():
     
     node= os.popen("uname -n").readline()
     node = node.split('\n')[0] 
-    nome_Arquivo =  'dadosTempertatura_Teste_'+ node +\
+    """
+        nome do arquivo:
+        dadosTemperatura_Teste_nodeX_hora.mintus.segundo_dia.mes.ano.txt
+    """
+    nome_Arquivo =  node + 'Tempertatura_' + \
                     time.strftime('_%l.%M.%S_%d.%m.%Y')+'.txt'    
     arquivo = open(nome_Arquivo,'w')
     while True:
@@ -42,5 +47,7 @@ def main():
         time.sleep(1)
         
     arquivo.close()
+    diretorio = "hduser@master:/home/hduser/HadoopDados"
+    subprocess.call(["scp",nome_Arquivo,diretorio])
 
 main()
