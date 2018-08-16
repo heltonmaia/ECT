@@ -22,14 +22,16 @@ virtuabotixRTC myRTC(6, 7, 8);
 
 //Para dar inicio a leitura, digite 'i'. Para terminar, digite 't'.
 
-float corrente = 0;
-float leitura = 0;
+float corrente = 0.0;
+float leitura = 0.0;
+float tempAux = 0.0;
+
 boolean habilitar = false;
 char input;
 int medPorSeg = 10;
 int auxTime = 1000/medPorSeg;
 int contadorAux = 2;
-float tempAux = 0.0;
+
 //Porta digital em que sera mandando o pulso para medir temperatura na Rasp
 int sinal = 9;
 //Porta analogica em que sao medidos os valores de corrente do sensor
@@ -41,6 +43,7 @@ float fator = 1000.00/66.00;
 //Mapeamento de Vout do sensor considerando seus parametros, retornando o valor de tensao de saida normalizado
 float mapFloat(int leitura);
 String nameFile="";
+
 void setup() {
   Serial.begin(9600); 
   // Initialize device.
@@ -83,13 +86,16 @@ void loop() {
   dht.temperature().getEvent(&event);
  
   //Quando ha algo para ser lido na comunicaçao serial
-  if(Serial.available() == 1){
+  if(Serial.available() > 0){
     
     input = Serial.read();
+    
     if(input == 'i'){
+      Serial.println("AbrindoLeituras");
       // open the file. note that only one file can be open at a time,
       // so you have to close this one before opening another.
       MyFile = SD.open("leituras.csv", FILE_WRITE);
+      
       nameFile.concat("Current_AmbTemp_");
       nameFile.concat(String(myRTC.dayofmonth));
       nameFile.concat( ".");
@@ -103,11 +109,14 @@ void loop() {
       nameFile.concat('.'); 
       nameFile.concat(String(myRTC.seconds));
       nameFile.concat(".csv");
+      
       MyFile.println(nameFile);
+      
       //Sinal digital para habilitar leitura de temperatura
       //CUIDADO!! Realizar divisor de tensao para o sinal nao passar de 3.3V na placa Rasp
       digitalWrite(sinal, HIGH);
-      delay(100);
+      delay(1);
+      
       //Comunicacao serial para habilitar a execucao do codigo Python
       //Serial.print('i');
       //Habilitar o codigo de leitura de corrente
@@ -115,11 +124,13 @@ void loop() {
       //Encerrando o pulso dado para a placa para medir temperatura
       digitalWrite(sinal, LOW);
     }
+    
     if(input == 't'){
+      Serial.println("FechandoLeituras");
       //Sinal digital para desabilitar leitura de temperatura
       //CUIDADO!! Realizar divisor de tensao para o sinal nao passar de 3.3V na placa Rasp
       digitalWrite(sinal, HIGH);
-      delay(100);
+      delay(1);
       //Comunicacao serial para parar a execucao do codigo Python
       //Serial.print('t');
       //Desabilitar o codigo de leitura de corrente
@@ -127,7 +138,31 @@ void loop() {
       digitalWrite(sinal, LOW);
       MyFile.close();
     }
+    if(input == 'l'){
+      
+      File dataFile = SD.open("leituras.csv");
+    
+      // if the file is available, write to it:
+      if (dataFile) {
+        while (dataFile.available()) {
+          Serial.write(dataFile.read());
+        }
+        dataFile.close();
+      }
+      // if the file isn't open, pop up an error:
+      else {
+        Serial.println("error opening leituras.csv");
+      }
+    }
+    if(input == 'r'){
+      
+      SD.remove("leituras.csv");
+     }
+    
+    
+    
   }
+  
   if(habilitar == true){
     
     if(contadorAux == 2){
@@ -135,21 +170,7 @@ void loop() {
         Serial.println("Error reading temperature!");
       }
       else {
-        Serial.print(myRTC.dayofmonth);                                                                          
-        Serial.print("/");                                                                                       
-        Serial.print(myRTC.month);                                                                               
-        Serial.print("/");                                                                                       
-        Serial.print(myRTC.year);                                                                                
-        Serial.print("  ");                                                                                      
-        Serial.print(myRTC.hours);                                                                               
-        Serial.print(":");                                                                                       
-        Serial.print(myRTC.minutes);                                                                             
-        Serial.print(":");                                                                                       
-        Serial.println(myRTC.seconds);
-        Serial.print("Temperature: ");
         tempAux = event.temperature;
-        Serial.print(tempAux);
-        Serial.println(" *C");
         contadorAux = 0;
       }
     }
@@ -172,8 +193,6 @@ void loop() {
       corrente = -corrente;
     }
     
-    Serial.println(corrente,2);
-    
     MyFile.println(corrente,2);
     corrente = 0;
     contadorAux++;
@@ -185,4 +204,3 @@ void loop() {
 float mapFloat(int leitura){ 
   return (leitura-510)*voltsPorUnidade;
 }
-
