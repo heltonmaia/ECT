@@ -1,0 +1,4 @@
+teste5MBnode1Tempertatura__ 7.58.59_17.08.2018.txt
+teste5MBnode2Tempertatura__ 7.59.13_17.08.2018.txt
+teste5MBnode3Tempertatura__ 7.59.16_17.08.2018.txt
+teste5MBnode4Tempertatura__ 7.59.18_17.08.2018.txt
