@@ -496,7 +496,7 @@ sudo nano hdfs-site.xml
   </property>
   <property>
     <name>dfs.blocksize</name>
-    <value>5242880</value>
+    <value>104857600</value>
   </property>
   <property>
     <name>dfs.namenode.name.dir</name>
