@@ -51,7 +51,7 @@ def getTest(testcode):
     elif testcode == 12:
         return(["/opt/hadoop/bin/hadoop","jar","/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar","pi","4","2"])
     else:
-        return(None)
+        return(0)
 def printInformationList(out):
     for aux in out:
         print(str(aux))
@@ -87,9 +87,11 @@ def getFileToUploadHdfs(selectcode):
     elif selectcode == 9:
         return(["hdfs","dfs","-copyFromLocal","/home/hduser/Documentos/file_test/test900MB.txt","/files/test900MB.txt"])
     elif selectcode == 10:
-        return(["hdfs","dfs","-copyFromLocal","/home/hduser/Documentos/file_test/test1000MB.txt","/files/test1000MB.txt"])    
+        return(["hdfs","dfs","-copyFromLocal","/home/hduser/Documentos/file_test/test1000MB.txt","/files/test1000MB.txt"])
+    elif selectcode == 11:
+        return(["hdfs","dfs","-copyFromLocal","/opt/hadoop/LICENSE.txt","/license.txt"])    
     else:
-        return(None)
+        return(0)
 
 def uploadFileToHdfs(code):
    command = getFileToUploadHdfs(code)
@@ -117,7 +119,7 @@ def showFilesHDFS():
     print("error: "+error3)
 
 
-def statHadoop():
+def startHadoop():
     print ("stat Hadoop ")
     command = ["start-yarn.sh"]
     output1,error1 = execute(command)
@@ -177,23 +179,78 @@ def prepareHDFS():
     print("error: "+error6)
 
 def menu():
-    print("_____________________________ TESTS MENU _____________________________")
-    print("1  - Start the Hadoop")
-    print("2  - Stop the Hadoop")
-    print("3  - Show the files list in the HDFS")
-    print("4  - Prepare the HDFS")
-    print("5  - Execute the wordcount test with file size 100MB")
-    print("6  - Execute the wordcount test with file size 200MB")
-    print("7  - Execute the wordcount test with file size 300MB")
-    print("8  - Execute the wordcount test with file size 400MB")
-    print("9  - Execute the wordcount test with file size 500MB")
-    print("10 - Execute the wordcount test with file size 600MB")
-    print("11 - Execute the wordcount test with file size 700MB")
-    print("12 - Execute the wordcount test with file size 800MB")
-    print("13 - Execute the wordcount test with file size 900MB")
-    print("14 - Execute the wordcount test with file size 1000MB")
-    print("15 - Execute the wordcount test with file license.txt")
-    print("16 - Execute the PI test")
+    option = -1
+    while option != 0:
+        print("_____________________________ TESTS MENU _____________________________")
+        print("1  - Start the Hadoop")
+        print("2  - Stop the Hadoop")
+        print("3  - Show the files list in the HDFS")
+        print("4  - Prepare the HDFS")
+        print("5  - Execute the wordcount test with file size 100MB")
+        print("6  - Execute the wordcount test with file size 200MB")
+        print("7  - Execute the wordcount test with file size 300MB")
+        print("8  - Execute the wordcount test with file size 400MB")
+        print("9  - Execute the wordcount test with file size 500MB")
+        print("10 - Execute the wordcount test with file size 600MB")
+        print("11 - Execute the wordcount test with file size 700MB")
+        print("12 - Execute the wordcount test with file size 800MB")
+        print("13 - Execute the wordcount test with file size 900MB")
+        print("14 - Execute the wordcount test with file size 1000MB")
+        print("15 - Execute the wordcount test with file license.txt")
+        print("16 - Execute the PI test")
+        print("0  - Exit")
+
+        while option < 0 or option > 16:
+            option = input("inform the option: ")
+
+        if option == 0:
+            break
+        elif option == 1:
+            startHadoop()
+        elif option == 2:
+            stopHadoop()
+        elif option == 3:
+            showFilesHDFS()
+        elif option == 4:
+            prepareHDFS()
+        elif option == 5:
+            getFileToUploadHdfs(1)
+            execute(getTest(1))
+        elif option == 6:
+            getFileToUploadHdfs(2)
+            execute(getTest(2))
+        elif option == 7:
+            getFileToUploadHdfs(3)
+            execute(getTest(3))
+        elif option == 8:
+            getFileToUploadHdfs(4)
+            execute(getTest(4))
+        elif option == 9:
+            getFileToUploadHdfs(5)
+            execute(getTest(5))
+        elif option == 10:
+            getFileToUploadHdfs(6)
+            execute(getTest(6))
+        elif option == 11:
+            getFileToUploadHdfs(7)
+            execute(getTest(7))
+        elif option == 12:
+            getFileToUploadHdfs(8)
+            execute(getTest(8))
+        elif option == 13:
+            getFileToUploadHdfs(9)
+            execute(getTest(9))
+        elif option == 14:
+            getFileToUploadHdfs(10)
+            execute(getTest(10))
+        elif option == 15:
+            getFileToUploadHdfs(11)
+            execute(getTest(11))
+        elif option == 16:
+            execute(getTest(12))
+        else:
+            option = -1
+        
     
 
 
