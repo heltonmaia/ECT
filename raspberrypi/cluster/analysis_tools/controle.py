@@ -178,6 +178,53 @@ def prepareHDFS():
     printInformationList(output6)
     print("error: "+error6)
 
+def executeTest(n_test, codeTest, delay, delay_exec):
+    cont = 0
+    while(cont < n_test):
+        print ("execucao" +str(cont) +"\n") 
+    
+        sleep(delay)
+        ser.write(bytes("i","utf-8"))
+        sleep(delay_exec)
+        testli = getTest(11)
+        start = strftime("%H:%M:%S", gmtime())
+        saida, erro = execute(getTest(codeTest))
+        stop = strftime("%H:%M:%S", gmtime())
+    
+        sleep(delay_exec)
+        
+
+        print("\nSAIDA1\n")
+        print("\n")
+        print(saida)
+        
+        application = getInformation(saida,'Submitted application ')    
+        print(application)
+        print("\nERRO\n")
+        print(erro)
+        print("\n")
+        print("\nSAIDA2\n")
+        print("\n")
+        test = ["yarn", "application", "-status", application]
+        saida1,erro1 = execute(test)
+        
+        print(saida1)
+        print("\n")
+        
+        state = getInformation(saida1,'State : ')
+        finalState = getInformation(saida1,'Final-State : ')
+        if(state == 'FINISHED'):
+            ser.write(bytes("t","utf-8"))
+            if(finalState == 'SUCCEEDED'):
+                pass
+        
+        
+        print("\n")
+        print(state)
+        print(finalState)
+        cont = cont + 1
+        arquivo.writelines( start + "," + stop+ "\n")
+
 def menu():
     option = -1
     while option != 0:
@@ -200,8 +247,10 @@ def menu():
         print("16 - Execute the PI test")
         print("0  - Exit")
 
-        while option < 0 or option > 16:
+        while (option < 0 or option > 16) and n_test < 1 and delay_exec < 1:
             option = input("inform the option: ")
+            n_test = input("inform the number of test: ")
+            delay_exec = input("inform the delay for before and after (before = after): ")
 
         if option == 0:
             break
@@ -215,7 +264,7 @@ def menu():
             prepareHDFS()
         elif option == 5:
             getFileToUploadHdfs(1)
-            execute(getTest(1))
+            executeTest(n_test,1,10,60)
         elif option == 6:
             getFileToUploadHdfs(2)
             execute(getTest(2))
@@ -247,7 +296,7 @@ def menu():
             getFileToUploadHdfs(11)
             execute(getTest(11))
         elif option == 16:
-            execute(getTest(12))
+            
         else:
             option = -1
         
@@ -272,50 +321,6 @@ ser.reset_output_buffer()
 arquivo = open(file_name,'w')
 arquivo.writelines("tempo_start,tempo_stop\n")
 
-while(cont < n_test):
-    print ("execucao" +str(cont) +"\n") 
-   
-    sleep(delay)
-    ser.write(bytes("i","utf-8"))
-    sleep(delay_exec)
-    testli = getTest(11)
-    start = strftime("%H:%M:%S", gmtime())
-    saida, erro = execute(testli)
-    stop = strftime("%H:%M:%S", gmtime())
-   
-    sleep(delay_exec)
-    
-
-    print("\nSAIDA1\n")
-    print("\n")
-    print(saida)
-    
-    application = getInformation(saida,'Submitted application ')    
-    print(application)
-    print("\nERRO\n")
-    print(erro)
-    print("\n")
-    print("\nSAIDA2\n")
-    print("\n")
-    test = ["yarn", "application", "-status", application]
-    saida1,erro1 = execute(test)
-    
-    print(saida1)
-    print("\n")
-    
-    state = getInformation(saida1,'State : ')
-    finalState = getInformation(saida1,'Final-State : ')
-    if(state == 'FINISHED'):
-        ser.write(bytes("t","utf-8"))
-        if(finalState == 'SUCCEEDED'):
-            pass
-    
-    
-    print("\n")
-    print(state)
-    print(finalState)
-    cont = cont + 1
-    arquivo.writelines( start + "," + stop+ "\n")
     
 arquivo.close()
 
