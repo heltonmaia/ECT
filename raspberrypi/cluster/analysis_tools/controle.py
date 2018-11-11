@@ -182,12 +182,12 @@ def prepareHDFS():
     printInformationList(output6)
     print("error: "+error6)
 
-def executeTest(n_test, codeTest, delay, delay_exec):
+def executeTest(n_test, codeTest, delay_exec):
     cont = 0
     while(cont < n_test):
         print ("execucao" +str(cont) +"\n") 
     
-        sleep(delay)
+        sleep(10)
         ser.write(bytes("i","utf-8"))
         sleep(delay_exec)
         
@@ -240,6 +240,7 @@ def menu():
     delay_exec = -1
     while option != 0:
         print("_____________________________ TESTS MENU _____________________________")
+        print("0  - Exit")
         print("1  - Start the Hadoop")
         print("2  - Stop the Hadoop")
         print("3  - Show the files list in the HDFS")
@@ -256,12 +257,14 @@ def menu():
         print("14 - Execute the wordcount test with file size 1000MB")
         print("15 - Execute the wordcount test with file license.txt")
         print("16 - Execute the PI test")
-        print("0  - Exit")
+        print("17 - Check the node active")
+        print("18 - Check the pages")
+        
 
         while (option < 0 or option > 16) and n_test < 1 and delay_exec < 1:
             option = input("inform the option: ")
             n_test = input("inform the number of test: ")
-            delay_exec = input("inform the delay for before and after (before = after): ")
+            delay_exec = input("inform the delay for before and after to the execution (before = after): ")
 
         if option == 0:
             break
@@ -275,39 +278,39 @@ def menu():
             prepareHDFS()
         elif option == 5:
             getFileToUploadHdfs(1)
-            executeTest(n_test,1,10,delay_exec)
+            executeTest(n_test, 1, delay_exec)
         elif option == 6:
             getFileToUploadHdfs(2)
-            executeTest(n_test,2,10,delay_exec)
+            executeTest(n_test, 2, delay_exec)
         elif option == 7:
             getFileToUploadHdfs(3)
-            executeTest(n_test,3,10,delay_exec)
+            executeTest(n_test, 3, delay_exec)
         elif option == 8:
             getFileToUploadHdfs(4)
-            executeTest(n_test,4,10,delay_exec)
+            executeTest(n_test, 4, delay_exec)
         elif option == 9:
             getFileToUploadHdfs(5)
-            executeTest(n_test,5,10,delay_exec)
+            executeTest(n_test, 5, delay_exec)
         elif option == 10:
             getFileToUploadHdfs(6)
-            executeTest(n_test,6,10,delay_exec)
+            executeTest(n_test, 6, delay_exec)
         elif option == 11:
             getFileToUploadHdfs(7)
-            executeTest(n_test,7,10,delay_exec)
+            executeTest(n_test,  7, delay_exec)
         elif option == 12:
             getFileToUploadHdfs(8)
-            executeTest(n_test,8,10,delay_exec)
+            executeTest(n_test, 8, delay_exec)
         elif option == 13:
             getFileToUploadHdfs(9)
-            executeTest(n_test,9,10,delay_exec)
+            executeTest(n_test, 9, delay_exec)
         elif option == 14:
             getFileToUploadHdfs(10)
-            executeTest(n_test,10,10,delay_exec)
+            executeTest(n_test, 10, delay_exec)
         elif option == 15:
             getFileToUploadHdfs(11)
-            executeTest(n_test,11,10,delay_exec)
+            executeTest(n_test, 11, delay_exec)
         elif option == 16:
-            executeTest(n_test,16,10,delay_exec)
+            executeTest(n_test, 12, delay_exec)
         else:
             option = -1
         
@@ -330,8 +333,8 @@ ser.reset_input_buffer()
 ser.reset_output_buffer()
 
 arquivo = open(file_name,'w')
-arquivo.writelines("tempo_start,tempo_stop\n")
-
+arquivo.writelines("tempo_start,tempo_stop,state,state_final\n")
+menu()
     
 arquivo.close()
 
