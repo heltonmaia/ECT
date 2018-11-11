@@ -204,37 +204,41 @@ def executeTest(n_test, codeTest, delay_exec):
         print("\nERRO_EXEC: ")
         print(erro_exec)
         print("\n")
-        
-        application = getInformation(saida_exec,'Submitted application ')    
-        print(application)
-        
-        print("\nSAIDA2\n")
-        print("\n")
-        test = ["yarn", "application", "-status", application]
-        saida_test, erro_test = execute(test)
-        
-        print("\nSAIDA_TEST: ")
-        print(saida_test)
-        print("\n")
-        print("\nERRO_TEST: ")
-        print(erro_test)
-        print("\n")
-        
-        state = getInformation(saida_test,'State : ')
-        finalState = getInformation(saida_test,'Final-State : ')
-        if(state == 'FINISHED'):
-            ser.write(bytes("t","utf-8"))
-            if(finalState == 'SUCCEEDED'):
-                pass
-        
-        
-        print("\n")
-        print(state)
-        print(finalState)
-        cont = cont + 1
-        arquivo.writelines( start + "," + stop+ "\n")
 
-def menu():
+        state = ''
+        state_final = ''
+        
+        while state != 'FINISHED':
+            application = getInformation(saida_exec,'Submitted application ')    
+            print(application)
+            
+        
+            test = ["yarn", "application", "-status", application]
+            saida_test, erro_test = execute(test)
+            
+            print("SAIDA_TEST: ")
+            print(saida_test)
+            print("ERRO_TEST: ")
+            print(erro_test)
+            
+            
+            state = getInformation(saida_test,'State : ')
+            finalState = getInformation(saida_test,'Final-State : ')
+            if(state == 'FINISHED'):
+                ser.write(bytes("t","utf-8"))
+                if(finalState == 'SUCCEEDED'):
+                    pass
+            
+            
+            print("STATE: ")
+            print(state)
+            print("STATE_FINAL: ")
+            print(finalState)
+
+        cont = cont + 1
+         file_main.writelines( start + "," + stop + "," + state + "," + state_final + "\n")
+
+def menu(file_main):
     option = -1
     n_test = -1
     delay_exec = -1
@@ -323,19 +327,21 @@ delay_exec = 5
 n_test = 1
 cont = 0
 
-file_name = "tempos" + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
-
+file_name_main = "tempos" + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
+file_name_log  = "log" + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
 while(ser.isOpen() == False):
     ser.open()
-print("Comunicacao Serial Disponivel")
+print("Communication Serial Available")
 
 ser.reset_input_buffer()
 ser.reset_output_buffer()
 
-arquivo = open(file_name,'w')
-arquivo.writelines("tempo_start,tempo_stop,state,state_final\n")
-menu()
+ file_main = open(file_name_main,'w')
+ file_main.writelines("tempo_start,tempo_stop,state,state_final\n")
+ file_log  = open(file_name_log,'w')
+menu(file_main,file_log)
     
-arquivo.close()
+ file_main.close()
+ file_log.close()
 
 
