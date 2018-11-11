@@ -182,13 +182,14 @@ def prepareHDFS():
     printInformationList(output6)
     print("error: "+error6)
 
-def executeTest(n_test, codeTest, delay_exec):
+def executeTest(n_test, codeTest, delay_exec, file_log):
     cont = 0
     while(cont < n_test):
-        print ("execucao" +str(cont) +"\n") 
+        print_exec = "execucao" +str(cont) +"\n"
+        print (print_exec) 
     
         sleep(10)
-        ser.write(bytes("i","utf-8"))
+        serial_arduino.write(bytes("i","utf-8"))
         sleep(delay_exec)
         
         start = strftime("%H:%M:%S", gmtime())
@@ -225,7 +226,7 @@ def executeTest(n_test, codeTest, delay_exec):
             state = getInformation(saida_test,'State : ')
             finalState = getInformation(saida_test,'Final-State : ')
             if(state == 'FINISHED'):
-                ser.write(bytes("t","utf-8"))
+                serial_arduino.write(bytes("t","utf-8"))
                 if(finalState == 'SUCCEEDED'):
                     pass
             
@@ -236,12 +237,15 @@ def executeTest(n_test, codeTest, delay_exec):
             print(finalState)
 
         cont = cont + 1
-         file_main.writelines( start + "," + stop + "," + state + "," + state_final + "\n")
+        file_log.writelines(print_exec + '\n' + application + "\n\n")
+        file_main.writelines( start + "," + stop + "," + state + "," + state_final + "\n")
 
-def menu(file_main):
-    option = -1
-    n_test = -1
+def menu(file_main, file_log):
+
+    option     = -1
+    n_test     = -1
     delay_exec = -1
+
     while option != 0:
         print("_____________________________ TESTS MENU _____________________________")
         print("0  - Exit")
@@ -265,7 +269,7 @@ def menu(file_main):
         print("18 - Check the pages")
         
 
-        while (option < 0 or option > 16) and n_test < 1 and delay_exec < 1:
+        while (option < 0 or option > 18) and n_test < 1 and delay_exec < 1:
             option = input("inform the option: ")
             n_test = input("inform the number of test: ")
             delay_exec = input("inform the delay for before and after to the execution (before = after): ")
@@ -282,66 +286,64 @@ def menu(file_main):
             prepareHDFS()
         elif option == 5:
             getFileToUploadHdfs(1)
-            executeTest(n_test, 1, delay_exec)
+            executeTest(n_test, 1, delay_exec, file_log)
         elif option == 6:
             getFileToUploadHdfs(2)
-            executeTest(n_test, 2, delay_exec)
+            executeTest(n_test, 2, delay_exec, file_log)
         elif option == 7:
             getFileToUploadHdfs(3)
-            executeTest(n_test, 3, delay_exec)
+            executeTest(n_test, 3, delay_exec, file_log)
         elif option == 8:
             getFileToUploadHdfs(4)
-            executeTest(n_test, 4, delay_exec)
+            executeTest(n_test, 4, delay_exec, file_log)
         elif option == 9:
             getFileToUploadHdfs(5)
-            executeTest(n_test, 5, delay_exec)
+            executeTest(n_test, 5, delay_exec, file_log)
         elif option == 10:
             getFileToUploadHdfs(6)
-            executeTest(n_test, 6, delay_exec)
+            executeTest(n_test, 6, delay_exec, file_log)
         elif option == 11:
             getFileToUploadHdfs(7)
-            executeTest(n_test,  7, delay_exec)
+            executeTest(n_test, 7, delay_exec, file_log)
         elif option == 12:
             getFileToUploadHdfs(8)
-            executeTest(n_test, 8, delay_exec)
+            executeTest(n_test, 8, delay_exec, file_log)
         elif option == 13:
             getFileToUploadHdfs(9)
-            executeTest(n_test, 9, delay_exec)
+            executeTest(n_test, 9, delay_exec, file_log)
         elif option == 14:
             getFileToUploadHdfs(10)
-            executeTest(n_test, 10, delay_exec)
+            executeTest(n_test, 10, delay_exec, file_log)
         elif option == 15:
             getFileToUploadHdfs(11)
-            executeTest(n_test, 11, delay_exec)
+            executeTest(n_test, 11, delay_exec, file_log)
         elif option == 16:
-            executeTest(n_test, 12, delay_exec)
+            executeTest(n_test, 12, delay_exec, file_log)
+        elif option == 17:
+            checkNodesActive()
+        elif option ==18:
+            checkPages()
         else:
             option = -1
-        
-    
+           
+serial_arduino = serial.Serial(port='/dev/ttyACM0',baudrate=9600,timeout=2)
 
+file_name_main = "time" + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
+file_name_log  = "log"    + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
 
-ser = serial.Serial(port='/dev/ttyACM0',baudrate=9600,timeout=2)
-delay = 10
-delay_exec = 5
-n_test = 1
-cont = 0
+while(serial_arduino.isOpen() == False):
+    serial_arduino.open()
 
-file_name_main = "tempos" + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
-file_name_log  = "log" + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
-while(ser.isOpen() == False):
-    ser.open()
 print("Communication Serial Available")
 
-ser.reset_input_buffer()
-ser.reset_output_buffer()
+serial_arduino.reset_input_buffer()
+serial_arduino.reset_output_buffer()
 
- file_main = open(file_name_main,'w')
- file_main.writelines("tempo_start,tempo_stop,state,state_final\n")
- file_log  = open(file_name_log,'w')
+file_main = open(file_name_main,'w')
+file_main.writelines("time_start,time_stop,state,state_final\n")
+file_log  = open(file_name_log,'w')
+
 menu(file_main,file_log)
     
- file_main.close()
- file_log.close()
-
-
+file_main.close()
+file_log.close()
