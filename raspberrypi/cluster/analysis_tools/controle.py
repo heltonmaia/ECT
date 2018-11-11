@@ -2,29 +2,6 @@ import serial
 import subprocess
 from time import  gmtime, strftime, sleep
 
-def execute(command):
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    
-    while process.returncode == None:
-        process.poll()
-        if process.returncode != None:
-                process.kill()
-    
-    process.wait()
-    output, errors= process.communicate()
-    output = output.splitlines()
-    return (output,errors)
-
-def getInformation(data,key):
-    for aux in data:
-        aux = aux.decode("utf-8")
-        information = aux.split(key)
-
-        if(len(information)>1):
-            break
-    out = information[1]
-    return(out)
-
 def getTest(testcode):
     if testcode == 1:
         return(["/opt/hadoop/bin/hadoop","jar","/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar","wordcount","/test100MB.txt","/result/"+str(cont)+"test100MBOut.txt"])
@@ -52,20 +29,6 @@ def getTest(testcode):
         return(["/opt/hadoop/bin/hadoop","jar","/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar","pi","4","2"])
     else:
         return(0)
-def printInformationList(out):
-    for aux in out:
-        print(str(aux))
-def checkPages():
-    command = ["jps"]
-    output,error = execute(command)
-    printInformationList(output)
-    print("error: "+error)
-
-def checkNodesActive():
-    command = ["yarn","node","-list"]
-    output,error = execute(command)
-    printInformationList(output)
-    print("error: "+error)
 
 def getFileToUploadHdfs(selectcode):
     if selectcode == 1:
@@ -92,6 +55,47 @@ def getFileToUploadHdfs(selectcode):
         return(["hdfs","dfs","-copyFromLocal","/opt/hadoop/LICENSE.txt","/license.txt"])    
     else:
         return(0)
+
+def execute(command):
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    
+    while process.returncode == None:
+        process.poll()
+        if process.returncode != None:
+                process.kill()
+    
+    process.wait()
+    output, errors= process.communicate()
+    output = output.splitlines()
+    return (output,errors)
+
+def getInformation(data,key):
+    for aux in data:
+        aux = aux.decode("utf-8")
+        information = aux.split(key)
+
+        if(len(information)>1):
+            break
+    out = information[1]
+    return(out)
+
+def printInformationList(out):
+    for aux in out:
+        print(str(aux))
+
+def checkPages():
+    command = ["jps"]
+    output,error = execute(command)
+    printInformationList(output)
+    print("error: "+error)
+
+def checkNodesActive():
+    command = ["yarn","node","-list"]
+    output,error = execute(command)
+    printInformationList(output)
+    print("error: "+error)
+
+
 
 def uploadFileToHdfs(code):
    command = getFileToUploadHdfs(code)
@@ -186,33 +190,38 @@ def executeTest(n_test, codeTest, delay, delay_exec):
         sleep(delay)
         ser.write(bytes("i","utf-8"))
         sleep(delay_exec)
-        testli = getTest(11)
+        
         start = strftime("%H:%M:%S", gmtime())
-        saida, erro = execute(getTest(codeTest))
+        saida_exec, erro_exec = execute(getTest(codeTest))
         stop = strftime("%H:%M:%S", gmtime())
     
         sleep(delay_exec)
         
 
-        print("\nSAIDA1\n")
+        print("\nSAIDA_EXEC: ")
+        print(saida_exec)
         print("\n")
-        print(saida)
+        print("\nERRO_EXEC: ")
+        print(erro_exec)
+        print("\n")
         
-        application = getInformation(saida,'Submitted application ')    
+        application = getInformation(saida_exec,'Submitted application ')    
         print(application)
-        print("\nERRO\n")
-        print(erro)
-        print("\n")
+        
         print("\nSAIDA2\n")
         print("\n")
         test = ["yarn", "application", "-status", application]
-        saida1,erro1 = execute(test)
+        saida_test, erro_test = execute(test)
         
-        print(saida1)
+        print("\nSAIDA_TEST: ")
+        print(saida_test)
+        print("\n")
+        print("\nERRO_TEST: ")
+        print(erro_test)
         print("\n")
         
-        state = getInformation(saida1,'State : ')
-        finalState = getInformation(saida1,'Final-State : ')
+        state = getInformation(saida_test,'State : ')
+        finalState = getInformation(saida_test,'Final-State : ')
         if(state == 'FINISHED'):
             ser.write(bytes("t","utf-8"))
             if(finalState == 'SUCCEEDED'):
@@ -227,6 +236,8 @@ def executeTest(n_test, codeTest, delay, delay_exec):
 
 def menu():
     option = -1
+    n_test = -1
+    delay_exec = -1
     while option != 0:
         print("_____________________________ TESTS MENU _____________________________")
         print("1  - Start the Hadoop")
@@ -264,39 +275,39 @@ def menu():
             prepareHDFS()
         elif option == 5:
             getFileToUploadHdfs(1)
-            executeTest(n_test,1,10,60)
+            executeTest(n_test,1,10,delay_exec)
         elif option == 6:
             getFileToUploadHdfs(2)
-            execute(getTest(2))
+            executeTest(n_test,2,10,delay_exec)
         elif option == 7:
             getFileToUploadHdfs(3)
-            execute(getTest(3))
+            executeTest(n_test,3,10,delay_exec)
         elif option == 8:
             getFileToUploadHdfs(4)
-            execute(getTest(4))
+            executeTest(n_test,4,10,delay_exec)
         elif option == 9:
             getFileToUploadHdfs(5)
-            execute(getTest(5))
+            executeTest(n_test,5,10,delay_exec)
         elif option == 10:
             getFileToUploadHdfs(6)
-            execute(getTest(6))
+            executeTest(n_test,6,10,delay_exec)
         elif option == 11:
             getFileToUploadHdfs(7)
-            execute(getTest(7))
+            executeTest(n_test,7,10,delay_exec)
         elif option == 12:
             getFileToUploadHdfs(8)
-            execute(getTest(8))
+            executeTest(n_test,8,10,delay_exec)
         elif option == 13:
             getFileToUploadHdfs(9)
-            execute(getTest(9))
+            executeTest(n_test,9,10,delay_exec)
         elif option == 14:
             getFileToUploadHdfs(10)
-            execute(getTest(10))
+            executeTest(n_test,10,10,delay_exec)
         elif option == 15:
             getFileToUploadHdfs(11)
-            execute(getTest(11))
+            executeTest(n_test,11,10,delay_exec)
         elif option == 16:
-            
+            executeTest(n_test,16,10,delay_exec)
         else:
             option = -1
         
