@@ -2,7 +2,7 @@ import serial
 import subprocess
 from time import  gmtime, strftime, sleep
 
-def getTest(testcode):
+def getTest(testcode, cont):
     if testcode == 1:
         return(["/opt/hadoop/bin/hadoop","jar","/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar","wordcount","/test100MB.txt","/result/"+str(cont)+"test100MBOut.txt"])
     elif testcode == 2:
@@ -28,7 +28,7 @@ def getTest(testcode):
     elif testcode == 12:
         return(["/opt/hadoop/bin/hadoop","jar","/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.5.jar","pi","4","2"])
     else:
-        return(0)
+        return(["echo","invalid option"])
 
 def getFileToUploadHdfs(selectcode):
     if selectcode == 1:
@@ -54,7 +54,7 @@ def getFileToUploadHdfs(selectcode):
     elif selectcode == 11:
         return(["hdfs","dfs","-copyFromLocal","/opt/hadoop/LICENSE.txt","/license.txt"])    
     else:
-        return(0)
+        return(["echo","invalid option"])
 
 def execute(command):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -81,19 +81,19 @@ def getInformation(data,key):
 
 def printInformationList(out):
     for aux in out:
-        print(str(aux))
+        print(str(aux.decode("utf-8")))
 
 def checkPages():
     command = ["jps"]
     output,error = execute(command)
     printInformationList(output)
-    print("error: "+error)
+    print("error: " + str(error))
 
 def checkNodesActive():
     command = ["yarn","node","-list"]
     output,error = execute(command)
     printInformationList(output)
-    print("error: "+error)
+    print("error: "+str(error))
 
 
 
@@ -101,53 +101,55 @@ def uploadFileToHdfs(code):
    command = getFileToUploadHdfs(code)
    output,error = execute(command)
    printInformationList(output)
-   print("error: "+error)
+   print("error: "+str(error))
 
 def showFilesHDFS():
     print ("HDFS /")
     command = ["hdfs","dfs","-ls","/"]
     output1 ,error1 =  execute(command)
     printInformationList(output1)
-    print("error: "+error1)    
+    print("error: "+str(error1))  
     
     print ("HDFS /result")
     command =["hdfs","dfs","-ls","/result"]
     output2 ,error2 =  execute(command)
     printInformationList(output2)
-    print("error: "+error2)
+    print("error: "+str(error2))
 
     print ("HDFS /files")
     command = ["hdfs","dfs","-ls","/files"]
     output3 ,error3 =  execute(command)
     printInformationList(output3)
-    print("error: "+error3)
+    print("error: "+ str(error3))
 
 
 def startHadoop():
-    print ("stat Hadoop ")
-    command = ["start-yarn.sh"]
-    output1,error1 = execute(command)
-    printInformationList(output1)
-    print("error: "+error1)
-    
-    command = ["start-dfs.sh"]
+    print ("stat DFS ")
+    command = ["/opt/hadoop/sbin/start-dfs.sh"]
     output2 ,error2 =  execute(command)
     printInformationList(output2)
-    print("Erro: "+error2)
+    print("Erro: " + str(error2))
+
+    print ("stat YARN ")
+    command = ["/opt/hadoop/sbin/start-yarn.sh"]
+    output1,error1 = execute(command)
+    printInformationList(output1)
+    print("error: " + str(error1))
+        
     checkPages()
 
 def stopHadoop():
-    print ("Stop Hadoop ")
+    print ("Stop YARN")
     command = ["stop-yarn.sh"]
     output1,error1 = execute(command)
     printInformationList(output1)
-    print("error: "+error1)
-    
-    
+    print("error: " + str(error1))
+    print ("Stop DFS")
     command = ["stop-dfs.sh"]
     output2 ,error2 =  execute(command)
     printInformationList(output2)
-    print("Erro: "+error2)
+    print("Erro: "+str(error2))
+    
     checkPages()
 
 def prepareHDFS():
@@ -155,32 +157,32 @@ def prepareHDFS():
     command = ["hdfs","dfsadmin","-safemode","leave"]
     output1,error1 = execute(command)
     printInformationList(output1)
-    print("error: "+error1)
+    print("error: " + str(error1))
     
     command = ["hdfs","fsck","-delete"]
     output2,error2 = execute(command)
     printInformationList(output2)
-    print("error: "+error2)
+    print("error: "+str(error2))
     
     command = ["hdfs","dfs","-rm","-r","/result"]
     output3,error3 = execute(command)
     printInformationList(output3)
-    print("error: "+error3)
+    print("error: "+ str(error3))
     
     command = ["hdfs","dfs","-rm","-r","/files"]
     output4,error4 = execute(command)
     printInformationList(output4)
-    print("error: "+error4)
+    print("error: "+ str(error4))
     
     command = ["hdfs","dfs","-mkdir","/result"]
     output5,error5 = execute(command)
     printInformationList(output5)
-    print("error: "+error5)
+    print("error: "+ str(error5))
     
     command = ["hdfs","dfs","-mkdir","/files"]
     output6,error6 = execute(command)
     printInformationList(output6)
-    print("error: "+error6)
+    print("error: "+ str(error6))
 
 def executeTest(n_test, codeTest, delay_exec, file_log):
     cont = 0
@@ -193,19 +195,15 @@ def executeTest(n_test, codeTest, delay_exec, file_log):
         sleep(delay_exec)
         
         start = strftime("%H:%M:%S", gmtime())
-        saida_exec, erro_exec = execute(getTest(codeTest))
+        saida_exec, erro_exec = execute(getTest(codeTest,cont))
         stop = strftime("%H:%M:%S", gmtime())
     
         sleep(delay_exec)
         
 
-        print("\nSAIDA_EXEC: ")
-        print(saida_exec)
-        print("\n")
-        print("\nERRO_EXEC: ")
-        print(erro_exec)
-        print("\n")
-
+        print("SAIDA_EXEC: " + str(saida_exec))
+        print("ERRO_EXEC: " + str(erro_exec))
+        
         state = ''
         state_final = ''
         
@@ -217,12 +215,9 @@ def executeTest(n_test, codeTest, delay_exec, file_log):
             test = ["yarn", "application", "-status", application]
             saida_test, erro_test = execute(test)
             
-            print("SAIDA_TEST: ")
-            print(saida_test)
-            print("ERRO_TEST: ")
-            print(erro_test)
-            
-            
+            print("SAIDA_TEST: " + str(saida_test))
+            print("ERRO_TEST: " + str(erro_test))
+                 
             state = getInformation(saida_test,'State : ')
             finalState = getInformation(saida_test,'Final-State : ')
             if(state == 'FINISHED'):
@@ -231,22 +226,27 @@ def executeTest(n_test, codeTest, delay_exec, file_log):
                     pass
             
             
-            print("STATE: ")
-            print(state)
-            print("STATE_FINAL: ")
-            print(finalState)
+            print("STATE: " + str(state))
+            print("STATE_FINAL: " + str(finalState))
 
         cont = cont + 1
         file_log.writelines(print_exec + '\n' + application + "\n\n")
         file_main.writelines( start + "," + stop + "," + state + "," + state_final + "\n")
-
-def menu(file_main, file_log):
-
-    option     = -1
-    n_test     = -1
+def inputTest():
+    n_test = -1
     delay_exec = -1
+    while n_test < 1 and delay_exec < 1:
+        n_test = int(input("inform the number of test: "))
+        delay_exec = int(input("inform the delay for before and after to the execution (before = after): "))
 
+    return n_test, delay_exec
+    
+def menu(file_main, file_log):
+    option     = -1
     while option != 0:
+        option     = -1
+        n_test     = -1
+        delay_exec = -1
         print("_____________________________ TESTS MENU _____________________________")
         print("0  - Exit")
         print("1  - Start the Hadoop")
@@ -270,9 +270,7 @@ def menu(file_main, file_log):
         
 
         while (option < 0 or option > 18) and n_test < 1 and delay_exec < 1:
-            option = input("inform the option: ")
-            n_test = input("inform the number of test: ")
-            delay_exec = input("inform the delay for before and after to the execution (before = after): ")
+            option = int(input("inform the option: "))
 
         if option == 0:
             break
@@ -285,39 +283,51 @@ def menu(file_main, file_log):
         elif option == 4:
             prepareHDFS()
         elif option == 5:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(1)
             executeTest(n_test, 1, delay_exec, file_log)
         elif option == 6:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(2)
             executeTest(n_test, 2, delay_exec, file_log)
         elif option == 7:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(3)
             executeTest(n_test, 3, delay_exec, file_log)
         elif option == 8:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(4)
             executeTest(n_test, 4, delay_exec, file_log)
         elif option == 9:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(5)
             executeTest(n_test, 5, delay_exec, file_log)
         elif option == 10:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(6)
             executeTest(n_test, 6, delay_exec, file_log)
         elif option == 11:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(7)
             executeTest(n_test, 7, delay_exec, file_log)
         elif option == 12:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(8)
             executeTest(n_test, 8, delay_exec, file_log)
         elif option == 13:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(9)
             executeTest(n_test, 9, delay_exec, file_log)
         elif option == 14:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(10)
             executeTest(n_test, 10, delay_exec, file_log)
         elif option == 15:
+            n_test, delay_exec = inputTest()
             getFileToUploadHdfs(11)
             executeTest(n_test, 11, delay_exec, file_log)
         elif option == 16:
+            n_test, delay_exec = inputTest()
             executeTest(n_test, 12, delay_exec, file_log)
         elif option == 17:
             checkNodesActive()
@@ -329,7 +339,7 @@ def menu(file_main, file_log):
 serial_arduino = serial.Serial(port='/dev/ttyACM0',baudrate=9600,timeout=2)
 
 file_name_main = "time" + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
-file_name_log  = "log"    + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
+file_name_log  = "log"    + strftime('%H.%M.%S_%d.%m.%Y') + ".txt"
 
 while(serial_arduino.isOpen() == False):
     serial_arduino.open()
