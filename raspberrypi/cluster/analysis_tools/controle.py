@@ -1,5 +1,6 @@
 import serial
 import subprocess
+import os
 from time import  gmtime, strftime, sleep
 
 def getTest(testcode, cont):
@@ -55,6 +56,34 @@ def getFileToUploadHdfs(selectcode):
         return(["hdfs","dfs","-copyFromLocal","/opt/hadoop/LICENSE.txt","/files/license.txt"])    
     else:
         return(["echo","invalid option"])
+
+def printMenuOption():
+    print("_____________________________ TESTS MENU _____________________________")
+    print("0  - Exit")
+    print("1  - Start the Hadoop")
+    print("2  - Stop the Hadoop")
+    print("3  - Show the files list in the HDFS")
+    print("4  - Prepare the HDFS")
+    print("5  - Execute the wordcount test with file size 100MB")
+    print("6  - Execute the wordcount test with file size 200MB")
+    print("7  - Execute the wordcount test with file size 300MB")
+    print("8  - Execute the wordcount test with file size 400MB")
+    print("9  - Execute the wordcount test with file size 500MB")
+    print("10 - Execute the wordcount test with file size 600MB")
+    print("11 - Execute the wordcount test with file size 700MB")
+    print("12 - Execute the wordcount test with file size 800MB")
+    print("13 - Execute the wordcount test with file size 900MB")
+    print("14 - Execute the wordcount test with file size 1000MB")
+    print("15 - Execute the wordcount test with file license.txt")
+    print("16 - Execute the PI test")
+    print("17 - Check the node active")
+    print("18 - Check the pages")
+
+def makerDir(way):
+    if os.path.isdir(way):
+        pass
+    else:
+        os.mkdir(way)
 
 def execute(command):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -198,12 +227,9 @@ def executeTest(n_test, codeTest, delay_exec, file_log, file_main):
         start = strftime("%H:%M:%S", gmtime())
         saida_exec, erro_exec = execute(getTest(codeTest,cont))
         stop = strftime("%H:%M:%S", gmtime())
-    
-        sleep(delay_exec)
+        print("\nERRO_EXEC: " + str(erro_exec))
         
-
-        print("SAIDA_EXEC: " + str(saida_exec))
-        print("ERRO_EXEC: "  + str(erro_exec))
+        sleep(delay_exec)
         
         state = ''
         finalState = ''
@@ -212,13 +238,11 @@ def executeTest(n_test, codeTest, delay_exec, file_log, file_main):
             application = getInformation(saida_exec,'Submitted application ')    
             print(application)
             
-        
             test = ["yarn", "application", "-status", application]
             saida_test, erro_test = execute(test)
+
+            print("\nERRO_TEST: "  + str(erro_test))
             
-            print("SAIDA_TEST: " + str(saida_test))
-            print("ERRO_TEST: "  + str(erro_test))
-                 
             state = getInformation(saida_test,'State : ')
             finalState = getInformation(saida_test,'Final-State : ')
             if(state == 'FINISHED'):
@@ -226,13 +250,14 @@ def executeTest(n_test, codeTest, delay_exec, file_log, file_main):
                 if(finalState == 'SUCCEEDED'):
                     pass
             
-            
             print("STATE: " + str(state))
             print("STATE_FINAL: " + str(finalState))
 
         cont = cont + 1
-        file_log.writelines(print_exec + "\nSAIDA EXEC" + str(saida_exec) + "\n\nSAIDA TEST" + str(saida_test) + "\n")
-        file_main.writelines( start + "," + stop + "," + application + "," + state + "," + finalState + "\n")
+        file_log.writelines(print_exec + "\nSAIDA EXEC" + str(saida_exec) + "\nERRO_EXEC: "  \
+            + str(erro_exec) + "\n\nSAIDA TEST" + str(saida_test) + "\nERRO_TEST: "  + str(erro_test) + "\n")
+        file_main.writelines( start + "," + stop + "," + application + "," + state + "," + \
+            finalState + "\n")
 
 def inputTest():
     n_test = -1
@@ -250,29 +275,10 @@ def menu(file_main, file_log):
         option     = -1
         n_test     = -1
         delay_exec = -1
-        print("_____________________________ TESTS MENU _____________________________")
-        print("0  - Exit")
-        print("1  - Start the Hadoop")
-        print("2  - Stop the Hadoop")
-        print("3  - Show the files list in the HDFS")
-        print("4  - Prepare the HDFS")
-        print("5  - Execute the wordcount test with file size 100MB")
-        print("6  - Execute the wordcount test with file size 200MB")
-        print("7  - Execute the wordcount test with file size 300MB")
-        print("8  - Execute the wordcount test with file size 400MB")
-        print("9  - Execute the wordcount test with file size 500MB")
-        print("10 - Execute the wordcount test with file size 600MB")
-        print("11 - Execute the wordcount test with file size 700MB")
-        print("12 - Execute the wordcount test with file size 800MB")
-        print("13 - Execute the wordcount test with file size 900MB")
-        print("14 - Execute the wordcount test with file size 1000MB")
-        print("15 - Execute the wordcount test with file license.txt")
-        print("16 - Execute the PI test")
-        print("17 - Check the node active")
-        print("18 - Check the pages")
         
-
-        while (option < 0 or option > 18) and n_test < 1 and delay_exec < 1:
+        printMenuOption()
+        
+        while (option < 0 or option > 18):
             option = int(input("inform the option: "))
 
         if option == 0:
@@ -339,11 +345,17 @@ def menu(file_main, file_log):
         else:
             option = -1
 
-
 serial_arduino = serial.Serial(port='/dev/ttyACM0',baudrate=9600,timeout=2)
 
-file_name_main = "time" + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
-file_name_log  = "log"    + strftime('%H.%M.%S_%d.%m.%Y') + ".txt"
+way = os.getcwd() + "/results"
+way_time = way + "/time"
+way_log = way + "/log"
+file_name_main = way_time + "/time" + strftime('%H.%M.%S_%d.%m.%Y') + ".csv"
+file_name_log  = way_log + "/log" + strftime('%H.%M.%S_%d.%m.%Y') + ".txt"
+
+makerDir(way)
+makerDir(way_time)
+makerDir(way_log)
 
 while(serial_arduino.isOpen() == False):
     serial_arduino.open()
@@ -358,6 +370,6 @@ file_main.writelines("time_start,time_stop,application,state,state_final\n")
 file_log  = open(file_name_log,'w')
 
 menu(file_main,file_log)
-    
+
 file_main.close()
 file_log.close()
