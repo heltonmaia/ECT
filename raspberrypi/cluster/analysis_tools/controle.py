@@ -254,6 +254,7 @@ def executeTest(n_test, codeTest, delay_exec, file_log, file_main):
             print("STATE_FINAL: " + str(finalState))
 
         cont = cont + 1
+
         file_log.writelines(print_exec + "\nSAIDA EXEC" + str(saida_exec) + "\nERRO_EXEC: "  \
             + str(erro_exec) + "\n\nSAIDA TEST" + str(saida_test) + "\nERRO_TEST: "  + str(erro_test) + "\n")
         file_main.writelines( start + "," + stop + "," + application + "," + state + "," + \
@@ -345,7 +346,9 @@ def menu(file_main, file_log):
         else:
             option = -1
 
-serial_arduino = serial.Serial(port='/dev/ttyACM0',baudrate=9600,timeout=2)
+portArduino = input("Inform the port of Arduino (ttyACM): ")
+
+serial_arduino = serial.Serial(port='/dev/ttyACM'+ portArduino,baudrate=9600,timeout=2)
 
 way = os.getcwd() + "/results"
 way_time = way + "/time"
@@ -369,7 +372,7 @@ file_main = open(file_name_main,'w')
 file_main.writelines("time_start,time_stop,application,state,state_final\n")
 file_log  = open(file_name_log,'w')
 
-menu(file_main,file_log)
+menu(file_main, file_log)
 
 file_main.close()
 file_log.close()
