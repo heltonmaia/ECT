@@ -33,10 +33,9 @@ https://github.com/llSourcell/learn_math_fast/blob/master/README.md
 http://neuralnetworksanddeeplearning.com/chap1.html
 
 ### Videos
-* But what *is* a Neural Network? | Chapter 1, deep learning
-https://youtu.be/IHZwWFHWa-w
-* Gradient descent, how neural networks learn | Chapter 2, deep learning
-https://youtu.be/IHZwWFHWa-w
-* Machine Learning - Supervised VS Unsupervised Learning
-https://youtu.be/cfj6yaYE86U
-* Convolutional Neural Networks (CNNs) by Andrew Ng [full course]: https://goo.gl/C5y1Cj 
+* How Computer Vision Is Finally Taking Off https://youtu.be/eQLcDmfmGB0
+* How we teach computers to understand pictures https://youtu.be/40riCqvRoMs
+* Convolutional Neural Networks (CNNs) explained https://youtu.be/YRhxdVk_sIs
+* But what *is* a Neural Network?  https://youtu.be/aircAruvnKk
+* MIT Deep Learning Basics (Lex Fridman)  https://youtu.be/O5xeyoRL95U
+
