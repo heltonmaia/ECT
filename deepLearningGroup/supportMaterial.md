@@ -13,7 +13,7 @@ https://machinelearningmastery.com/start-here/
 https://adeshpande3.github.io/adeshpande3.github.io/A-Beginner's-Guide-To-Understanding-Convolutional-Neural-Networks/
 
 ### Tutorials
- * Programação C/C++: https://www.inf.pucrs.br/~pinho/PRGSWB/Ponteiros/ponteiros.html
+ * Programação C/C++ (Ponteiros): https://www.inf.pucrs.br/~pinho/PRGSWB/Ponteiros/ponteiros.html
  * Tutorials(pt): https://matheusfacure.github.io/tutoriais/ 
  * Gradient Descent: https://towardsdatascience.com/gradient-descent-in-a-nutshell-eaf8c18212f0
  * Python Brasil - http://wiki.python.org.br/DocumentacaoPython 
