@@ -13,7 +13,7 @@ Helton Maia - helton.maia@ect.ufrn.br
 
 ## Projects
 
-* (2018-2019) Object Detection with Machine Learning on Aerial Imagery
+* (2018-2020) Object Detection with Machine Learning on Aerial Imagery
 
 * (2018-2019) Deep Learning for Behavioral Classification of Mice During Behavioral Experiments
 
